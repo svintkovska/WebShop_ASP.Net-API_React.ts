@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <title>All Users</title>
+</head>
+<body>
+    <div class="container col-8 ">
+        <h1 class="my-5 text-center">All Users</h1>
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody id="user-table-body">
+
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+
+
+<script src="../lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../lib/axios/axios.min.js"></script>
+<script>
+    const userTableBody = document.getElementById("user-table-body");
+
+    axios.get("http://localhost:5285/api/Users")
+        .then((response) => {
+            const users = response.data;
+            users.forEach((user) => {
+                const row = document.createElement("tr");
+
+                const idCell = document.createElement("td");
+                idCell.textContent = user.id;
+                row.appendChild(idCell);
+
+                const nameCell = document.createElement("td");
+                nameCell.textContent = user.name;
+                row.appendChild(nameCell);
+
+                const descCell = document.createElement("td");
+                descCell.textContent = user.description;
+                row.appendChild(descCell);
+
+                const imageCell = document.createElement("td");
+                const image = document.createElement("img");
+                image.src = user.image;
+                image.width = 150;
+                image.height = 100;
+
+                imageCell.appendChild(image);
+                row.appendChild(imageCell);
+
+                userTableBody.appendChild(row);
+            });
+        })
+        .catch((error) => {
+            console.log("Error retrieving user data:", error);
+        });
+</script>
