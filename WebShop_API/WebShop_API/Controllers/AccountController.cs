@@ -24,8 +24,7 @@ namespace WebShop_API.Controllers
 
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
-            {
+
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user != null)
                 {
@@ -33,7 +32,7 @@ namespace WebShop_API.Controllers
                     if (result.Succeeded)
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
-                        return Redirect(model.ReturnUrl);
+                        return Ok();
                     }
                     else if (result.IsLockedOut)
                     {
@@ -48,14 +47,12 @@ namespace WebShop_API.Controllers
                         int seconds = timeSpan.Seconds;
 
                         string remainingTimeStr = $"{months} months, {days} days, {hours} hours, {minutes} minutes, and {seconds} seconds";
+                        return BadRequest($"Your account is locked out. Please try again after {remainingTimeStr}.");
 
-                        ModelState.AddModelError("", $"Your account is locked out. Please try again after {remainingTimeStr}.");
-                        return Ok(model);
                     }
                 }
-            }
-            ModelState.AddModelError("", "Incorrect data");
-            return Ok(model);
+
+            return BadRequest();
         }
         [HttpPost("logout")]
         public async Task<IActionResult> LogOut()
