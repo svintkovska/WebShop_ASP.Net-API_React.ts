@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ChangeEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import GoogleAuth from "./google";
 
 interface LoginForm {
     email: string;
@@ -90,13 +91,8 @@ return(
             <hr></hr>
             <div className="text-center">
               <div className="col-md-12">
-                <a
-                  className="btn btn-outline-primary text-uppercase mb-4"
-                  href="#"
-                >
-                  <img src="https://img.icons8.com/color/16/000000/google-logo.png" />{" "}
-                  Log In with Google
-                </a>
+                <GoogleAuth></GoogleAuth>
+
               </div>
             </div>
           </form>

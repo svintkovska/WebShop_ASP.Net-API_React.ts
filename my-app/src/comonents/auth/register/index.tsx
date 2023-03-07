@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { ChangeEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import selectUser from "../../../assets/selectUser.png"
+import GoogleAuth from '../login/google';
 
 
 interface RegisterForm {
@@ -208,13 +209,8 @@ const RegisterPage = () =>{
             <hr></hr>
             <div className="text-center">
               <div className="col-md-12">
-                <a
-                  className="btn btn-outline-primary text-uppercase mb-4"
-                  href="#"
-                >
-                  <img src="https://img.icons8.com/color/16/000000/google-logo.png" />{" "}
-                  Register with Google
-                </a>
+              <GoogleAuth></GoogleAuth>
+
               </div>
             </div>
           </form>

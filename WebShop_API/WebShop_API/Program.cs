@@ -1,16 +1,20 @@
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using WebShop_API.Abstract;
 using WebShop_API.Data;
 using WebShop_API.Data.Entities.Identity;
+using WebShop_API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 builder.Services.AddDbContext<AppEFContext>(opt =>
          opt.UseNpgsql(builder.Configuration.GetConnectionString("MyDbConnection")));
 
-
+// Rest of your existing code
 
 
 builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
@@ -22,6 +26,13 @@ builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
     options.Password.RequireUppercase = false;
     options.Password.RequireLowercase = false;
 }).AddEntityFrameworkStores<AppEFContext>().AddDefaultTokenProviders();
+
+
+
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>(); 
+
+
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -52,6 +63,7 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/images"
 });
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
