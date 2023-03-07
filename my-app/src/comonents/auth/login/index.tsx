@@ -27,18 +27,23 @@ const LoginPage = () =>{
         const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>)=>{
             e.preventDefault();
             
-            try{
+            try {
               const result = await axios
-              .post("http://localhost:5285/api/account/login", state);
-              navigator("/");
+                .post("http://localhost:5285/api/account/login", state)
+                .then((resp) => {
+                  console.log("token - ", resp.data.token.result);
+      
+                  localStorage.setItem("token", resp.data.token.result);
+      
+                  axios.defaults.headers.common = {
+                    Authorization: `Bearer ${resp.data.token.result}`,
+                  };
+                  navigator("/");
+                });
+            } catch (error: any) {
+              console.log("error:", error);
             }
-            catch(error: any){
-              console.log ("error:", error);
-              console.log ("----------");
-
-              setErrorMessage("Invalid password or email");
-            }
-            console.log ("Data sent", state);          
+            console.log("Data sent", state);    
         }
         
 return(

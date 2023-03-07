@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebShop_API.Data;
 using WebShop_API.Data.Entities;
@@ -19,6 +20,7 @@ namespace WebShop_API.Controllers
             _context= context;
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult GetList()
         {

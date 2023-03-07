@@ -1,32 +1,57 @@
-import React from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import HomePage from './comonents/home';
 import CreatePage from './comonents/create';
-import { Routes, Route, Outlet, Link } from "react-router-dom";
+import { Routes, Route, Outlet, Link, useNavigate } from "react-router-dom";
 import EditPage from './comonents/Edit';
 import RegisterPage from './comonents/auth/register';
 import LoginPage from './comonents/auth/login';
 
 function App() {
+
+  const [authenticated, setAuthenticated] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if token exists in local storage
+    const token = localStorage.getItem('token');
+    if (token) {
+      setAuthenticated(true);
+    } else {
+      navigate('/account/login');
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    // Remove token from local storage
+    localStorage.removeItem('token');
+    // Update authenticated state
+    setAuthenticated(false);
+    // Navigate to login page
+    navigate('/account/login');
+  };
+
   return (
     <div>
+      <Layout authenticated={authenticated} handleLogout={handleLogout}>
       <Routes>
-        <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="categories/create" element={<Create/>} />
           <Route path="/categories/edit/:categoryId" element={<EditPage></EditPage>} />
           <Route path="/account/register" element={<Register/>} />
           <Route path="/account/login" element={<Login/>} />
           <Route path="*" element={<NoMatch />} />
-        </Route>
       </Routes>
+      </Layout>
+
     </div>
   );
 }
 
 
-function Layout() {
+function Layout({ authenticated,handleLogout,children
+}: {authenticated: boolean;handleLogout: () => void;children: React.ReactNode;}) {
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -61,22 +86,32 @@ function Layout() {
               </li>
             </ul>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li className="nav-item">
-          <Link to="account/register" className="nav-link">
-            Register
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link to="account/login" className="nav-link">
-            Log In
-          </Link>
-        </li>
-      </ul>
+              {authenticated ? (
+                <li className="nav-item">
+                  <button onClick={handleLogout} className="nav-link btn btn-link">
+                    Log Out
+                  </button>
+                </li>
+              ) : (
+                <>
+                  <li className="nav-item">
+                    <Link to="account/register" className="nav-link">
+                      Register
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="account/login" className="nav-link">
+                      Log In
+                    </Link>
+                  </li>
+                </>
+              )}
+            </ul>
           </div>
         </div>
       </nav>
 
-      <Outlet />
+      {children}
     </div>
   );
 }

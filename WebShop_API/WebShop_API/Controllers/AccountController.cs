@@ -13,6 +13,7 @@ using Newtonsoft.Json.Linq;
 using WebShop_API.Abstract;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Http.HttpResults;
+using WebShop_API.Services;
 
 namespace WebShop_API.Controllers
 {
@@ -34,7 +35,7 @@ namespace WebShop_API.Controllers
         }
 
         [HttpPost("google/login")]
-        public async Task<IActionResult> GoogleLogin([FromForm]GoogleLogInViewModel model)
+        public async Task<IActionResult> GoogleLogin(GoogleLogInViewModel model)
         {
             var payload = await _jwtTokenService.VerifyGoogleToken(model.Token);
             if (payload == null)
@@ -49,12 +50,14 @@ namespace WebShop_API.Controllers
                 user = await _userManager.FindByEmailAsync(payload.Email);
                 if (user == null)
                 {
-                    string exp = Path.GetExtension(model.Image.FileName);
-                    var imageName = Path.GetRandomFileName() + exp;
+
+                    IFormFile ifile = await ConvertUrlToFormFile.ConvertUrlToIFormFile(model.Image);
+
+                    var imageName = Path.GetRandomFileName() + ".jpg";
                     string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", imageName);
                     using (var stream = System.IO.File.Create(dirSaveImage))
                     {
-                        await model.Image.CopyToAsync(stream);
+                        await ifile.CopyToAsync(stream);
                     }
 
                     user = new UserEntity
@@ -89,53 +92,31 @@ namespace WebShop_API.Controllers
         }
 
 
-
+       
 
         [HttpPost("login")]
 
         public async Task<IActionResult> Login(LoginViewModel model)
         {
 
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user != null)
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user != null)
+            {
+               
+                var isPasswordValid = await _userManager.CheckPasswordAsync(user, model.Password);
+                if(!isPasswordValid)
                 {
-                    var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
-                    if (result.Succeeded)
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return Ok();
-                    }
-                    else if (result.IsLockedOut)
-                    {
-                        var lockoutEnd = await _userManager.GetLockoutEndDateAsync(user);
+                    return BadRequest("Invalid password");
 
-                        TimeSpan remainingTime = lockoutEnd.HasValue ? lockoutEnd.Value.Subtract(DateTimeOffset.Now).Duration() : TimeSpan.Zero;
-                        TimeSpan timeSpan = TimeSpan.FromSeconds(remainingTime.TotalSeconds);
-                        int months = timeSpan.Days / 30;
-                        int days = timeSpan.Days % 30;
-                        int hours = timeSpan.Hours;
-                        int minutes = timeSpan.Minutes;
-                        int seconds = timeSpan.Seconds;
-
-                        string remainingTimeStr = $"{months} months, {days} days, {hours} hours, {minutes} minutes, and {seconds} seconds";
-                        return BadRequest($"Your account is locked out. Please try again after {remainingTimeStr}.");
-
-                    }
                 }
+                var token = _jwtTokenService.CreateToken(user);
+                return Ok(new { token });
 
-            return BadRequest();
+            }
+
+            return BadRequest("User Not Found");
         }
 
-
-       
-       
-
-        [HttpPost("logout")]
-        public async Task<IActionResult> LogOut()
-        {
-            await _signInManager.SignOutAsync();
-            return Ok();
-        }
 
 
         [HttpPost("register")]
