@@ -101,11 +101,6 @@ function Layout({ authenticated,handleLogout,children
                       Register
                     </Link>
                   </li>
-                  <li className="nav-item" >
-                    <Link to="account/register/googleRegistration" className="nav-link">
-                      Register google
-                    </Link>
-                  </li>
                   <li className="nav-item">
                     <Link to="account/login" className="nav-link">
                       Log In
