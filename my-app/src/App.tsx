@@ -7,6 +7,7 @@ import { Routes, Route, Outlet, Link, useNavigate } from "react-router-dom";
 import EditPage from './comonents/Edit';
 import RegisterPage from './comonents/auth/register';
 import LoginPage from './comonents/auth/login';
+import ContinueRegistration from './comonents/auth/register/google';
 
 function App() {
 
@@ -14,21 +15,18 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if token exists in local storage
     const token = localStorage.getItem('token');
+    const currentRoute = window.location.pathname;
     if (token) {
       setAuthenticated(true);
-    } else {
+    } else if (currentRoute !== '/account/register' && currentRoute !== '/account/register/googleRegistration') {
       navigate('/account/login');
     }
   }, [navigate]);
 
   const handleLogout = () => {
-    // Remove token from local storage
     localStorage.removeItem('token');
-    // Update authenticated state
     setAuthenticated(false);
-    // Navigate to login page
     navigate('/account/login');
   };
 
@@ -40,6 +38,7 @@ function App() {
           <Route path="categories/create" element={<Create/>} />
           <Route path="/categories/edit/:categoryId" element={<EditPage></EditPage>} />
           <Route path="/account/register" element={<Register/>} />
+          <Route path="/account/register/googleRegistration" element={<ContinueRegistrationGoogle/>} />
           <Route path="/account/login" element={<Login/>} />
           <Route path="*" element={<NoMatch />} />
       </Routes>
@@ -88,7 +87,10 @@ function Layout({ authenticated,handleLogout,children
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
               {authenticated ? (
                 <li className="nav-item">
-                  <button onClick={handleLogout} className="nav-link btn btn-link">
+                  <button
+                    onClick={handleLogout}
+                    className="nav-link btn btn-link"
+                  >
                     Log Out
                   </button>
                 </li>
@@ -97,6 +99,11 @@ function Layout({ authenticated,handleLogout,children
                   <li className="nav-item">
                     <Link to="account/register" className="nav-link">
                       Register
+                    </Link>
+                  </li>
+                  <li className="nav-item" >
+                    <Link to="account/register/googleRegistration" className="nav-link">
+                      Register google
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -136,6 +143,13 @@ function Register() {
   return ( 
     <>
       <RegisterPage></RegisterPage>
+    </>
+  );
+}
+function ContinueRegistrationGoogle() {
+  return ( 
+    <>
+      <ContinueRegistration></ContinueRegistration>
     </>
   );
 }

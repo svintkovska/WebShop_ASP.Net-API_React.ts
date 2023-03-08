@@ -1,35 +1,44 @@
 import axios from 'axios';
 import React, { ChangeEvent, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import selectUser from "../../../assets/selectUser.png"
-import GoogleAuth from '../login/google';
 
 
 interface RegisterForm {
+    token: string;
     firstName: string;
     lastName: string;
     username: string;
     email: string;
-    password: string;
-    confirmPassword: string;
     uploadImage: File | null;
+    imagePath: string
   }
   
 
-const RegisterPage = () =>{
+const ContinueRegistration = () =>{
     const navigator = useNavigate();
-    const [state, setState] = useState<RegisterForm>({
-      firstName: '',
-      lastName: '',
-      username: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      uploadImage: null
-      });
 
-      const [errorMessage, setErrorMessage] = useState("");
-    
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+
+    const googleTokenValue = queryParams.get('googleToken');
+    const token = googleTokenValue !== null ? googleTokenValue : '';    
+    const email = queryParams.get('email');
+    const firstName = queryParams.get('firstName');
+    const lastName = queryParams.get('lastName');
+    const imagePath = queryParams.get('imagePath');
+
+
+
+    const [state, setState] = useState<RegisterForm>({
+      token: token,
+      firstName: firstName || '',
+      lastName: lastName || '',
+      username: email || '',
+      email: email || '',
+      uploadImage: null,
+      imagePath: imagePath || ''
+      });
+     
       const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) =>{
         setState({...state, [e.target.name]: e.target.value});
 
@@ -50,18 +59,13 @@ const RegisterPage = () =>{
 
     const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
-        if (state.password !== state.confirmPassword) {
-            setErrorMessage("Passwords do not match");
-            return;
-          }
-          setErrorMessage("");
-
+        
         try{
           const result = await axios
-          .post("http://localhost:5285/api/account/register", state, {
+          .post("http://localhost:5285/api/account/google/registartion", state, {
             headers: {"Content-Type": "multipart/form-data"}
           });
-          navigator("/");
+          navigator("/account/login");
         }
         catch(error: any){
           console.log ("error:", error);
@@ -74,7 +78,7 @@ const RegisterPage = () =>{
     return (
       <>
         <div className="container col-6 offset-3">
-          <h1 className="mt-2 mb-3 text-center">Create New Account</h1>
+          <h1 className="mt-2 mb-3 text-center">Finish Registration</h1>
 
           <form onSubmit={onSubmitHandler}>
             <div className="mb-3">
@@ -134,55 +138,16 @@ const RegisterPage = () =>{
                 className="form-control"
                 name="email"
                 value={state.email}
-                onChange={onChangeInputHandler}
                 placeholder="Enter Email"
-                required
+                disabled={true} 
               />
               <div className="invalid-feedback">Please enter a valid name.</div>
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">
-                Password
-              </label>
-              <input
-                type="password"
-                className="form-control"
-                name="password"
-                value={state.password}
-                onChange={onChangeInputHandler}
-                placeholder="Enter password"
-                required
-              />
-              <div className="invalid-feedback">Please enter a valid name.</div>
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="confirmPassword" className="form-label">
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                className={`form-control ${errorMessage ? "is-invalid" : ""}`}
-                name="confirmPassword"
-                value={state.confirmPassword}
-                onChange={onChangeInputHandler}
-                placeholder="Confirm password"
-                required
-              />
-              {errorMessage && (
-                <div className="invalid-feedback">{errorMessage}</div>
-              )}
-            </div>
+            </div>         
 
             <div className="mb-3">
               <label htmlFor="uploadImage" className="form-label">
-                <img
-                  src={
-                    state.uploadImage == null
-                      ? selectUser
-                      : URL.createObjectURL(state.uploadImage)
-                  }
+              <img src={(state.uploadImage == null ? "http://localhost:5285/images/" + state.imagePath :  URL.createObjectURL(state.uploadImage))} 
+
                   alt="select img"
                   width="150px"
                   style={{ cursor: "pointer" }}
@@ -199,16 +164,10 @@ const RegisterPage = () =>{
 
             <div className="text-center">
               <button type="submit" className="btn btn-success mb-3">
-                Register
+                Finish
               </button>
             </div>
-            <hr></hr>
-            <div className="text-center">
-              <div className="col-md-12">
-              <GoogleAuth></GoogleAuth>
-
-              </div>
-            </div>
+            <hr></hr>         
           </form>
           <p className="text-center">Have an account? 
           <Link to="/account/login">
@@ -220,4 +179,4 @@ const RegisterPage = () =>{
     );
 }
 
-export default RegisterPage;
+export default ContinueRegistration;

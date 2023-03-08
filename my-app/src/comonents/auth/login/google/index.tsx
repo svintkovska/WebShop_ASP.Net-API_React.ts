@@ -8,7 +8,7 @@ interface GoogleData {
   token: string;
   firstName: string;
   lastName: string;
-  image: string;
+  imagePath: string;
 }
 
 
@@ -21,7 +21,7 @@ const navigate = useNavigate();
     token: "",
     firstName: "",
     lastName: "",
-    image: ""
+    imagePath: ""
   });
 
 
@@ -35,7 +35,7 @@ const navigate = useNavigate();
         token: credential,
         firstName: userObject.given_name,
         lastName: userObject.family_name,
-        image: userObject.picture
+        imagePath: userObject.picture
       });
       console.log("setState----", state);
 
@@ -43,14 +43,20 @@ const navigate = useNavigate();
         const result = await axios
           .post("http://localhost:5285/api/account/google/login", state)
           .then((resp) => {
-            console.log("token - ", resp.data.token.result);
+            if(resp.data.token == '')
+            {
+              const user = resp.data.user;
+              const queryParams = `?googleToken=${credential}&email=${user.email}&firstName=${user.firstName}&lastName=${user.lastName}&imagePath=${user.image}`;
+             navigate(`/account/register/googleRegistration${queryParams}`);
+            }
+            else{
+              localStorage.setItem("token", resp.data.token);
 
-            localStorage.setItem("token", resp.data.token.result);
-
-            axios.defaults.headers.common = {
-              Authorization: `Bearer ${resp.data.token.result}`,
-            };
-            navigate("/");
+              axios.defaults.headers.common = {
+                Authorization: `Bearer ${resp.data.token}`,
+              };          
+              navigate("/");
+            }           
           });
       } catch (error: any) {
         console.log("error:", error);
@@ -81,16 +87,10 @@ const navigate = useNavigate();
 
     return (
       <>
-
-      <div id="googleButton" className="d-flex justify-content-center mb-3">
-
-      </div>
-
-
-        {/* <a className="btn btn-outline-primary text-uppercase mb-4" href="#">
-          <img src="https://img.icons8.com/color/16/000000/google-logo.png" />{" "}
-          Log In with Google
-        </a> */}
+        <div
+          id="googleButton"
+          className="d-flex justify-content-center mb-3"
+        ></div>
       </>
     );
 }

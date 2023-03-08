@@ -38,6 +38,60 @@ namespace WebShop_API.Controllers
         public async Task<IActionResult> GoogleLogin(GoogleLogInViewModel model)
         {
             var payload = await _jwtTokenService.VerifyGoogleToken(model.Token);
+            var token = "";
+            if (payload == null)
+            {
+                return BadRequest();
+            }
+            string provider = "Google";
+            var info = new UserLoginInfo(provider, payload.Subject, provider);
+            var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+            bool isNewUser = false;
+            if (user == null)
+            {
+                user = await _userManager.FindByEmailAsync(payload.Email);
+                if (user == null)
+                {
+                    isNewUser = true;
+
+                    IFormFile ifile = await ConvertUrlToFormFile.ConvertUrlToIFormFile(model.ImagePath);
+
+                    var imageName = Path.GetRandomFileName() + ".jpg";
+                    string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", imageName);
+                    using (var stream = System.IO.File.Create(dirSaveImage))
+                    {
+                        await ifile.CopyToAsync(stream);
+                    }
+
+                    user = new UserEntity
+                    {
+                        Email = payload.Email,
+                        UserName = payload.Email,
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        Image = imageName
+
+                    };
+                    return Ok(new { isNewUser, user, token });
+
+                }
+
+                var resultuserLogin = await _userManager.AddLoginAsync(user, info);
+                if(!resultuserLogin.Succeeded)
+                {
+                    return BadRequest();
+                }
+            }
+
+             token = await _jwtTokenService.CreateToken(user);
+
+            return Ok(new { isNewUser, user, token });
+        }
+
+        [HttpPost("google/registartion")]
+        public async Task<IActionResult> GoogleRegistartion([FromForm]GoogleLogInViewModel model)
+        {
+            var payload = await _jwtTokenService.VerifyGoogleToken(model.Token);
             if (payload == null)
             {
                 return BadRequest();
@@ -50,52 +104,46 @@ namespace WebShop_API.Controllers
                 user = await _userManager.FindByEmailAsync(payload.Email);
                 if (user == null)
                 {
-
-                    IFormFile ifile = await ConvertUrlToFormFile.ConvertUrlToIFormFile(model.Image);
-
-                    var imageName = Path.GetRandomFileName() + ".jpg";
-                    string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", imageName);
-                    using (var stream = System.IO.File.Create(dirSaveImage))
+                    var imageName = "";
+                    if (model.UploadImage != null)
                     {
-                        await ifile.CopyToAsync(stream);
+                        string exp = Path.GetExtension(model.UploadImage.FileName);
+                        imageName = Path.GetRandomFileName() + exp;
+                        string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", imageName);
+                        using (var stream = System.IO.File.Create(dirSaveImage))
+                        {
+                            await model.UploadImage.CopyToAsync(stream);
+                        }
+                        model.ImagePath = imageName;
                     }
-
+                      
                     user = new UserEntity
                     {
                         Email = payload.Email,
-                        UserName = payload.Email.Trim(),
+                        UserName = model.UserName,
                         FirstName = model.FirstName,
                         LastName = model.LastName,
-                        Image = imageName
+                        Image = model.ImagePath,
 
                     };
                     var resultCreate = await _userManager.CreateAsync(user);
-                    if(!resultCreate.Succeeded)
+                    if (!resultCreate.Succeeded)
                     {
                         return BadRequest();
                     }
 
                     await _userManager.AddToRoleAsync(user, Roles.User);
 
-                }
+                    return Ok();
 
-                var resultuserLogin = await _userManager.AddLoginAsync(user, info);
-                if(!resultuserLogin.Succeeded)
-                {
-                    return BadRequest();
-                }
+                }             
             }
-
-            var token = _jwtTokenService.CreateToken(user);
-
-            return Ok(new { token});
+   
+            return BadRequest();
         }
 
 
-       
-
         [HttpPost("login")]
-
         public async Task<IActionResult> Login(LoginViewModel model)
         {
 

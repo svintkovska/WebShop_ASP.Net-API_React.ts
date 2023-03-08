@@ -30,11 +30,8 @@ const LoginPage = () =>{
             try {
               const result = await axios
                 .post("http://localhost:5285/api/account/login", state)
-                .then((resp) => {
-                  console.log("token - ", resp.data.token.result);
-      
-                  localStorage.setItem("token", resp.data.token.result);
-      
+                .then((resp) => {    
+                  localStorage.setItem("token", resp.data.token.result);   
                   axios.defaults.headers.common = {
                     Authorization: `Bearer ${resp.data.token.result}`,
                   };
@@ -42,6 +39,7 @@ const LoginPage = () =>{
                 });
             } catch (error: any) {
               console.log("error:", error);
+              setErrorMessage("Inavlid email or password" );
             }
             console.log("Data sent", state);    
         }
