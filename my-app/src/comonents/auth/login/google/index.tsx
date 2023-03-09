@@ -31,17 +31,19 @@ const navigate = useNavigate();
    
       console.log("userObject----", userObject);
 
-      await setState({
+      const model: GoogleData = {
         token: credential,
         firstName: userObject.given_name,
         lastName: userObject.family_name,
         imagePath: userObject.picture
-      });
-      console.log("setState----", state);
+      };
+
+    
+      console.log("model----", model);
 
       try {
         const result = await axios
-          .post("http://localhost:5285/api/account/google/login", state)
+          .post("http://localhost:5285/api/account/google/login", model)
           .then((resp) => {
             if(resp.data.token == '')
             {
@@ -61,7 +63,7 @@ const navigate = useNavigate();
       } catch (error: any) {
         console.log("error:", error);
       }
-      console.log("Data sent", state);
+      console.log("Data sent", model);
     };
 
     useEffect(() => {
