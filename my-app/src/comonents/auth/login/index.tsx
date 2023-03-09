@@ -1,17 +1,17 @@
-import axios from "axios";
 import { ChangeEvent, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import http from "../../../http";
+import { AuthActionType } from "../types";
 import GoogleAuth from "./google";
+import { LoginForm } from "./types";
 
-interface LoginForm {
-    email: string;
-    password: string;
-  }
-  
+
 
 const LoginPage = () =>{
 
     const navigator = useNavigate();
+    const dispatch = useDispatch();
 
     const [state, setState] = useState<LoginForm>({
         email: "",
@@ -27,17 +27,20 @@ const LoginPage = () =>{
         const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>)=>{
             e.preventDefault();
             
-            try {
-              const result = await axios
-                .post("http://localhost:5285/api/account/login", state)
-                .then((resp) => {    
-                  localStorage.setItem("token", resp.data.token.result);   
-                  axios.defaults.headers.common = {
-                    Authorization: `Bearer ${resp.data.token.result}`,
-                  };
-                  navigator("/");
-                });
-            } catch (error: any) {
+            try{
+              const resp = await http.post("api/account/login", state);
+              const {token} = resp.data;
+              const {result} = token;
+
+              localStorage.token = result;
+              http.defaults.headers.common['Authorization'] = `Bearer ${result}`;
+
+              dispatch({type: AuthActionType.USER_LOGIN});
+              console.log("login result ", token);
+
+              navigator("/");
+            }
+            catch (error: any) {
               console.log("error:", error);
               setErrorMessage("Inavlid email or password" );
             }

@@ -8,6 +8,7 @@ import EditPage from './comonents/Edit';
 import RegisterPage from './comonents/auth/register';
 import LoginPage from './comonents/auth/login';
 import ContinueRegistration from './comonents/auth/register/google';
+import DefaultLayout from './comonents/containers';
 
 function App() {
 
@@ -31,20 +32,35 @@ function App() {
   };
 
   return (
-    <div>
-      <Layout authenticated={authenticated} handleLogout={handleLogout}>
+    // <div>
+    //   <Layout authenticated={authenticated} handleLogout={handleLogout}>
+    //   <Routes>
+    //       <Route index element={<Home />} />
+    //       <Route path="categories/create" element={<Create/>} />
+    //       <Route path="/categories/edit/:categoryId" element={<EditPage></EditPage>} />
+    //       <Route path="/account/register" element={<Register/>} />
+    //       <Route path="/account/register/googleRegistration" element={<ContinueRegistrationGoogle/>} />
+    //       <Route path="/account/login" element={<Login/>} />
+    //       <Route path="*" element={<NoMatch />} />
+    //   </Routes>
+    //   </Layout>
+
+    // </div>
+
       <Routes>
-          <Route index element={<Home />} />
+        <Route path="/" element={<DefaultLayout/>}>
+        <Route index element={<Home />} />
           <Route path="categories/create" element={<Create/>} />
           <Route path="/categories/edit/:categoryId" element={<EditPage></EditPage>} />
           <Route path="/account/register" element={<Register/>} />
           <Route path="/account/register/googleRegistration" element={<ContinueRegistrationGoogle/>} />
           <Route path="/account/login" element={<Login/>} />
           <Route path="*" element={<NoMatch />} />
+        </Route>
+         
       </Routes>
-      </Layout>
 
-    </div>
+ 
   );
 }
 

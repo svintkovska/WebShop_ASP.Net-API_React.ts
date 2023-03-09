@@ -1,7 +1,7 @@
-import axios from 'axios';
 import React, { ChangeEvent, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import selectUser from "../../../assets/selectUser.png"
+import http from '../../../http';
 import GoogleAuth from '../login/google';
 
 
@@ -39,7 +39,6 @@ const RegisterPage = () =>{
       const {target} = e;
       const {files} = target;
 
-      console.log ("Show data", files);
       if(files){
         const file = files[0];
         setState({...state, uploadImage: file});
@@ -57,8 +56,8 @@ const RegisterPage = () =>{
           setErrorMessage("");
 
         try{
-          const result = await axios
-          .post("http://localhost:5285/api/account/register", state, {
+          const result = await http
+          .post("api/account/register", state, {
             headers: {"Content-Type": "multipart/form-data"}
           });
           navigator("/");
@@ -66,9 +65,7 @@ const RegisterPage = () =>{
         catch(error: any){
           console.log ("error:", error);
         }
-        console.log ("Data sent", state);
-
-        
+        console.log ("Data sent", state);       
     }
 
     return (

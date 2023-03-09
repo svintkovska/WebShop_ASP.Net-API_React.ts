@@ -3,6 +3,7 @@ import { APP_ENV } from "../../../../env";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import http from "../../../../http";
 
 interface GoogleData {
   token: string;
@@ -29,8 +30,6 @@ const navigate = useNavigate();
       const { credential } = resp;
       const userObject = jwt_decode(credential) as any;
    
-      console.log("userObject----", userObject);
-
       const model: GoogleData = {
         token: credential,
         firstName: userObject.given_name,
@@ -38,12 +37,9 @@ const navigate = useNavigate();
         imagePath: userObject.picture
       };
 
-    
-      console.log("model----", model);
-
       try {
-        const result = await axios
-          .post("http://localhost:5285/api/account/google/login", model)
+        const result = await http
+          .post("api/account/google/login", model)
           .then((resp) => {
             if(resp.data.token == '')
             {
@@ -53,7 +49,6 @@ const navigate = useNavigate();
             }
             else{
               localStorage.setItem("token", resp.data.token);
-
               axios.defaults.headers.common = {
                 Authorization: `Bearer ${resp.data.token}`,
               };          
@@ -85,8 +80,6 @@ const navigate = useNavigate();
       })
     })
     
-
-
     return (
       <>
         <div

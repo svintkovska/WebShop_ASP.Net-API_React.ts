@@ -11,6 +11,5 @@ namespace WebShop_API.Models
 
         public string Password { get; set; }
 
-        public string ReturnUrl { get; set; }
     }
 }

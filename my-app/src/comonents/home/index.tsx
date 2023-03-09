@@ -1,6 +1,7 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
+import { APP_ENV } from "../../env";
+import http from "../../http";
 
 interface ICategoryItem{
     id: number,
@@ -14,31 +15,28 @@ const HomePage = ()=>{
 
     const [categories, setCategories] = useState<Array<ICategoryItem>>([]);
 
-    useEffect(() => {
-        axios
-          .get<Array<ICategoryItem>>("http://localhost:5285/api/Categories")
-          .then((resp) => {
-            console.log("response - ", resp);
-            setCategories(resp.data);
-          });
-      }, []);
+      useEffect(() => {
+        http.
+            get<Array<ICategoryItem>>("api/Categories")
+            .then((resp) => {
+              setCategories(resp.data);
+            });
+        }, []);
 
+  
       const OnDeleteClickHandler = (id: number) => {
-        axios.delete(`http://localhost:5285/api/Categories/${id}`).then((response) => {
-          console.log(response.data);
+        http.delete(`api/Categories/${id}`).then((response) => {
           const updatedCatgories = categories.filter((category) => category.id !== id);
           setCategories(updatedCatgories);
-        });
-     
+        });   
       };
           
-
     const content = categories.map((category) => (
       <tr key={category.id}>
         <th scope="row">{category.id}</th>
         <td>
           <img
-            src={"http://localhost:5285/images/" + category.image}
+            src={APP_ENV.IMAGE_PATH + category.image}
             width="150"
           ></img>
         </td>
@@ -67,16 +65,15 @@ const HomePage = ()=>{
     ));
 
  const onReloadClickHandler = ()=> {
-     axios.get<Array<ICategoryItem>>("http://localhost:5285/api/Users")
+     http.get<Array<ICategoryItem>>("api/Categories")
      .then((resp) =>{
-        console.log("response - ", resp);
         setCategories(resp.data);
      });
 }
 
     return (
       <>
-        <h1 className="text-center mt-3 mb-4">Users</h1>
+        <h1 className="text-center mt-3 mb-4">Categories</h1>
 
         <div className="d-flex justify-content-center mb-4">
           <button

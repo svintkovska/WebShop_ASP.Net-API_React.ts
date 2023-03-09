@@ -25,7 +25,7 @@ namespace WebShop_API.Services
             List<Claim> claims = new List<Claim>()
             {
                 new Claim("name", user.UserName),
-                new Claim("image", user.Image)
+                new Claim("image", user.Image ?? "admin.png")
             };
 
             foreach (var claim in roles)

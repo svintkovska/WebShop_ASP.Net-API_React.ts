@@ -1,7 +1,7 @@
-import axios from "axios";
 import { ChangeEvent, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import upload from "../../assets/upload.png"
+import http from "../../http";
 
 interface ICategoryCreate {
     name: string;
@@ -19,26 +19,19 @@ const CreatePage = () =>{
         image: null
     });
 
-  
-
     const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) =>{
         setState({...state, [e.target.name]: e.target.value});
-
     }
 
     const onFileChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
       const {target} = e;
       const {files} = target;
-      //e.target.files
 
-      console.log ("Show data", files);
       if(files){
         const file = files[0];
         setState({...state, image: file});
       }
-
       target.value = "";
-
     }
 
 
@@ -47,8 +40,8 @@ const CreatePage = () =>{
         console.log(state);
 
         try{
-          const result = await axios
-          .post("http://localhost:5285/api/Categories", state, {
+          const result = await http
+          .post("api/Categories", state, {
             headers: {"Content-Type": "multipart/form-data"}
           });
           navigator("/");
@@ -56,9 +49,7 @@ const CreatePage = () =>{
         catch(error: any){
           console.log ("error:", error);
         }
-        console.log ("Data sent", state);
-
-        
+        console.log ("Data sent", state);        
     }
 
     return (

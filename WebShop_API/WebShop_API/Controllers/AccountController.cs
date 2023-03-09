@@ -23,14 +23,11 @@ namespace WebShop_API.Controllers
     {
 
         private readonly UserManager<UserEntity> _userManager;
-        private readonly SignInManager<UserEntity> _signInManager;
-        private readonly IConfiguration _config;
         private readonly IJwtTokenService _jwtTokenService;
 
-        public AccountController(UserManager<UserEntity> userManager, SignInManager<UserEntity> signInManager, IJwtTokenService jwtTokenService)
+        public AccountController(UserManager<UserEntity> userManager, IJwtTokenService jwtTokenService)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _jwtTokenService = jwtTokenService;
         }
 

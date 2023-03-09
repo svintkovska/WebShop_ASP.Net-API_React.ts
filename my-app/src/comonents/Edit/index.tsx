@@ -1,6 +1,6 @@
-import axios from "axios";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import http from "../../http";
 
 
 interface ICategoryEdit {
@@ -20,7 +20,6 @@ const EditPage = () =>{
     if(categoryId)
     {
       catIdNumber = parseInt(categoryId, 10);
-
     }
     console.log(catIdNumber);
 
@@ -33,32 +32,27 @@ const EditPage = () =>{
     });
     
     useEffect(() => {
-        axios
-          .get<ICategoryEdit>(`http://localhost:5285/api/Categories/edit/${catIdNumber}`)
+        http
+          .get<ICategoryEdit>(`api/Categories/edit/${catIdNumber}`)
           .then((resp) => {
-            console.log("response - ", resp);
             setState(resp.data);
           });
       }, []);
 
     const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) =>{
         setState({...state, [e.target.name]: e.target.value});
-
     }
 
     const onFileChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
       const {target} = e;
       const {files} = target;
-      //e.target.files
 
       console.log ("Show data", files);
       if(files){
         const file = files[0];
         setState({...state, uploadImage: file});
       }
-
       target.value = "";
-
     }
 
     const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>)=>{
@@ -66,8 +60,8 @@ const EditPage = () =>{
         console.log(state);
 
         try{
-          const result = await axios
-          .put(`http://localhost:5285/api/Categories`, state, {
+          const result = await http
+          .put("api/Categories", state, {
             headers: {"Content-Type": "multipart/form-data"}
           });
           navigator("/");
@@ -75,9 +69,7 @@ const EditPage = () =>{
         catch(error: any){
           console.log ("error:", error);
         }
-        console.log ("Data sent", state);
-
-        
+        console.log ("Data sent", state);     
     }
 
     return (
@@ -144,7 +136,6 @@ const EditPage = () =>{
           <Link to="/">
                 <button className="btn btn-outline-success">Go to Categories List</button>
           </Link>
-
         </div>
       </>
 

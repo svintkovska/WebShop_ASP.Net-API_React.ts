@@ -1,6 +1,6 @@
-import axios from 'axios';
 import React, { ChangeEvent, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import http from '../../../../http';
 
 
 interface RegisterForm {
@@ -41,14 +41,12 @@ const ContinueRegistration = () =>{
      
       const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) =>{
         setState({...state, [e.target.name]: e.target.value});
-
     }
 
     const onFileChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
       const {target} = e;
       const {files} = target;
 
-      console.log ("Show data", files);
       if(files){
         const file = files[0];
         setState({...state, uploadImage: file});
@@ -61,8 +59,8 @@ const ContinueRegistration = () =>{
         e.preventDefault();
         
         try{
-          const result = await axios
-          .post("http://localhost:5285/api/account/google/registartion", state, {
+          const result = await http
+          .post("api/account/google/registartion", state, {
             headers: {"Content-Type": "multipart/form-data"}
           });
           navigator("/account/login");
@@ -70,9 +68,7 @@ const ContinueRegistration = () =>{
         catch(error: any){
           console.log ("error:", error);
         }
-        console.log ("Data sent", state);
-
-        
+        console.log ("Data sent", state);      
     }
 
     return (
