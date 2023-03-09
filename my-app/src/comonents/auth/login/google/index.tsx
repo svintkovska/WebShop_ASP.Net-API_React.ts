@@ -4,12 +4,17 @@ import jwt_decode from "jwt-decode";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import http from "../../../../http";
+import { useDispatch } from "react-redux";
+import { AuthActionType } from "../../types";
+import { setEmail, setImage } from "../../AuthReducer";
+
 
 interface GoogleData {
   token: string;
   firstName: string;
   lastName: string;
   imagePath: string;
+  email: string;
 }
 
 
@@ -17,12 +22,14 @@ interface GoogleData {
 
 const GoogleAuth= ()=> {
 const navigate = useNavigate();
+const dispatch = useDispatch();
 
   const [state, setState] = useState<GoogleData>({
     token: "",
     firstName: "",
     lastName: "",
-    imagePath: ""
+    imagePath: "",
+    email: ""
   });
 
 
@@ -34,7 +41,8 @@ const navigate = useNavigate();
         token: credential,
         firstName: userObject.given_name,
         lastName: userObject.family_name,
-        imagePath: userObject.picture
+        imagePath: userObject.picture,
+        email: userObject.email
       };
 
       try {
@@ -49,9 +57,18 @@ const navigate = useNavigate();
             }
             else{
               localStorage.setItem("token", resp.data.token);
+              localStorage.setItem("email", model.email);
+              localStorage.setItem("imagePath", model.imagePath);
+
+
               axios.defaults.headers.common = {
                 Authorization: `Bearer ${resp.data.token}`,
               };          
+
+              dispatch({type: AuthActionType.USER_LOGIN});
+              dispatch(setEmail(model.email));
+              dispatch(setImage(model.imagePath));
+
               navigate("/");
             }           
           });

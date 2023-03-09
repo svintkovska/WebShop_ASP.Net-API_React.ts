@@ -155,7 +155,7 @@ namespace WebShop_API.Controllers
 
                 }
                 var token = _jwtTokenService.CreateToken(user);
-                return Ok(new { token });
+                return Ok(new { token, user });
 
             }
 

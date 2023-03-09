@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import http from "../../../http";
+import { setEmail, setImage } from "../AuthReducer";
 import { AuthActionType } from "../types";
 import GoogleAuth from "./google";
 import { LoginForm } from "./types";
@@ -29,14 +30,19 @@ const LoginPage = () =>{
             
             try{
               const resp = await http.post("api/account/login", state);
+              
               const {token} = resp.data;
               const {result} = token;
+              localStorage.setItem("token",result);
+              localStorage.setItem("email", state.email);
+              localStorage.setItem("imagePath", resp.data.user.image);
 
-              localStorage.token = result;
+              //localStorage.token = result;
               http.defaults.headers.common['Authorization'] = `Bearer ${result}`;
 
               dispatch({type: AuthActionType.USER_LOGIN});
-              console.log("login result ", token);
+              dispatch(setEmail(state.email));
+              dispatch(setImage(resp.data.user.image));
 
               navigator("/");
             }

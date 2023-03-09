@@ -1,16 +1,23 @@
-import { MouseEventHandler } from "react";
+import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { APP_ENV } from "../../../env";
 import { AuthActionType, IAuthUser } from "../../auth/types";
 
 const DefaultHeader = () =>{
     const navigator = useNavigate()
     const {isAuth} = useSelector((store: any) => store.auth as IAuthUser);
+    const {email} = useSelector((store: any) => store.auth as IAuthUser);
+    const {imagePath} = useSelector((store: any) => store.auth as IAuthUser);
+
     const dispatch = useDispatch();
 
     const handleLogOut = () =>{
         localStorage.removeItem('token');
+        localStorage.removeItem('email');
+        localStorage.removeItem('imagePath');
+
         navigator('/account/login');
         dispatch({type: AuthActionType.USER_LOGOUT})
     }
@@ -50,14 +57,28 @@ const DefaultHeader = () =>{
               </ul>
               <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                 {isAuth ? (
-                  <li className="nav-item">
-                    <button
-                      onClick={handleLogOut}
-                      className="nav-link btn btn-link"
-                    >
-                      Log Out
-                    </button>
-                  </li>
+                  <>
+                    <li className="nav-item nav-link active">Hello {email}</li>
+                    <li className="nav-item nav-link">
+                      <img
+                        src={APP_ENV.IMAGE_PATH + imagePath}
+                        width="40"
+                        height="40"
+                      ></img>
+                    </li>
+                    <li className="nav-item">
+                      <button
+                        onClick={handleLogOut}
+                        className="nav-link btn btn-link"
+                      >
+                        <img
+                          src="https://cdn-icons-png.flaticon.com/512/3168/3168315.png"
+                          width="40"
+                          height="40"
+                        />
+                      </button>
+                    </li>
+                  </>
                 ) : (
                   <>
                     <li className="nav-item">
