@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
 import { APP_ENV } from "../../env";
 import http from "../../http";
+import { IAuthUser } from "../auth/types";
 
 interface ICategoryItem{
     id: number,
@@ -13,6 +15,13 @@ interface ICategoryItem{
 
 const HomePage = ()=>{
 
+  const {isAuth} = useSelector((store: any) => store.auth as IAuthUser);
+  const {token} = useSelector((store: any) => store.auth as IAuthUser);
+  if (isAuth)
+  {
+    http.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    console.log("token", token);  
+  }
     const [categories, setCategories] = useState<Array<ICategoryItem>>([]);
 
       useEffect(() => {
