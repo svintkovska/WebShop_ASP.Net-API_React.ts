@@ -67,6 +67,15 @@ const DefaultHeader = () =>{
                       ></img>
                     </li>
                     <li className="nav-item">
+                      <Link to="account/editProfile" className="nav-link">
+                        <img
+                          src="https://cdn-icons-png.flaticon.com/512/9653/9653837.png"
+                          width="40"
+                          height="40"
+                        ></img>
+                      </Link>
+                    </li>
+                    <li className="nav-item">
                       <button
                         onClick={handleLogOut}
                         className="nav-link btn btn-link"

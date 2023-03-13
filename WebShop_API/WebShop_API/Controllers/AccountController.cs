@@ -14,6 +14,8 @@ using WebShop_API.Abstract;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Http.HttpResults;
 using WebShop_API.Services;
+using Microsoft.EntityFrameworkCore;
+using WebShop_API.Data;
 
 namespace WebShop_API.Controllers
 {
@@ -21,14 +23,15 @@ namespace WebShop_API.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-
+        private readonly AppEFContext _context;
         private readonly UserManager<UserEntity> _userManager;
         private readonly IJwtTokenService _jwtTokenService;
 
-        public AccountController(UserManager<UserEntity> userManager, IJwtTokenService jwtTokenService)
+        public AccountController(UserManager<UserEntity> userManager, IJwtTokenService jwtTokenService, AppEFContext appEFContext )
         {
             _userManager = userManager;
             _jwtTokenService = jwtTokenService;
+            _context = appEFContext;
         }
 
         [HttpPost("google/login")]
@@ -200,6 +203,60 @@ namespace WebShop_API.Controllers
             {
                 return BadRequest();
             }
-        }  
+        }
+
+        [HttpGet("edit/{email}")]
+        public async Task <IActionResult> Edit(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                UserProfileEditViewModel model = new UserProfileEditViewModel()
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    UserName = user.UserName,
+                    CurrentImg = user.Image,
+                    Email = user.Email,
+                };
+                return Ok(model);
+            }
+
+            return BadRequest("User Not Found");
+        }
+
+
+
+
+        [HttpPut]
+        public async Task<IActionResult> Edit([FromForm] UserProfileEditViewModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.UserName = model.UserName;
+
+            string imageName = String.Empty;
+            if (model.UploadImage != null)
+            {
+                string exp = Path.GetExtension(model.UploadImage.FileName);
+                imageName = Path.GetRandomFileName() + exp;
+                string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", imageName);
+                using (var stream = System.IO.File.Create(dirSaveImage))
+                {
+                    await model.UploadImage.CopyToAsync(stream);
+                }
+                string oldImg = user.Image;
+                user.Image = imageName;
+                string dirDelImage = Path.Combine(Directory.GetCurrentDirectory(), "images", oldImg);
+                if (System.IO.File.Exists(dirDelImage))
+                    System.IO.File.Delete(dirDelImage);
+            }
+
+
+            _context.SaveChanges();
+            return Ok(user.Image);
+        }
     }
 }

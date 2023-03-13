@@ -1,43 +1,23 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import http from "../../http";
+import { ChangeEvent, useState } from "react";
+import { Link, useNavigate } from 'react-router-dom';
+import http from "../../../http";
+import upload from "../../../assets/upload.png"
 
-
-interface ICategoryEdit {
-    id: number;
+interface ICategoryCreate {
     name: string;
     description: string;
-    currentImg: string;
-    uploadImage: File | null;
+    image: File | null;
     }
 
 
-const EditPage = () =>{
+const CreateCategoryPage = () =>{
     const navigator = useNavigate();
 
-    const { categoryId } = useParams();
-    let catIdNumber = -1;
-    if(categoryId)
-    {
-      catIdNumber = parseInt(categoryId, 10);
-    }
-    console.log(catIdNumber);
-
-    const [state, setState] = useState<ICategoryEdit>({
-        id: catIdNumber,
+    const [state, setState] = useState<ICategoryCreate>({
         name: "",
         description: "",
-        currentImg: "",
-        uploadImage: null
+        image: null
     });
-    
-    useEffect(() => {
-        http
-          .get<ICategoryEdit>(`api/Categories/edit/${catIdNumber}`)
-          .then((resp) => {
-            setState(resp.data);
-          });
-      }, []);
 
     const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) =>{
         setState({...state, [e.target.name]: e.target.value});
@@ -47,13 +27,13 @@ const EditPage = () =>{
       const {target} = e;
       const {files} = target;
 
-      console.log ("Show data", files);
       if(files){
         const file = files[0];
-        setState({...state, uploadImage: file});
+        setState({...state, image: file});
       }
       target.value = "";
     }
+
 
     const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
@@ -61,7 +41,7 @@ const EditPage = () =>{
 
         try{
           const result = await http
-          .put("api/Categories", state, {
+          .post("api/Categories", state, {
             headers: {"Content-Type": "multipart/form-data"}
           });
           navigator("/");
@@ -69,13 +49,13 @@ const EditPage = () =>{
         catch(error: any){
           console.log ("error:", error);
         }
-        console.log ("Data sent", state);     
+        console.log ("Data sent", state);        
     }
 
     return (
-        <>
+      <>
         <div className="container col-6 offset-3">
-          <h1 className="mt-5 mb-4 text-center">Edit Category</h1>
+          <h1 className="mt-5 mb-4 text-center">Add Category</h1>
 
           <form onSubmit={onSubmitHandler}>
             <div className="mb-3">
@@ -113,7 +93,7 @@ const EditPage = () =>{
 
             <div className="mb-3">
               <label htmlFor="image" className="form-label">
-                <img src={(state.uploadImage == null ? "http://localhost:5285/images/" + state.currentImg :  URL.createObjectURL(state.uploadImage))} 
+                <img src={(state.image == null ? upload : URL.createObjectURL(state.image))} 
                 alt="select img" 
                 width="150px" 
                 style={{cursor: "pointer"}}/>
@@ -123,25 +103,23 @@ const EditPage = () =>{
                 className="d-none"
                 name="image"
                 id="image"
-                onChange={onFileChangeHandler}              
-              />          
+                onChange={onFileChangeHandler}
+              />
             </div>
 
             <div className="text-center">
               <button type="submit" className="btn btn-success">
-                Edit Category
+                Add Category
               </button>
             </div>
           </form>
           <Link to="/">
                 <button className="btn btn-outline-success">Go to Categories List</button>
           </Link>
+
         </div>
       </>
-
     );
-
 }
 
-
-export default EditPage;
+export default CreateCategoryPage;

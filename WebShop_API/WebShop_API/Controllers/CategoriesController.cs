@@ -11,8 +11,6 @@ namespace WebShop_API.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        //private static readonly List<UserItemViewModel> _users = new ();
-
         private readonly AppEFContext _context;
 
         public CategoriesController(AppEFContext context) { 
