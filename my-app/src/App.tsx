@@ -7,10 +7,11 @@ import RegisterPage from './comonents/auth/register';
 import LoginPage from './comonents/auth/login';
 import ContinueRegistration from './comonents/auth/register/google';
 import DefaultLayout from './comonents/containers';
-import EditCategoryPage from './comonents/categories/edit';
-import CreateCategoryPage from './comonents/categories/create';
+import EditCategoryPage from './comonents/admin/categories/edit';
+import CreateCategoryPage from './comonents/admin/categories/create';
 import EditProfile from './comonents/auth/editProfile';
 import ChangePassword from './comonents/auth/editProfile/chnagePassword';
+import CategoriesList from './comonents/admin/categories/list';
 
 function App() {
 
@@ -20,7 +21,8 @@ function App() {
       <Routes>
         <Route path="/" element={<DefaultLayout/>}>
         <Route index element={<HomePage />} />
-          <Route path="categories/create" element={<CreateCategoryPage/>} />
+          <Route path="/categories/create" element={<CreateCategoryPage/>} />
+          <Route path="/categories/list" element={<CategoriesList/>} />
           <Route path="/categories/edit/:categoryId" element={<EditCategoryPage></EditCategoryPage>} />
           <Route path="/account/register" element={<RegisterPage/>} />
           <Route path="/account/register/googleRegistration" element={<ContinueRegistration/>} />

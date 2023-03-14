@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -45,7 +44,7 @@ const DefaultHeader = () =>{
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                 <li className="nav-item">
-                  <Link to="/" className="nav-link active" aria-current="page">
+                  <Link to="/categories/list" className="nav-link active" aria-current="page">
                     Categories
                   </Link>
                 </li>
