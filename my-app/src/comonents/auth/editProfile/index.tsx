@@ -21,6 +21,7 @@ const EditProfile = () =>{
     const {email} = useSelector((store: any) => store.auth as IAuthUser);
     const dispatch = useDispatch();
 
+    const [profileChanged, setProfileChanged] = useState<boolean>(false);
 
     const [state, setState] = useState<IProfileEdit>({
         email: "",
@@ -30,17 +31,12 @@ const EditProfile = () =>{
         currentImg: "",
         uploadImage: null
     });
-    console.log("initial state", state);
 
     useEffect(() => {
         http
           .get<IProfileEdit>(`api/Account/edit/${email}`)
           .then((resp) => {
             setState(resp.data);
-            console.log("resp data", resp.data);
-            console.log("state", state);
-            
-            
           });
       }, []);
 
@@ -62,23 +58,15 @@ const EditProfile = () =>{
 
     const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
-        console.log(state);
-
         try{
           const result = await http
           .put("api/Account", state, {
             headers: {"Content-Type": "multipart/form-data"}
-          }).then(resp => {
-            console.log("000000",  resp.data);
-            
+          }).then(resp => {          
             localStorage.setItem("imagePath", resp.data);
             dispatch(setImage(resp.data));
-
-            navigator("/");
-
+            setProfileChanged(true);
           })
-
-
         }
         catch(error: any){
           console.log ("error:", error);
@@ -90,7 +78,16 @@ const EditProfile = () =>{
         <>
         <div className="container col-6 offset-3">
           <h1 className="mt-5 mb-4 text-center">Update Profile</h1>
-
+          <div className="text-center">
+          <Link to="/account/editProfile/changePassword">
+                <button className="btn btn-outline-primary">Change Password</button>
+          </Link>
+          </div>
+          {profileChanged && (
+            <div className="alert alert-success" role="alert">
+              Profile successfully updated
+            </div>
+          )}
           <form onSubmit={onSubmitHandler}>
             <div className="mb-3">
               <label htmlFor="firstName" className="form-label">
@@ -158,14 +155,12 @@ const EditProfile = () =>{
             </div>
 
             <div className="text-center">
-              <button type="submit" className="btn btn-success">
-                Edit Profile
+              <button type="submit" className="btn btn-success mb-5">
+                Update Profile
               </button>
             </div>
           </form>
-          <Link to="/">
-                <button className="btn btn-outline-success">Go to Categories List</button>
-          </Link>
+          
         </div>
       </>
 

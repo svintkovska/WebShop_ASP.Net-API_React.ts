@@ -166,7 +166,6 @@ namespace WebShop_API.Controllers
         }
 
 
-
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromForm]RegisterUserViewModel model)
         {
@@ -225,9 +224,6 @@ namespace WebShop_API.Controllers
             return BadRequest("User Not Found");
         }
 
-
-
-
         [HttpPut]
         public async Task<IActionResult> Edit([FromForm] UserProfileEditViewModel model)
         {
@@ -258,5 +254,32 @@ namespace WebShop_API.Controllers
             _context.SaveChanges();
             return Ok(user.Image);
         }
+
+        [HttpPost("edit/changePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordViewModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            if(model.NewPassword == model.ConfirmPassword)
+            {
+                var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                if (!result.Succeeded)
+                {
+                    return BadRequest(result.Errors);
+                }
+                return Ok();
+
+            }
+            return BadRequest();
+        }
     }
+
+
+
+
+    
 }

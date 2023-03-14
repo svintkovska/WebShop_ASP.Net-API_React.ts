@@ -10,6 +10,7 @@ import DefaultLayout from './comonents/containers';
 import EditCategoryPage from './comonents/categories/edit';
 import CreateCategoryPage from './comonents/categories/create';
 import EditProfile from './comonents/auth/editProfile';
+import ChangePassword from './comonents/auth/editProfile/chnagePassword';
 
 function App() {
 
@@ -25,6 +26,8 @@ function App() {
           <Route path="/account/register/googleRegistration" element={<ContinueRegistration/>} />
           <Route path="/account/login" element={<LoginPage/>} />
           <Route path="/account/editProfile" element={<EditProfile/>} />
+          <Route path="/account/editProfile/changePassword" element={<ChangePassword/>} />
+
           {/* <Route path="*" element={<NoMatch />} /> */}
         </Route>         
       </Routes>
