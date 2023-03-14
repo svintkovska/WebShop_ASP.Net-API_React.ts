@@ -10,7 +10,7 @@ const initState: IAuthUser = {
 
 export const AuthReducer = (state = initState, action: any)=>{
 
-    axios.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
+  
 
    switch(action.type){
     case AuthActionType.USER_LOGIN: {
@@ -32,9 +32,11 @@ export const AuthReducer = (state = initState, action: any)=>{
         };
       }
       case UserActionType.SET_IMAGE: {
+        console.log("action", action);
+        
         return {
           ...state,
-          image: action.payload,
+          imagePath: action.payload,
         };
       }
    }

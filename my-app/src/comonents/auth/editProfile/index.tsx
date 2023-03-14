@@ -89,7 +89,7 @@ const EditProfile = () =>{
     return (
         <>
         <div className="container col-6 offset-3">
-          <h1 className="mt-5 mb-4 text-center">Edit Category</h1>
+          <h1 className="mt-5 mb-4 text-center">Update Profile</h1>
 
           <form onSubmit={onSubmitHandler}>
             <div className="mb-3">

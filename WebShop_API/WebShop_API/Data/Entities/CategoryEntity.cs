@@ -14,5 +14,7 @@ namespace WebShop_API.Data.Entities
         [StringLength(500)]
 
         public string Image { get; set; }
+        public virtual ICollection<ProductEntity> Products { get; set; }
+
     }
 }
