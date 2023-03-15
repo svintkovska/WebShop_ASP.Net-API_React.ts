@@ -12,6 +12,10 @@ import CreateCategoryPage from './comonents/admin/categories/create';
 import EditProfile from './comonents/auth/editProfile';
 import ChangePassword from './comonents/auth/editProfile/chnagePassword';
 import CategoriesList from './comonents/admin/categories/list';
+import CategoriesPage from './comonents/shop/categories';
+import ProductsList from './comonents/admin/products/list';
+import EditProductPage from './comonents/admin/products/edit';
+import CreateProductPage from './comonents/admin/products/create';
 
 function App() {
 
@@ -24,11 +28,16 @@ function App() {
           <Route path="/categories/create" element={<CreateCategoryPage/>} />
           <Route path="/categories/list" element={<CategoriesList/>} />
           <Route path="/categories/edit/:categoryId" element={<EditCategoryPage></EditCategoryPage>} />
+          <Route path="/products/list" element={<ProductsList/>} />
+          <Route path="/products/create" element={<CreateProductPage/>} />
+          <Route path="/products/edit/:productId" element={<EditProductPage></EditProductPage>} />
           <Route path="/account/register" element={<RegisterPage/>} />
           <Route path="/account/register/googleRegistration" element={<ContinueRegistration/>} />
           <Route path="/account/login" element={<LoginPage/>} />
           <Route path="/account/editProfile" element={<EditProfile/>} />
           <Route path="/account/editProfile/changePassword" element={<ChangePassword/>} />
+          <Route path="/categories" element={<CategoriesPage/>} />
+
 
           {/* <Route path="*" element={<NoMatch />} /> */}
         </Route>         

@@ -1,10 +1,13 @@
+import { Link } from "react-router-dom";
 
 const HomePage = ()=>{
 
   
     return (
       <>
-       <h1>Home Page</h1>
+        <Link to="/categories">
+                <button className="btn btn-outline-success">Go to Categories </button>
+          </Link>
       </>
     );
 }

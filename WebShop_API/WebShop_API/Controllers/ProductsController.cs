@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 using WebShop_API.Data;
 using WebShop_API.Data.Entities;
 using WebShop_API.Models;
@@ -13,7 +15,6 @@ namespace WebShop_API.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly AppEFContext _context;
-
         public ProductsController(AppEFContext context)
         {
 
@@ -39,6 +40,18 @@ namespace WebShop_API.Controllers
             return Ok(list);
         }
 
+        [HttpGet("create")]
+        public async Task<IActionResult> Create()
+        {
+            var categories = await _context.Categories
+                .ToListAsync();
+            //List<CategoryViewModel> categoriesViewModel = new List<CategoryViewModel>();
+            //foreach (var item in categories)
+            //{
+            //    categoriesViewModel.Add(new CategoryViewModel { Id = item.Id, Name = item.Name });
+            //}
+            return Ok(categories);
+        }
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] ProductCreateViewModel model)
         {
@@ -75,9 +88,70 @@ namespace WebShop_API.Controllers
                 }
             }
 
-
             return Ok();
         }
+
+        [HttpGet("edit/{id}")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var productEdit = _context.Products.SingleOrDefault(c => c.Id == id);
+            var productImages = await _context.ProductImages.Where(pi => pi.ProductId == id)
+                .Select(pi=>pi.Name)
+                .ToListAsync();
+
+
+            var categories = await _context.Categories
+                .ToListAsync();
+            List<CategoryViewModel> categoriesViewModel = new List<CategoryViewModel>();
+            foreach (var item in categories)
+            {
+                categoriesViewModel.Add(new CategoryViewModel { Id = item.Id, Name = item.Name });
+            }
+
+            ProductEditViewModel model = new ProductEditViewModel()
+            {
+                Name = productEdit.Name,
+                Description = productEdit.Description,
+                Id = id,
+                Price= productEdit.Price,
+                CategoryId = productEdit.CategoryId,
+                CurrentImages = productImages,
+                Categories = categoriesViewModel
+            };
+            return Ok(model);
+        }
+       
+        [HttpPut]
+        public async Task<IActionResult> Edit([FromForm] EditCategoryViewModel model)
+        {
+            var edit = _context.Categories.SingleOrDefault(x => x.Id == model.Id);
+            edit.Name = model.Name;
+            edit.Description = model.Description;
+
+            string imageName = String.Empty;
+            if (model.UploadImage != null)
+            {
+                string exp = Path.GetExtension(model.UploadImage.FileName);
+                imageName = Path.GetRandomFileName() + exp;
+                string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", imageName);
+                using (var stream = System.IO.File.Create(dirSaveImage))
+                {
+                    await model.UploadImage.CopyToAsync(stream);
+                }
+                string oldImg = edit.Image;
+                edit.Image = imageName;
+                string dirDelImage = Path.Combine(Directory.GetCurrentDirectory(), "images", oldImg);
+                if (System.IO.File.Exists(dirDelImage))
+                    System.IO.File.Delete(dirDelImage);
+            }
+
+
+            _context.SaveChanges();
+            return Ok();
+        }
+
+
+
 
         private async Task<string> SaveImage(IFormFile image)
         {

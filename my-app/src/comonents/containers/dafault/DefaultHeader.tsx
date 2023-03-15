@@ -49,8 +49,8 @@ const DefaultHeader = () =>{
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="categories/create" className="nav-link">
-                    Add Category
+                  <Link to="/products/list" className="nav-link">
+                    Products
                   </Link>
                 </li>
               </ul>

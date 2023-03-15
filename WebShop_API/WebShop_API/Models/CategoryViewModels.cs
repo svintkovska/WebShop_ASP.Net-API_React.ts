@@ -14,4 +14,14 @@
         public string Description { get; set; }
         public IFormFile Image { get; set; }
     }
+
+    public class EditCategoryViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+
+        public IFormFile UploadImage { get; set; }
+        public string CurrentImg { get; set; }
+    }
 }

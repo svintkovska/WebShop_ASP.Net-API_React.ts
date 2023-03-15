@@ -18,7 +18,6 @@ namespace WebShop_API.Controllers
             _context= context;
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult GetList()
         {
