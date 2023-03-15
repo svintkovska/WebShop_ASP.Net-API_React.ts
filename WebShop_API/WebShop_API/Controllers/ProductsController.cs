@@ -43,15 +43,10 @@ namespace WebShop_API.Controllers
         [HttpGet("create")]
         public async Task<IActionResult> Create()
         {
-            var categories = await _context.Categories
-                .ToListAsync();
-            //List<CategoryViewModel> categoriesViewModel = new List<CategoryViewModel>();
-            //foreach (var item in categories)
-            //{
-            //    categoriesViewModel.Add(new CategoryViewModel { Id = item.Id, Name = item.Name });
-            //}
+            var categories = await _context.Categories.ToListAsync();
             return Ok(categories);
         }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] ProductCreateViewModel model)
         {
