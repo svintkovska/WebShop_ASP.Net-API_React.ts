@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using WebShop_API.Services;
 using Microsoft.EntityFrameworkCore;
 using WebShop_API.Data;
+using System.Net;
 
 namespace WebShop_API.Controllers
 {
@@ -26,12 +27,16 @@ namespace WebShop_API.Controllers
         private readonly AppEFContext _context;
         private readonly UserManager<UserEntity> _userManager;
         private readonly IJwtTokenService _jwtTokenService;
-
-        public AccountController(UserManager<UserEntity> userManager, IJwtTokenService jwtTokenService, AppEFContext appEFContext )
+        private readonly ISmtpEmailService _emailService;
+        private readonly IConfiguration _configuration;
+        public AccountController(UserManager<UserEntity> userManager, IJwtTokenService jwtTokenService, 
+            AppEFContext appEFContext, ISmtpEmailService emailService, IConfiguration configuration )
         {
             _userManager = userManager;
             _jwtTokenService = jwtTokenService;
             _context = appEFContext;
+            _emailService = emailService;
+            _configuration = configuration;
         }
 
         [HttpPost("google/login")]
@@ -276,10 +281,45 @@ namespace WebShop_API.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPost("forgotPassword")]
+        public async Task<IActionResult> ForgotPassword( ForgotPasswordModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+                return NotFound();
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var frontendURL = _configuration.GetValue<string>("FrontEndURL");
+            var callbackURL = $"{frontendURL}/resetpassword?userId={user.Id}&" + $"code={WebUtility.UrlEncode(token)}";
+
+            var message = new Message()
+            {
+                To = user.Email,
+                Subject = "Reset Password",
+                Body = "To reset the password follow the link -> " + $"<a href='{callbackURL}'> Reset Password </a>"
+            };
+            _emailService.Send(message);
+        
+            return Ok();
+        }
+
+        [HttpPost("newPassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] NewPasswordViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            var res = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+            if(!res.Succeeded)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+
     }
 
 
 
 
-    
+
 }

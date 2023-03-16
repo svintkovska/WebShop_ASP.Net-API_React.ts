@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import http from "../../../http";
 import { setEmail, setImage } from "../AuthReducer";
+import SendEmailModal from "../resetPassword/sendEmailModal";
 import { AuthActionType } from "../types";
 import GoogleAuth from "./google";
 import { LoginForm } from "./types";
@@ -15,43 +16,50 @@ const LoginPage = () =>{
     const dispatch = useDispatch();
 
     const [state, setState] = useState<LoginForm>({
-        email: "",
-        password: "",
-      });
+      email: "",
+      password: "",
+    });
+    const [errorMessage, setErrorMessage] = useState("");
+    const [showModal, setShowModal] = useState(false);
 
-      const [errorMessage, setErrorMessage] = useState("");
 
-     
-      const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) =>{
-        setState({...state, [e.target.name]: e.target.value});}
+    const handleModal = () => {
+      setShowModal(!showModal);
+    };
 
-        const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>)=>{
-            e.preventDefault();
-            
-            try{
-              const resp = await http.post("api/account/login", state);
-              
-              const {token} = resp.data;
-              const {result} = token;
-              localStorage.setItem("token",result);
-              localStorage.setItem("email", state.email);
-              localStorage.setItem("imagePath", resp.data.user.image);
+    const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
+      setState({ ...state, [e.target.name]: e.target.value });
+    };
 
-              //localStorage.token = result;
-              http.defaults.headers.common['Authorization'] = `Bearer ${result}`;
+    const onClickHandler = async () => {
+      setShowModal(true);
+    };
 
-              dispatch({type: AuthActionType.USER_LOGIN});
-              dispatch(setEmail(state.email));
-              dispatch(setImage(resp.data.user.image));
+    const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
 
-              navigator("/");
-            }
-            catch (error: any) {
-              console.log("error:", error);
-              setErrorMessage("Inavlid email or password" );
-            }
-            console.log("Data sent", state);    
-        }
+      try {
+        const resp = await http.post("api/account/login", state);
+
+        const { token } = resp.data;
+        const { result } = token;
+        localStorage.setItem("token", result);
+        localStorage.setItem("email", state.email);
+        localStorage.setItem("imagePath", resp.data.user.image);
+
+        http.defaults.headers.common["Authorization"] = `Bearer ${result}`;
+
+        dispatch({ type: AuthActionType.USER_LOGIN });
+        dispatch(setEmail(state.email));
+        dispatch(setImage(resp.data.user.image));
+
+        navigator("/");
+      } catch (error: any) {
+        console.log("error:", error);
+        setErrorMessage("Inavlid email or password");
+      }
+      console.log("Data sent", state);
+    };
         
 return(
     <>
@@ -76,7 +84,7 @@ return(
               <div className="invalid-feedback">Please enter a valid name.</div>
             </div>
 
-            <div className="mb-3">
+            <div className="mb-1">
               <label htmlFor="password" className="form-label">
                 Password
               </label>
@@ -94,7 +102,12 @@ return(
               )}
             </div>
              
-           
+            <div className="text-center mb-3">
+              <button type="button" className="btn btn-link" onClick={onClickHandler} >
+                Forgot password?
+              </button>
+              {showModal && <SendEmailModal showModal={showModal} handleModal={handleModal} />}
+            </div>
             <div className="text-center">
               <button type="submit" className="btn btn-success mb-3">
                 Log In

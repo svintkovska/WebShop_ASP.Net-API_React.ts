@@ -6,6 +6,9 @@ using WebShop_API.Data.Entities;
 using Bogus;
 using WebShop_API.Helpers;
 using System.Drawing.Imaging;
+using WebShop_API.Abstract;
+using WebShop_API.Models;
+using WebShop_API.Services;
 
 namespace WebShop_API.Data
 {
@@ -16,6 +19,7 @@ namespace WebShop_API.Data
             using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<AppEFContext>();
+                var emailService = scope.ServiceProvider.GetRequiredService<ISmtpEmailService>();
 
                 context.Database.Migrate();
 

@@ -16,6 +16,7 @@ import CategoriesPage from './comonents/shop/categories';
 import ProductsList from './comonents/admin/products/list';
 import EditProductPage from './comonents/admin/products/edit';
 import CreateProductPage from './comonents/admin/products/create';
+import ResetPassword from './comonents/auth/resetPassword';
 
 function App() {
 
@@ -34,6 +35,8 @@ function App() {
           <Route path="/account/register" element={<RegisterPage/>} />
           <Route path="/account/register/googleRegistration" element={<ContinueRegistration/>} />
           <Route path="/account/login" element={<LoginPage/>} />
+          <Route path="/resetpassword" element={<ResetPassword/>} />
+
           <Route path="/account/editProfile" element={<EditProfile/>} />
           <Route path="/account/editProfile/changePassword" element={<ChangePassword/>} />
           <Route path="/categories" element={<CategoriesPage/>} />
