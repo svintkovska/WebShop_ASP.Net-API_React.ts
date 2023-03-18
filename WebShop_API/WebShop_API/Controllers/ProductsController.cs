@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using WebShop_API.Data;
 using WebShop_API.Data.Entities;
 using WebShop_API.Models;
+using WebShop_API.Services;
 
 namespace WebShop_API.Controllers
 {
@@ -15,10 +16,12 @@ namespace WebShop_API.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly AppEFContext _context;
-        public ProductsController(AppEFContext context)
+        private readonly IConfiguration _configuration;
+        public ProductsController(AppEFContext context, IConfiguration configuration)
         {
 
             _context = context;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -115,14 +118,15 @@ namespace WebShop_API.Controllers
             _context.SaveChanges();
 
             string imageName = String.Empty;
-            if(model.Files != null)
+            if (model.Files != null)
             {
                 short priority = 1;
                 foreach (var image in model.Files)
                 {
-                    if(image !=null)
+                    if (image != null)
                     {
-                        imageName = await SaveImage(image);
+                        //imageName = await SaveImage(image);
+                        imageName =  AddSizedImage.AddIFormImage(_configuration, image);
                         ProductImageEntity pi = new ProductImageEntity
                         {
                             Name = imageName,
@@ -196,9 +200,6 @@ namespace WebShop_API.Controllers
             _context.SaveChanges();
             return Ok();
         }
-
-
-
 
         private async Task<string> SaveImage(IFormFile image)
         {

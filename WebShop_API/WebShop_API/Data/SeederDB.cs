@@ -61,7 +61,7 @@ namespace WebShop_API.Data
                         for (int j = 0; j < 3; j++)
                         {
                             var img = testProductImage.Generate();
-                            string name = AddImage(app, img.Name);
+                            string name = AddSizedImage.AddImage(app, img.Name);
                             img.Name = name;
                             context.ProductImages.Add(img);
                             context.SaveChanges();
@@ -107,34 +107,7 @@ namespace WebShop_API.Data
             }
         }
 
-        private static string AddImage(IApplicationBuilder app, string urlImage)
-        {
-            using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var _configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-
-                string fileName = String.Empty;
-
-                if (urlImage != null)
-                {
-                    var bmp = ImageWorker.UrlToBitmap(urlImage);
-
-                    fileName = Path.GetRandomFileName() + ".jpg";
-                    string[] imageSizes = ((string)_configuration.GetValue<string>("ImageSizes")).Split(" ");
-                    foreach (var imageSize in imageSizes)
-                    {
-                        int size = int.Parse(imageSize);
-                        string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", $"{size}_{fileName}");
-
-                        var saveImage = ImageWorker.CompressImage(bmp, size, size, false, false);
-                        saveImage.Save(dirSaveImage, ImageFormat.Jpeg);
-                    }
-                    return fileName;
-
-                }
-            }
-            return null;
-        }
+        
     }
 
 }

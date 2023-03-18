@@ -22,6 +22,33 @@ namespace WebShop_API.Models
         public List<IFormFile> Files { get; set; }
     }
 
+
+
+
+
+
+
+    //public class ProductImage
+    //{
+    //    public IFormFile File { get; set; }
+    //    public string Url { get; set; }
+    //}
+    //public class ProductCreateViewModel
+    //{
+    //    public int Id { get; set; }
+    //    public string Name { get; set; }
+    //    public decimal Price { get; set; }
+    //    public string Description { get; set; }
+    //    public int CategoryId { get; set; }
+    //    public List<ProductImage> Images { get; set; }
+    //    public List<CategoryEntity> Categories { get; set; }
+    //    public List<IFormFile> Files { get; set; }
+
+    //}
+
+
+
+
     public class ProductEditViewModel
     {
         public int Id { get; set; }

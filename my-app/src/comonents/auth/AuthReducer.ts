@@ -1,7 +1,7 @@
 import axios from "axios";
 import { AuthActionType, IAuthUser, UserActionType } from "./types";
 
-const storedRoles = localStorage.getItem('userRoles');
+const storedRoles = localStorage.getItem('roles');
 const roles = storedRoles ? JSON.parse(storedRoles) as string[] : [];
 
 const initState: IAuthUser = {

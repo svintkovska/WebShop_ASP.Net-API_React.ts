@@ -8,7 +8,7 @@ import upload from "../../../../assets/upload.png"
     id: number;
     name: string;
   }
- interface IProductImage {
+ interface ProductImage {
   file?: File;
   url: string;
 }
@@ -18,7 +18,7 @@ import upload from "../../../../assets/upload.png"
     description: string;
     categoryId: number;
     categories: ICategory[];
-    images: IProductImage[];
+    images: ProductImage[];
     files: File[];
   }
 
@@ -146,21 +146,28 @@ const CreateProductPage = () =>{
     formData.append("description", product.description);
     formData.append("categoryId", product.categoryId.toString());
 
-    for (let file of product.files) {
-      formData.append("files", file);
+    for (let image of product.images) {
+      if (image.file) {
+        formData.append("files", image.file);
+      }
     }
+    console.log("formData ---", formData);
 
     console.log("submit ---", product);
     
-      // try {
-      //   const result = await http.put("api/Categories", formData, {
-      //     headers: { "Content-Type": "multipart/form-data" },
-      //   });
-      //   navigator("/");
-      // } catch (error: any) {
-      //   console.log("error:", error);
-      // }
-      // console.log("Data sent", product);
+      try {
+        const result = await http.post("api/Products", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+          
+        });
+        console.log("submit ++++++++");
+
+      } catch (error: any) {
+        console.log("error:", error);
+        console.log("submit -------");
+
+      }
+      console.log("Data sent", product);
     };
 
   

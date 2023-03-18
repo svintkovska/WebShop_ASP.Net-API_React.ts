@@ -30,6 +30,10 @@ const CreateCategoryPage = () =>{
       if(files){
         const file = files[0];
         setState({...state, image: file});
+        console.log("state", state);
+        console.log("files[0]", files[0]);
+
+
       }
       target.value = "";
     }
