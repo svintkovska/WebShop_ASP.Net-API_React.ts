@@ -31,7 +31,7 @@ namespace WebShop_API.Data
                     CategoryEntity cat = new CategoryEntity()
                     {
                         Name = "Pizza",
-                        DateCreated = DateTime.Now,
+                        DateCreated = DateTime.UtcNow,
                         Image = "pizza.jpg"
                     };
                     context.Categories.Add(cat);

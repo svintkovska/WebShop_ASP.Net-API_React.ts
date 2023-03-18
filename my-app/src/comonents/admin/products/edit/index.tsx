@@ -50,9 +50,7 @@ const EditProductPage = () =>{
         files: []
       });
 
-     
-    console.log("initial product", product);
-    
+         
       const [file, setFile] = useState<File | null>(null);
     
      useEffect(() => {

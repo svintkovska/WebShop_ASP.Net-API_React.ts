@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import http from "../../../http";
-import { setEmail, setImage } from "../AuthReducer";
+import { setEmail, setImage, setRoles } from "../AuthReducer";
 import SendEmailModal from "../resetPassword/sendEmailModal";
 import { AuthActionType } from "../types";
 import GoogleAuth from "./google";
@@ -40,18 +40,23 @@ const LoginPage = () =>{
 
       try {
         const resp = await http.post("api/account/login", state);
-
+        
         const { token } = resp.data;
         const { result } = token;
         localStorage.setItem("token", result);
         localStorage.setItem("email", state.email);
         localStorage.setItem("imagePath", resp.data.user.image);
 
-        http.defaults.headers.common["Authorization"] = `Bearer ${result}`;
+        const roles: string[] = resp.data.roles;
+        localStorage.setItem('roles', JSON.stringify(roles));
 
+        http.defaults.headers.common["Authorization"] = `Bearer ${result}`;
+ 
         dispatch({ type: AuthActionType.USER_LOGIN });
         dispatch(setEmail(state.email));
         dispatch(setImage(resp.data.user.image));
+        dispatch(setRoles(roles));
+
 
         navigator("/");
       } catch (error: any) {

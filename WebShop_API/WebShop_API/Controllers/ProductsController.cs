@@ -38,6 +38,58 @@ namespace WebShop_API.Controllers
                 })
                 .ToList();
             return Ok(list);
+
+        }
+        [HttpGet("search")]
+        public IActionResult GetList([FromQuery] ProductSearchViewModel search)
+        {
+            var query = _context.Products.
+                Include(x => x.Category)
+                .Include(x => x.ProductImages)
+                .AsQueryable();
+
+            if(!string.IsNullOrEmpty(search.Name))
+            {
+                query = query.Where(x => x.Name.ToLower().Contains(search.Name.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(search.Description))
+            {
+                query = query.Where(x => x.Description.ToLower().Contains(search.Description.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(search.CategoryId))
+            {
+                int catId = int.Parse(search.CategoryId);
+                query = query.Where(x => x.CategoryId == catId);
+            }
+
+            int page = search.Page;
+            int pageSize = 5;
+
+            var list = query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new ProductItemView
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    Price = x.Price,
+                    Category = x.Category.Name,
+                    Images = x.ProductImages.Select(x => x.Name).ToList()
+                })
+                .ToList();
+
+            int total = query.Count();
+            int pages = (int)Math.Ceiling(total / (double)pageSize);
+
+
+            return Ok(new ProductSearchResultViewModel
+            {
+                Products = list,
+                Total = total,
+                CurrentPage = page,
+                Pages= pages
+            });
         }
 
         [HttpGet("create")]

@@ -8,15 +8,19 @@ import upload from "../../../../assets/upload.png"
     id: number;
     name: string;
   }
+ interface IProductImage {
+  file?: File;
+  url: string;
+}
   interface IProduct {
     name: string;
     price: number;
     description: string;
     categoryId: number;
     categories: ICategory[];
-    files: File[]
+    images: IProductImage[];
+    files: File[];
   }
-
 
 const CreateProductPage = () =>{
     const navigator = useNavigate();
@@ -31,23 +35,19 @@ const CreateProductPage = () =>{
         description: "",
         categoryId: 0,
         categories: [],
+        images: [],
         files: []
       });
 
      
     console.log("initial product", product);
-    
-      const [file, setFile] = useState<File | null>(null);
-    
+
+      
      useEffect(() => {
        const res =  http
           .get<IProduct>(`api/Products/create`)
           .then((resp) => {
-            console.log("GET --", resp.data);
-
             setProduct({ ...product, categories: resp.data as any});
-            console.log("GET --", resp.data);
-            
           });
       }, []);
 
@@ -64,33 +64,106 @@ const CreateProductPage = () =>{
       };
 
      
+      const [showFileInput, setShowFileInput] = useState(false);
 
-    const onFileChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-      const { target } = e;
-      const { files } = target;
 
-      console.log("Show data", files);
-    //   if (files) {
-    //     const file = files[0];
-    //     setState({ ...state, uploadImage: file });
-    //   }
-      target.value = "";
-    };
+      const onFileChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setShowFileInput(false);
 
+        const { target } = e;
+        const { files } = target;
+      
+        if (files) {
+          const fileList = Array.from(files);
+          const newImages = fileList.map((file) => ({ file, url: URL.createObjectURL(file) }));
+          setProduct({ ...product, files: [...product.files, ...fileList], images: [...product.images, ...newImages] });
+        }
+      
+        target.value = "";
+      };
+      
+      const onDeleteImageHandler = (index: number) => {
+        const updatedFiles = [...product.files];
+        updatedFiles.splice(index, 1);
+        const updatedImages = [...product.images];
+        updatedImages.splice(index, 1);
+        setProduct({ ...product, files: updatedFiles, images: updatedImages });
+      };
+      
+      const onEditImageHandler = (index: number) => {
+        setShowFileInput(false);
+
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "image/*";
+        input.multiple = false;
+        input.addEventListener("change", (e) => {
+          const { target } = e;
+          if (target instanceof HTMLInputElement && target.files) {
+            const newImages = Array.from(target.files).map((file) => ({
+              file,
+              url: URL.createObjectURL(file),
+            }));
+            const updatedImages = [...product.images];
+            updatedImages[index] = newImages[0];
+            setProduct({ ...product, images: updatedImages });
+          }
+        });
+        input.click();
+      };
+      
+      const onSelectImageHandler = (index: number) => {
+        setShowFileInput(false);
+
+        const inputElement = document.createElement("input");
+        inputElement.type = "file";
+        inputElement.multiple = false;
+        inputElement.accept = "image/*";
+      
+        inputElement.addEventListener("change", (e: any) => {
+          const file = e.target.files[0];
+          if (file) {
+            const newImages = [...product.images];
+            const updatedImage = {
+              file: file,
+              url: URL.createObjectURL(file)
+            };
+            newImages[index] = updatedImage;
+            setProduct({ ...product, images: newImages });
+          }
+        });
+      
+        inputElement.click();
+      };
+      
+      
     const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      const formData = new FormData();
-      
-      try {
-        const result = await http.put("api/Categories", product, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        navigator("/");
-      } catch (error: any) {
-        console.log("error:", error);
-      }
-      console.log("Data sent", product);
+    const formData = new FormData();
+
+    formData.append("name", product.name);
+    formData.append("price", product.price.toString());
+    formData.append("description", product.description);
+    formData.append("categoryId", product.categoryId.toString());
+
+    for (let file of product.files) {
+      formData.append("files", file);
+    }
+
+    console.log("submit ---", product);
+    
+      // try {
+      //   const result = await http.put("api/Categories", formData, {
+      //     headers: { "Content-Type": "multipart/form-data" },
+      //   });
+      //   navigator("/");
+      // } catch (error: any) {
+      //   console.log("error:", error);
+      // }
+      // console.log("Data sent", product);
     };
+
+  
 
     return (
       <>
@@ -129,8 +202,9 @@ const CreateProductPage = () =>{
                 onChange={onChangeInputHandler}
                 required
               />
-            <div className="invalid-feedback">Please enter a valid price.</div>
-
+              <div className="invalid-feedback">
+                Please enter a valid price.
+              </div>
             </div>
 
             <div className="mb-3">
@@ -168,23 +242,52 @@ const CreateProductPage = () =>{
                 ))}
               </select>
             </div>
-            
+
             <div className="mb-3">
               <label htmlFor="image" className="form-label">
-                <img src={upload} 
-                alt="select img" 
-                width="150px" 
-                style={{cursor: "pointer"}}/>
+                {product.images.length > 0 &&
+                  product.images.map((image, index) => (
+                    <div
+                      key={index}
+                      className="d-inline-block position-relative mx-1"
+                    >
+                      <img
+                        src={image.url}
+                        alt="product-image"
+                        className="mw-100 mh-100"
+                        width="150px"
+                        height="150px"
+                        style={{ objectFit: "cover", cursor: "pointer" }}
+                        onClick={() => onEditImageHandler(index)}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-danger position-absolute top-0 end-0"
+                        onClick={() => onDeleteImageHandler(index)}
+                      >
+                        <i className="bi bi-x">X</i>
+                      </button>
+                    </div>
+                  ))}
+                <img
+                  src={upload}
+                  alt="select img"
+                  width="150px"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => onSelectImageHandler(product.images.length)}
+                />
+                {showFileInput && (
+                  <input
+                    type="file"
+                    className="d-none"
+                    name="image"
+                    id="image"
+                    onChange={onFileChangeHandler}
+                    onBlur={() => setShowFileInput(false)}
+                  />
+                )}
               </label>
-              <input
-                type="file"
-                className="d-none"
-                name="image"
-                id="image"
-                onChange={onFileChangeHandler}              
-              />          
-            </div>   
-         
+            </div>
 
             <div className="text-center">
               <button type="submit" className="btn btn-success">

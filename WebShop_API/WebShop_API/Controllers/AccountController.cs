@@ -153,6 +153,10 @@ namespace WebShop_API.Controllers
         {
 
             var user = await _userManager.FindByEmailAsync(model.Email);
+            //var user = await _userManager.Users
+             //.Include(u => u.UserRoles)
+             //.FirstOrDefaultAsync(u => u.Email == model.Email);
+
             if (user != null)
             {
                
@@ -162,8 +166,12 @@ namespace WebShop_API.Controllers
                     return BadRequest("Invalid password");
 
                 }
+               // var result = _userManager.AddToRoleAsync(user, Roles.User).Result;
+
+                var roles = await _userManager.GetRolesAsync(user);
+
                 var token = _jwtTokenService.CreateToken(user);
-                return Ok(new { token, user });
+                return Ok(new { token, user, roles });
 
             }
 

@@ -1,9 +1,9 @@
+import classNames from "classnames";
+import qs from "qs";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { APP_ENV } from "../../../../env";
 import http from "../../../../http";
-import { IAuthUser } from "../../../auth/types";
 
 
 interface IProductItem{
@@ -15,21 +15,72 @@ interface IProductItem{
     category: string
 }
 
+interface IProductResult{
+  products: Array<IProductItem>,
+  pages: number,
+  currentPage: number,
+  total: number
+}
+interface IProductSearch{
+  name?: string,
+  description?: string,
+  categoryId: string,
+  page?: number | string | null
+}
 
 const ProductsList = ()=>{
+  const [products, setProducts] = useState<Array<IProductItem>>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  const [data, setData] = useState<IProductResult>({
+      pages: 0,
+      products: [],
+      total: 0,
+      currentPage:0
+  });
 
-    const [products, setProducts] = useState<Array<IProductItem>>([]);
+  const [search, setSearch] = useState<IProductSearch>({
+      name: searchParams.get("name") || "",
+      description: searchParams.get("description") || "",
+      categoryId: searchParams.get("categoryId") || "",
+      page: searchParams.get("page") || 1,
+  });
 
-      useEffect(() => {
-        http.
-            get<Array<IProductItem>>("api/Products")
-            .then((resp) => {
-                setProducts(resp.data);
-            });
-        }, []);
+  function filterNonNull(obj: IProductSearch) {
+      return Object.fromEntries(Object.entries(obj).filter(([k, v]) => v));
+    }
 
-  
+    const buttons = [];
+    for (let i = 1; i <= data.pages; i++) {
+      buttons.push(i);
+    }
+
+    const pagination = buttons.map((page) => (
+      <li key={page} className="page-item">
+        <Link
+          className={classNames("page-link", { active: data.currentPage === page })}
+          onClick={() => setSearch({ ...search, page })}
+          to={"?" + qs.stringify(filterNonNull({ ...search, page }))}
+        >
+          {page}
+        </Link>
+      </li>
+    ));
+
+    useEffect(() => {
+      console.log("search", search);
+      http.
+          get<IProductResult>("api/Products/search", {
+              params: search
+          })
+          .then((resp) => {
+              console.log("porducts list", resp.data);
+              setData(resp.data);
+              setProducts(resp.data.products);
+          });
+      }, [search]);
+
+      
       const OnDeleteClickHandler = (id: number) => {
         http.delete(`api/Products/${id}`).then((response) => {
           const updatedProducts = products.filter((product) => product.id !== id);
@@ -104,6 +155,9 @@ const ProductsList = ()=>{
             </thead>
             <tbody>{content}</tbody>
           </table>
+          <nav>
+            <ul className="pagination">{pagination}</ul>
+          </nav>
         </div>
       </>
     );

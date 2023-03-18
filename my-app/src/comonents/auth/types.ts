@@ -2,7 +2,8 @@ export interface IAuthUser{
     email: string,
     imagePath: string,
     isAuth: boolean,
-    token: string
+    token: string,
+    roles: string[]
 }
 
 export enum AuthActionType {
@@ -14,6 +15,8 @@ export enum AuthActionType {
 export enum UserActionType {
     SET_EMAIL = "SET_EMAIL_ACTION",
     SET_IMAGE = "SET_IMAGE_ACTION",
+    SET_ROLES = "SET_ROLES_ACTION",
+
   }
 
 

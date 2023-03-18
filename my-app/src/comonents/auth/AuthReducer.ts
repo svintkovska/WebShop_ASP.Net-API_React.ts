@@ -1,16 +1,18 @@
 import axios from "axios";
 import { AuthActionType, IAuthUser, UserActionType } from "./types";
 
+const storedRoles = localStorage.getItem('userRoles');
+const roles = storedRoles ? JSON.parse(storedRoles) as string[] : [];
+
 const initState: IAuthUser = {
     isAuth: localStorage.getItem('token') ? true: false,
     email: localStorage.getItem('email') as string,
     imagePath: localStorage.getItem('imagePath') as string,
-    token: localStorage.getItem('token') as string    
+    token: localStorage.getItem('token') as string   ,
+    roles : roles
 };
 
 export const AuthReducer = (state = initState, action: any)=>{
-
-  
 
    switch(action.type){
     case AuthActionType.USER_LOGIN: {
@@ -39,6 +41,12 @@ export const AuthReducer = (state = initState, action: any)=>{
           imagePath: action.payload,
         };
       }
+      case UserActionType.SET_ROLES: {
+        return {
+          ...state,
+          roles: action.payload,
+        };
+      }
    }
     return state;
 }
@@ -51,4 +59,9 @@ export const setEmail = (email: string) => ({
   export const setImage = (image: string) => ({
     type: UserActionType.SET_IMAGE,
     payload: image,
+  });
+
+  export const setRoles = (roles: string[]) => ({
+    type: UserActionType.SET_ROLES,
+    payload: roles,
   });
