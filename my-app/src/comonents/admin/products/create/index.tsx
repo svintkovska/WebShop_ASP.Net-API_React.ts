@@ -2,25 +2,10 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import http from "../../../../http";
 import upload from "../../../../assets/upload.png"
+import { ICategory, ICreateProduct } from "../types";
 
 
-  interface ICategory{
-    id: number;
-    name: string;
-  }
- interface ProductImage {
-  file?: File;
-  url: string;
-}
-  interface IProduct {
-    name: string;
-    price: number;
-    description: string;
-    categoryId: number;
-    categories: ICategory[];
-    images: ProductImage[];
-    files: File[];
-  }
+
 
 const CreateProductPage = () =>{
     const navigator = useNavigate();
@@ -29,7 +14,7 @@ const CreateProductPage = () =>{
         id: 0,
         name: "",
     });
-    const [product, setProduct] = useState<IProduct>({
+    const [product, setProduct] = useState<ICreateProduct>({
         name: "",
         price: 0,
         description: "",
@@ -45,7 +30,7 @@ const CreateProductPage = () =>{
       
      useEffect(() => {
        const res =  http
-          .get<IProduct>(`api/Products/create`)
+          .get<ICreateProduct>(`api/Products/create`)
           .then((resp) => {
             setProduct({ ...product, categories: resp.data as any});
           });
@@ -151,21 +136,15 @@ const CreateProductPage = () =>{
         formData.append("files", image.file);
       }
     }
-    console.log("formData ---", formData);
-
-    console.log("submit ---", product);
     
       try {
         const result = await http.post("api/Products", formData, {
           headers: { "Content-Type": "multipart/form-data" },
           
         });
-        console.log("submit ++++++++");
 
       } catch (error: any) {
         console.log("error:", error);
-        console.log("submit -------");
-
       }
       console.log("Data sent", product);
     };

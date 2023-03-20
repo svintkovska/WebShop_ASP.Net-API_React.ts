@@ -17,6 +17,8 @@ import ProductsList from './comonents/admin/products/list';
 import EditProductPage from './comonents/admin/products/edit';
 import CreateProductPage from './comonents/admin/products/create';
 import ResetPassword from './comonents/auth/resetPassword';
+import ProductsPage from './comonents/shop/products/productsPage';
+import ProductItemPage from './comonents/shop/products/productItem';
 
 function App() {
 
@@ -39,7 +41,11 @@ function App() {
 
           <Route path="/account/editProfile" element={<EditProfile/>} />
           <Route path="/account/editProfile/changePassword" element={<ChangePassword/>} />
-          <Route path="/categories" element={<CategoriesPage/>} />
+          <Route path="/shop/categories" element={<CategoriesPage/>} />
+          <Route path="/shop/products/:categoryId" element={<ProductsPage/>} />
+          <Route path="/shop/products/productItem/:productId" element={<ProductItemPage/>} />
+
+
 
 
           {/* <Route path="*" element={<NoMatch />} /> */}

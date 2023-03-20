@@ -4,29 +4,9 @@ import { useState, useEffect } from "react";
 import { Link, useSearchParams } from 'react-router-dom';
 import { APP_ENV } from "../../../../env";
 import http from "../../../../http";
+import { IProductItem, IProductResult, IProductSearch } from "../types";
 
 
-interface IProductItem{
-    id: number,
-    name: string,
-    images: Array<string>,
-    description: string,
-    price: number,
-    category: string
-}
-
-interface IProductResult{
-  products: Array<IProductItem>,
-  pages: number,
-  currentPage: number,
-  total: number
-}
-interface IProductSearch{
-  name?: string,
-  description?: string,
-  categoryId: string,
-  page?: number | string | null
-}
 
 const ProductsList = ()=>{
   const [products, setProducts] = useState<Array<IProductItem>>([]);
@@ -80,7 +60,7 @@ const ProductsList = ()=>{
           });
       }, [search]);
 
-      
+
       const OnDeleteClickHandler = (id: number) => {
         http.delete(`api/Products/${id}`).then((response) => {
           const updatedProducts = products.filter((product) => product.id !== id);

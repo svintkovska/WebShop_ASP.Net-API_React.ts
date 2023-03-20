@@ -38,7 +38,7 @@ const CategoriesPage = ()=>{
             <Card.Title>{category.name}</Card.Title>
           </Card.Body>
           <Card.Footer>
-            <a href={`/category/${category.id}`} className="btn btn-primary">
+            <a href={`/shop/products/${category.id}`} className="btn btn-primary">
               View Products
             </a>
           </Card.Footer>
