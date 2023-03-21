@@ -76,6 +76,11 @@ const AdminHeader = () =>{
                       </Link>
                     </li>
                     <li className="nav-item">
+                      <Link to="shop/basket">
+                        Basket
+                      </Link>
+                    </li>
+                    <li className="nav-item">
                       <button
                         onClick={handleLogOut}
                         className="nav-link btn btn-link"

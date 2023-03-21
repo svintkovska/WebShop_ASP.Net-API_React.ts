@@ -19,6 +19,7 @@ import CreateProductPage from './comonents/admin/products/create';
 import ResetPassword from './comonents/auth/resetPassword';
 import ProductsPage from './comonents/shop/products/productsPage';
 import ProductItemPage from './comonents/shop/products/productItem';
+import BasketPage from './comonents/shop/basket';
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
           <Route path="/shop/categories" element={<CategoriesPage/>} />
           <Route path="/shop/products/:categoryId" element={<ProductsPage/>} />
           <Route path="/shop/products/productItem/:productId" element={<ProductItemPage/>} />
+          <Route path="/shop/basket" element={<BasketPage/>} />
 
 
 
