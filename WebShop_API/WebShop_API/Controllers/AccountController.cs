@@ -61,13 +61,8 @@ namespace WebShop_API.Controllers
 
                     IFormFile ifile = await ConvertUrlToFormFile.ConvertUrlToIFormFile(model.ImagePath);
 
-                    var imageName = Path.GetRandomFileName() + ".jpg";
-                    string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", imageName);
-                    using (var stream = System.IO.File.Create(dirSaveImage))
-                    {
-                        await ifile.CopyToAsync(stream);
-                    }
-
+                    var imageName = AddSizedImage.AddIFormImage(_configuration, ifile);
+                   
                     user = new UserEntity
                     {
                         Email = payload.Email,
@@ -112,13 +107,7 @@ namespace WebShop_API.Controllers
                     var imageName = "";
                     if (model.UploadImage != null)
                     {
-                        string exp = Path.GetExtension(model.UploadImage.FileName);
-                        imageName = Path.GetRandomFileName() + exp;
-                        string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", imageName);
-                        using (var stream = System.IO.File.Create(dirSaveImage))
-                        {
-                            await model.UploadImage.CopyToAsync(stream);
-                        }
+                        imageName = AddSizedImage.AddIFormImage(_configuration, model.UploadImage);
                         model.ImagePath = imageName;
                     }
                       
@@ -186,13 +175,7 @@ namespace WebShop_API.Controllers
             string imageName = String.Empty;
             if (model.UploadImage != null)
             {
-                string exp = Path.GetExtension(model.UploadImage.FileName);
-                imageName = Path.GetRandomFileName() + exp;
-                string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", imageName);
-                using (var stream = System.IO.File.Create(dirSaveImage))
-                {
-                    await model.UploadImage.CopyToAsync(stream);
-                }
+                imageName = AddSizedImage.AddIFormImage(_configuration, model.UploadImage);         
                 model.ImgPath = imageName;
             }
 
@@ -249,18 +232,19 @@ namespace WebShop_API.Controllers
             string imageName = String.Empty;
             if (model.UploadImage != null)
             {
-                string exp = Path.GetExtension(model.UploadImage.FileName);
-                imageName = Path.GetRandomFileName() + exp;
-                string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", imageName);
-                using (var stream = System.IO.File.Create(dirSaveImage))
-                {
-                    await model.UploadImage.CopyToAsync(stream);
-                }
+                imageName = AddSizedImage.AddIFormImage(_configuration, model.UploadImage);
+
                 string oldImg = user.Image;
                 user.Image = imageName;
-                string dirDelImage = Path.Combine(Directory.GetCurrentDirectory(), "images", oldImg);
-                if (System.IO.File.Exists(dirDelImage))
-                    System.IO.File.Delete(dirDelImage);
+                string[] imageSizes = ((string)_configuration.GetValue<string>("ImageSizes")).Split(" ");
+
+                foreach (var size in imageSizes)
+                {
+                    string dirDelImage = Path.Combine(Directory.GetCurrentDirectory(), "images", size + "_" + oldImg);
+                    if (System.IO.File.Exists(dirDelImage))
+                        System.IO.File.Delete(dirDelImage);
+                }
+               
             }
 
 

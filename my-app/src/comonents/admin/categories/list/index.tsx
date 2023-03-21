@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { APP_ENV } from "../../../../env";
 import http from "../../../../http";
 import { IAuthUser } from "../../../auth/types";
+import CategoryDeleteModal from "../CategoryDeleteModal";
 
 
 interface ICategoryItem{
@@ -33,14 +34,26 @@ const CategoriesList = ()=>{
             });
         }, []);
 
-  
-      const OnDeleteClickHandler = (id: number) => {
-        http.delete(`api/Categories/${id}`).then((response) => {
-          const updatedCatgories = categories.filter((category) => category.id !== id);
-          setCategories(updatedCatgories);
-        });   
-      };
+      const [deleteCategoryId, setDeleteCategoryId] = useState<number | null>(null);
+
+      const handleDeleteCategory = async () => {
+        if (deleteCategoryId !== null) {
+          console.log("hereeeeeeeeeeeeeeeeeeee");
           
+          await http.delete(`api/Categories/${deleteCategoryId}`).then((response) => {
+          setCategories(categories.filter((category) => category.id !== deleteCategoryId));
+          setDeleteCategoryId(null);
+          });
+        }
+      };
+
+      const handleShowDeleteModal = (id: number) => {
+        setDeleteCategoryId(id);
+      };
+    
+      const handleCloseDeleteModal = () => {
+        setDeleteCategoryId(null);
+      };
     const content = categories.map((category) => (
       <tr key={category.id}>
         <th scope="row">{category.id}</th>
@@ -64,7 +77,7 @@ const CategoriesList = ()=>{
         </td>
         
         <td >
-          <button className="btn" type="button" onClick={() => OnDeleteClickHandler(category.id)} style={{marginTop: 10}}>
+          <button className="btn" type="button" onClick={() => handleShowDeleteModal(category.id)} style={{marginTop: 10}}>
           <img 
             src={"https://cdn-icons-png.flaticon.com/512/3221/3221897.png"}
             width="40"
@@ -120,6 +133,15 @@ const CategoriesList = ()=>{
             <tbody>{content}</tbody>
           </table>
         </div>
+
+        <CategoryDeleteModal
+        show={deleteCategoryId !== null}
+        onHide={handleCloseDeleteModal}
+        onDelete={handleDeleteCategory}
+        categoryName={
+        deleteCategoryId !== null ? categories.find((c) => c.id === deleteCategoryId)?.name || '' : ''
+        }
+      />
       </>
     );
 }

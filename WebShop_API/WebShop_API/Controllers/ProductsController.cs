@@ -201,6 +201,34 @@ namespace WebShop_API.Controllers
             return Ok();
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var productToDelete = _context.Products.Where(p => p.Id == id).FirstOrDefault();
+            if (productToDelete == null)
+                return NotFound();
+
+            var prodImages = _context.ProductImages.Where(i => i.ProductId == id).ToList();
+            string[] imageSizes = ((string)_configuration.GetValue<string>("ImageSizes")).Split(" ");
+
+            foreach (var prodImage in prodImages)
+            {
+                foreach (var size in imageSizes)
+                {
+                    string dirDelProductImage = Path.Combine(Directory.GetCurrentDirectory(), "images", size + "_" + prodImage.Name);
+                    if (System.IO.File.Exists(dirDelProductImage))
+                        System.IO.File.Delete(dirDelProductImage);
+                }
+            }
+            _context.ProductImages.RemoveRange(prodImages);
+            _context.SaveChanges();
+
+            _context.Products.Remove(productToDelete);
+
+            _context.SaveChanges();
+            return Ok();
+        }
+
         private async Task<string> SaveImage(IFormFile image)
         {
             string exp = Path.GetExtension(image.FileName);

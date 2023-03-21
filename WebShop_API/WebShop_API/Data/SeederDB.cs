@@ -9,6 +9,7 @@ using System.Drawing.Imaging;
 using WebShop_API.Abstract;
 using WebShop_API.Models;
 using WebShop_API.Services;
+using Bogus.DataSets;
 
 namespace WebShop_API.Data
 {
@@ -28,11 +29,13 @@ namespace WebShop_API.Data
 
                 if (!context.Categories.Any())
                 {
+                    var faker = new Faker();
+
                     CategoryEntity cat = new CategoryEntity()
                     {
                         Name = "Pizza",
                         DateCreated = DateTime.UtcNow,
-                        Image = "pizza.jpg"
+                        Image = AddSizedImage.AddImage(app, faker.Image.LoremFlickrUrl())
                     };
                     context.Categories.Add(cat);
                     context.SaveChanges();

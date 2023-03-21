@@ -12,10 +12,11 @@ namespace WebShop_API.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly AppEFContext _context;
-
-        public CategoriesController(AppEFContext context) { 
+        private readonly IConfiguration _configuration;
+        public CategoriesController(AppEFContext context, IConfiguration configuration) { 
             
             _context= context;
+            _configuration= configuration;
         }
 
         [HttpGet]
@@ -105,15 +106,54 @@ namespace WebShop_API.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var del = _context.Categories.SingleOrDefault(x => x.Id == id);
-            if (del.Image != null)
+            //var del = _context.Categories.SingleOrDefault(x => x.Id == id);
+            //if (del.Image != null)
+            //{
+            //    string dirDelImage = Path.Combine(Directory.GetCurrentDirectory(), "images", del.Image);
+            //    if (System.IO.File.Exists(dirDelImage))
+            //        System.IO.File.Delete(dirDelImage);
+            //}
+
+            //_context.Categories.Remove(del);
+            //_context.SaveChanges();
+
+            var categoryToDelete = _context.Categories.SingleOrDefault(x => x.Id == id);
+
+            if (categoryToDelete == null)
             {
-                string dirDelImage = Path.Combine(Directory.GetCurrentDirectory(), "images", del.Image);
-                if (System.IO.File.Exists(dirDelImage))
-                    System.IO.File.Delete(dirDelImage);
+                return NotFound();
             }
 
-            _context.Categories.Remove(del);
+            var productsToDelete = _context.Products.Where(p => p.CategoryId == id).ToList();
+
+            foreach (var product in productsToDelete)
+            {
+                var prodImages = _context.ProductImages.Where(i => i.ProductId == product.Id).ToList();
+                string[] imageSizes = ((string)_configuration.GetValue<string>("ImageSizes")).Split(" ");
+
+                foreach (var prodImage in prodImages)
+                {
+                    foreach (var size in imageSizes)
+                    {
+                        string dirDelProductImage = Path.Combine(Directory.GetCurrentDirectory(), "images", size + "_"+ prodImage.Name);
+                        if (System.IO.File.Exists(dirDelProductImage))
+                            System.IO.File.Delete(dirDelProductImage);
+                    }
+                }
+                 _context.ProductImages.RemoveRange(prodImages);
+                _context.SaveChanges();
+
+                _context.Products.Remove(product);
+            }
+
+            if (categoryToDelete.Image != null)
+            {
+                string dirDelCategoryImage = Path.Combine(Directory.GetCurrentDirectory(), "images", categoryToDelete.Image);
+                if (System.IO.File.Exists(dirDelCategoryImage))
+                    System.IO.File.Delete(dirDelCategoryImage);
+            }
+
+            _context.Categories.Remove(categoryToDelete);
             _context.SaveChanges();
             return Ok();
         }
