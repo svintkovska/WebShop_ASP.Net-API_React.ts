@@ -11,20 +11,36 @@ const AddToBasketModal: React.FC<Props> = ({ show, onClose }) => {
     if (show) {
       setTimeout(() => {
         onClose();
-      }, 2000);
+      }, 1600);
     }
   }, [show, onClose]);
 
   const modal = (
-    <div className={`modal fade ${show ? "show" : ""}`} tabIndex={-1} role="dialog" style={{ display: show ? "block" : "none" }}>
+    <div
+      className={`modal fade ${show ? "show" : ""}`}
+      tabIndex={-1}
+      role="dialog"
+      style={{ display: show ? "block" : "none", width: 150, position: "fixed",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)", }}
+    
+    >
       <div className="modal-dialog modal-dialog-centered" role="document">
         <div className="modal-content">
           <div className="modal-header border-0">
-            <h5 className="modal-title fw-bold">Item added to cart</h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+            <h5 className="modal-title fw-bold">Added</h5>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={onClose}
+            ></button>
           </div>
           <div className="modal-body">
-            <p className="text-center"><i className="fas fa-check-circle text-success me-2"></i>Your item has been successfully added to the cart.</p>
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/5290/5290058.png"
+              width={100}
+            />
           </div>
         </div>
       </div>

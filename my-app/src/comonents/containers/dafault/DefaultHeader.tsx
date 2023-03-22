@@ -54,7 +54,7 @@ const DefaultHeader = () =>{
                     <li className="nav-item nav-link active">Hello {email}</li>
                     <li className="nav-item nav-link">
                       <img
-                        src={APP_ENV.IMAGE_PATH + imagePath}
+                        src={APP_ENV.IMAGE_PATH + "300_" + imagePath}
                         width="40"
                         height="40"
                       ></img>

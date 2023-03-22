@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebShop_API.Data;
 using WebShop_API.Data.Entities;
 using WebShop_API.Models;
+using WebShop_API.Services;
 
 namespace WebShop_API.Controllers
 {
@@ -40,12 +41,7 @@ namespace WebShop_API.Controllers
             if (model.Image != null)
             {
                 string exp = Path.GetExtension(model.Image.FileName);
-                imageName = Path.GetRandomFileName() + exp;
-                string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", imageName);
-                using (var stream = System.IO.File.Create(dirSaveImage))
-                {
-                    await model.Image.CopyToAsync(stream);
-                }
+                imageName = AddSizedImage.AddIFormImage(_configuration, model.Image); 
             }
             var user = new CategoryEntity
             {
@@ -85,12 +81,7 @@ namespace WebShop_API.Controllers
             if (model.UploadImage != null)
             {
                 string exp = Path.GetExtension(model.UploadImage.FileName);
-                imageName = Path.GetRandomFileName() + exp;
-                string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", imageName);
-                using (var stream = System.IO.File.Create(dirSaveImage))
-                {
-                    await model.UploadImage.CopyToAsync(stream);
-                }
+                imageName = AddSizedImage.AddIFormImage(_configuration, model.UploadImage);
                 string oldImg = edit.Image;
                 edit.Image = imageName;
                 string dirDelImage = Path.Combine(Directory.GetCurrentDirectory(), "images", oldImg);
@@ -106,17 +97,6 @@ namespace WebShop_API.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            //var del = _context.Categories.SingleOrDefault(x => x.Id == id);
-            //if (del.Image != null)
-            //{
-            //    string dirDelImage = Path.Combine(Directory.GetCurrentDirectory(), "images", del.Image);
-            //    if (System.IO.File.Exists(dirDelImage))
-            //        System.IO.File.Delete(dirDelImage);
-            //}
-
-            //_context.Categories.Remove(del);
-            //_context.SaveChanges();
-
             var categoryToDelete = _context.Categories.SingleOrDefault(x => x.Id == id);
 
             if (categoryToDelete == null)

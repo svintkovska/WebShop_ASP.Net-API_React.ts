@@ -26,10 +26,10 @@ namespace WebShop_API.Data
 
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserEntity>>();
                 var rolemanager = scope.ServiceProvider.GetRequiredService<RoleManager<RoleEntity>>();
+                var faker = new Faker();
 
                 if (!context.Categories.Any())
                 {
-                    var faker = new Faker();
 
                     CategoryEntity cat = new CategoryEntity()
                     {
@@ -40,7 +40,6 @@ namespace WebShop_API.Data
                     context.Categories.Add(cat);
                     context.SaveChanges();
                 }
-
                 if (!context.Products.Any())
                 {
 
@@ -72,9 +71,6 @@ namespace WebShop_API.Data
                     }
 
                 }
-
-
-
                 if (!context.Roles.Any())
                 {
                     RoleEntity admin = new RoleEntity
@@ -89,17 +85,15 @@ namespace WebShop_API.Data
                     var result = rolemanager.CreateAsync(admin).Result;
                     result = rolemanager.CreateAsync(user).Result;
                 }
-
-
                 if (!context.Users.Any())
                 {
                     UserEntity user = new UserEntity
                     {
                         FirstName = "Tania",
                         LastName = "Svintkovska",
-                        Email = "tanyasv97@gmail.com",
+                        Email = "tanyasv@gmail.com",
                         UserName = "tanyasv",
-                        Image = "admin.png"
+                        Image = AddSizedImage.AddImage(app, faker.Image.LoremFlickrUrl())
                     };
                     var result = userManager.CreateAsync(user, "123456").Result;
                     if (result.Succeeded)
@@ -107,6 +101,42 @@ namespace WebShop_API.Data
                         result = userManager.AddToRoleAsync(user, Roles.Admin).Result;
                     }
                 }
+                if (!context.OrderStatuses.Any())
+                {
+                    OrderStatusEntity pending = new OrderStatusEntity
+                    {
+                        Name = OrderStatuses.Pending
+                    };
+                    OrderStatusEntity processing = new OrderStatusEntity
+                    {
+                        Name = OrderStatuses.Processing
+                    };
+                    OrderStatusEntity shipped = new OrderStatusEntity
+                    {
+                        Name = OrderStatuses.Shipped
+                    };
+                    OrderStatusEntity delivered = new OrderStatusEntity
+                    {
+                        Name = OrderStatuses.Delivered
+                    };
+                    OrderStatusEntity canceled = new OrderStatusEntity
+                    {
+                        Name = OrderStatuses.Canceled
+                    };
+                    OrderStatusEntity refunded = new OrderStatusEntity
+                    {
+                        Name = OrderStatuses.Refunded
+                    };
+
+                    context.OrderStatuses.Add(pending);
+                    context.OrderStatuses.Add(processing);
+                    context.OrderStatuses.Add(shipped);
+                    context.OrderStatuses.Add(delivered);
+                    context.OrderStatuses.Add(canceled);
+                    context.OrderStatuses.Add(refunded);
+                    context.SaveChanges();
+                }
+
             }
         }
 

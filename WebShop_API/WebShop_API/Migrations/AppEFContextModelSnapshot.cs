@@ -269,6 +269,22 @@ namespace WebShop_API.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
+            modelBuilder.Entity("WebShop_API.Data.Entities.OrderStatusEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tblOrderStatuses");
+                });
+
             modelBuilder.Entity("WebShop_API.Data.Entities.ProductEntity", b =>
                 {
                     b.Property<int>("Id")

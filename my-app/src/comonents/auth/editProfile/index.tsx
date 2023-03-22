@@ -140,7 +140,7 @@ const EditProfile = () =>{
 
             <div className="mb-3">
               <label htmlFor="image" className="form-label">
-                <img src={(state.uploadImage == null ? "http://localhost:5285/images/" + state.currentImg :  URL.createObjectURL(state.uploadImage))} 
+                <img src={(state.uploadImage == null ? "http://localhost:5285/images/" + "300_"+ state.currentImg :  URL.createObjectURL(state.uploadImage))} 
                 alt="select img" 
                 width="150px" 
                 style={{cursor: "pointer"}}/>

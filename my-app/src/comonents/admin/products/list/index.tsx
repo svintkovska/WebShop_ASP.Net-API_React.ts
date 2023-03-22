@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Link, useSearchParams } from 'react-router-dom';
 import { APP_ENV } from "../../../../env";
 import http from "../../../../http";
+import ProductDeleteModal from "../ProductDeleteModal";
 import { IProductItem, IProductResult, IProductSearch } from "../types";
 
 
@@ -47,6 +48,30 @@ const ProductsList = ()=>{
       </li>
     ));
 
+
+
+
+    const [deleteProductId, setDeleteProductId] = useState<number | null>(null);
+
+    const handleDeleteProduct = async () => {
+      if (deleteProductId !== null) {
+        console.log("hereeeeeeeeeeeeeeeeeeee");
+        
+        await http.delete(`api/Products/${deleteProductId}`).then((response) => {
+          setProducts(products.filter((product) => product.id !== deleteProductId));
+        setDeleteProductId(null);
+        });
+      }
+    };
+
+    const handleShowDeleteModal = (id: number) => {
+      setDeleteProductId(id);
+    };
+  
+    const handleCloseDeleteModal = () => {
+      setDeleteProductId(null);
+    };
+
     useEffect(() => {
       console.log("search", search);
       http.
@@ -61,12 +86,12 @@ const ProductsList = ()=>{
       }, [search]);
 
 
-      const OnDeleteClickHandler = (id: number) => {
-        http.delete(`api/Products/${id}`).then((response) => {
-          const updatedProducts = products.filter((product) => product.id !== id);
-          setProducts(updatedProducts);
-        });   
-      };
+      // const OnDeleteClickHandler = (id: number) => {
+      //   http.delete(`api/Products/${id}`).then((response) => {
+      //     const updatedProducts = products.filter((product) => product.id !== id);
+      //     setProducts(updatedProducts);
+      //   });   
+      // };
           
     const content = products.map((product) => (
       <tr key={product.id}>
@@ -93,7 +118,7 @@ const ProductsList = ()=>{
         </td>
         
         <td >
-          <button className="btn" type="button" onClick={() => OnDeleteClickHandler(product.id)} style={{marginTop: 10}}>
+          <button className="btn" type="button"  onClick={() => handleShowDeleteModal(product.id)}  style={{marginTop: 10}}>
           <img 
             src={"https://cdn-icons-png.flaticon.com/512/3221/3221897.png"}
             width="40"
@@ -139,6 +164,15 @@ const ProductsList = ()=>{
             <ul className="pagination">{pagination}</ul>
           </nav>
         </div>
+
+        <ProductDeleteModal
+        show={deleteProductId !== null}
+        onHide={handleCloseDeleteModal}
+        onDelete={handleDeleteProduct}
+        productName={
+          deleteProductId !== null ? products.find((c) => c.id === deleteProductId)?.name || '' : ''
+        }
+      />
       </>
     );
 }

@@ -21,7 +21,7 @@ const CategoryDeleteModal: React.FC<Props> = ({ show, onHide, onDelete, category
         <Button variant="secondary" onClick={onHide}>
           Cancel
         </Button>
-        <Button variant="primary" onClick={onDelete}>
+        <Button variant="danger" onClick={onDelete}>
           Delete
         </Button>
       </Modal.Footer>

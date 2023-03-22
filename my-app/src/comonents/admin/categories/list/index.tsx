@@ -59,7 +59,7 @@ const CategoriesList = ()=>{
         <th scope="row">{category.id}</th>
         <td>
           <img
-            src={APP_ENV.IMAGE_PATH + category.image}
+            src={APP_ENV.IMAGE_PATH + "300_" + category.image}
             width="150"
           ></img>
         </td>

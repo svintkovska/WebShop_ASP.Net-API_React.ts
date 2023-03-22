@@ -142,7 +142,7 @@ const ContinueRegistration = () =>{
 
             <div className="mb-3">
               <label htmlFor="uploadImage" className="form-label">
-              <img src={(state.uploadImage == null ? "http://localhost:5285/images/" + state.imagePath :  URL.createObjectURL(state.uploadImage))} 
+              <img src={(state.uploadImage == null ? "http://localhost:5285/images/" + "300_" + state.imagePath :  URL.createObjectURL(state.uploadImage))} 
 
                   alt="select img"
                   width="150px"

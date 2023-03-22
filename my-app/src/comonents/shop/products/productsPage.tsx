@@ -3,7 +3,7 @@ import qs from "qs";
 import { useState, useEffect } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useNavigation, useParams, useSearchParams } from 'react-router-dom';
 import { APP_ENV } from "../../../env";
 import http from "../../../http";
 import { addToBasket } from "../BasketReducer";
@@ -102,12 +102,47 @@ const ProductsPage = ()=>{
               setShowModal(true);
       
           };
+          
+         
 
+          
+          const location = useLocation();
+          const categoryName = location.state && location.state.categoryName;
+
+console.log("location.state", location);
+
+const navigate = useNavigate();
+const handleProductClick = (productId: number, productName: string) => {
+  navigate(`/shop/products/productItem/${productId}`, { state: { categoryName, categoryId, productName } });
+};
+
+          const navigation  = ()=>{
+            return (
+              <nav className="d-flex justify-content-left">
+                <ul className="list-unstyled">
+                  <li>
+                    <a href="/">Home Page -{'>'} </a>
+                  </li>
+                </ul>
+                <ul className="list-unstyled">
+                  <li>
+                    <a href="/shop/categories">Menu -{'>'} </a>
+                  </li>
+                </ul>
+                <ul className="list-unstyled">
+                <li>
+                    <a href={`/shop/products/${categoryId}`}>{categoryName} </a>
+                  </li>
+                </ul>
+              </nav>
+            );
+          }
+    
           
     const cardItem = products.map((product) => (
       <Col key={product.id}>
         <Card>
-          <Link to={`/shop/products/productItem/${product.id}`}>
+
             <Card.Img
               variant="top"
               src={APP_ENV.IMAGE_PATH + "300_" + product.images[0]}
@@ -117,8 +152,10 @@ const ProductsPage = ()=>{
                 minHeight: "200px",
                 cursor: "pointer",
               }}
+              onClick={() => handleProductClick(product.id, product.name)}
+
             />
-          </Link>
+
 
           <Card.Body>
             <Card.Title>{product.name}</Card.Title>
@@ -151,6 +188,7 @@ const ProductsPage = ()=>{
     return (
       <>
         <Container className="my-3" style={{ maxWidth: "900px" }}>
+          <div>{navigation()}</div>
           <h1>Products</h1>
           <Row xs={1} md={2} lg={3} className="g-4">
             {cardItem}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { APP_ENV } from "../../../env";
 import http from "../../../http";
 import { addToBasket } from "../BasketReducer";
@@ -99,10 +99,48 @@ const ProductItemPage = () => {
         setShowModal(true);
 
     };
+    const location = useLocation();
+    const categoryName = location.state && location.state.categoryName;
+console.log("location.state", location);
 
+const categoryId = location.state && location.state.categoryId;
+
+const navigate = useNavigate();
+
+  const handleCategoryClick = (categoryId: number, categoryName: string) => {
+    navigate(`/shop/products/${categoryId}`, { state: { categoryName, categoryId } });
+  };
+  
+    const navigation  = ()=>{
+      return (
+        <nav className="d-flex justify-content-left">
+          <ul className="list-unstyled">
+            <li>
+              <a href="/">Home Page  -{'>'}</a>
+            </li>
+          </ul>
+          <ul className="list-unstyled">
+            <li>
+              <a href="/shop/categories"> Menu -{'>'} </a>
+            </li>
+          </ul>
+          <ul className="list-unstyled">
+            <li>
+              <a onClick={() => handleCategoryClick(categoryId, categoryName)} href={`/shop/products/${categoryId}`}>{categoryName}  -{'>'} </a>
+            </li>
+          </ul>
+          <ul className="list-unstyled">
+            <li>
+              <a href={`/shop/products/productItem/${productId}`}>{product.name} </a>
+            </li>
+          </ul>
+        </nav>
+      );
+    }
     return (
       <>
         <Container>
+          <div>{navigation()}</div>
           <Row className="my-4">
             <Col md={6}>
               <div className="d-flex flex-column align-items-center">
