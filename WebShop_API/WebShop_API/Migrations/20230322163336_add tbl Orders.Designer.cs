@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebShop_API.Data;
@@ -11,9 +12,11 @@ using WebShop_API.Data;
 namespace WebShop_API.Migrations
 {
     [DbContext(typeof(AppEFContext))]
-    partial class AppEFContextModelSnapshot : ModelSnapshot
+    [Migration("20230322163336_add tbl Orders")]
+    partial class addtblOrders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -298,41 +301,6 @@ namespace WebShop_API.Migrations
                     b.ToTable("tblOrders");
                 });
 
-            modelBuilder.Entity("WebShop_API.Data.Entities.OrderItemEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<short>("Count")
-                        .HasColumnType("smallint");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("PriceBuy")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("tblOrderItems");
-                });
-
             modelBuilder.Entity("WebShop_API.Data.Entities.OrderStatusEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -475,7 +443,7 @@ namespace WebShop_API.Migrations
             modelBuilder.Entity("WebShop_API.Data.Entities.OrderEntity", b =>
                 {
                     b.HasOne("WebShop_API.Data.Entities.OrderStatusEntity", "OrderStatus")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("OrderStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -489,25 +457,6 @@ namespace WebShop_API.Migrations
                     b.Navigation("OrderStatus");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("WebShop_API.Data.Entities.OrderItemEntity", b =>
-                {
-                    b.HasOne("WebShop_API.Data.Entities.OrderEntity", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebShop_API.Data.Entities.ProductEntity", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("WebShop_API.Data.Entities.ProductEntity", b =>
@@ -543,16 +492,6 @@ namespace WebShop_API.Migrations
             modelBuilder.Entity("WebShop_API.Data.Entities.Identity.UserEntity", b =>
                 {
                     b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("WebShop_API.Data.Entities.OrderEntity", b =>
-                {
-                    b.Navigation("OrderItems");
-                });
-
-            modelBuilder.Entity("WebShop_API.Data.Entities.OrderStatusEntity", b =>
-                {
-                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("WebShop_API.Data.Entities.ProductEntity", b =>

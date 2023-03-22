@@ -20,6 +20,8 @@ namespace WebShop_API.Data
         public DbSet<ProductEntity> Products { get; set; }
         public DbSet<ProductImageEntity> ProductImages { get; set; }
         public DbSet<OrderStatusEntity> OrderStatuses { get; set; }
+        public DbSet<OrderEntity> Orders { get; set; }
+        public DbSet<OrderItemEntity> OrderItems { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
