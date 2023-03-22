@@ -76,14 +76,19 @@ namespace WebShop_API.Controllers
 
                 }
 
+               
                 var resultuserLogin = await _userManager.AddLoginAsync(user, info);
                 if(!resultuserLogin.Succeeded)
                 {
                     return BadRequest();
                 }
             }
-
-             token = await _jwtTokenService.CreateToken(user);
+            string lockedRes = await IsLockedOut(user);
+            if (lockedRes != null)
+            {
+               return BadRequest(lockedRes);
+            }
+            token = await _jwtTokenService.CreateToken(user);
 
             return Ok(new { isNewUser, user, token });
         }
@@ -155,7 +160,14 @@ namespace WebShop_API.Controllers
                     return BadRequest("Invalid password");
 
                 }
-               // var result = _userManager.AddToRoleAsync(user, Roles.User).Result;
+
+                string lockedRes = await IsLockedOut(user);
+                if (lockedRes != null)
+                {
+                    return BadRequest(lockedRes);
+                }
+
+                // var result = _userManager.AddToRoleAsync(user, Roles.User).Result;
 
                 var roles = await _userManager.GetRolesAsync(user);
 
@@ -306,6 +318,30 @@ namespace WebShop_API.Controllers
                 return BadRequest();
             }
             return Ok();
+        }
+
+
+        private async Task<string> IsLockedOut(UserEntity user)
+        {
+            var isLockedOut = await _userManager.IsLockedOutAsync(user);
+            if (isLockedOut)
+            {
+                var lockoutEnd = await _userManager.GetLockoutEndDateAsync(user);
+
+                TimeSpan remainingTime = lockoutEnd.HasValue ? lockoutEnd.Value.Subtract(DateTimeOffset.Now).Duration() : TimeSpan.Zero;
+                TimeSpan timeSpan = TimeSpan.FromSeconds(remainingTime.TotalSeconds);
+                int months = timeSpan.Days / 30;
+                int days = timeSpan.Days % 30;
+                int hours = timeSpan.Hours;
+                int minutes = timeSpan.Minutes;
+                int seconds = timeSpan.Seconds;
+
+                string remainingTimeStr = $"{months} months, {days} days, {hours} hours, {minutes} minutes, and {seconds} seconds";
+
+                return $"Your account is locked out. Please try again after {remainingTimeStr}.";
+            }
+            return null;
+           
         }
 
     }

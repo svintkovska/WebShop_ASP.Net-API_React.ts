@@ -55,8 +55,7 @@ const ProductsList = ()=>{
 
     const handleDeleteProduct = async () => {
       if (deleteProductId !== null) {
-        console.log("hereeeeeeeeeeeeeeeeeeee");
-        
+
         await http.delete(`api/Products/${deleteProductId}`).then((response) => {
           setProducts(products.filter((product) => product.id !== deleteProductId));
         setDeleteProductId(null);
@@ -86,13 +85,6 @@ const ProductsList = ()=>{
       }, [search]);
 
 
-      // const OnDeleteClickHandler = (id: number) => {
-      //   http.delete(`api/Products/${id}`).then((response) => {
-      //     const updatedProducts = products.filter((product) => product.id !== id);
-      //     setProducts(updatedProducts);
-      //   });   
-      // };
-          
     const content = products.map((product) => (
       <tr key={product.id}>
         <th scope="row">{product.id}</th>

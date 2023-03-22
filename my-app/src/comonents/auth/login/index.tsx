@@ -21,6 +21,7 @@ const LoginPage = () =>{
     });
     const [errorMessage, setErrorMessage] = useState("");
     const [showModal, setShowModal] = useState(false);
+    const [errorBlock, setErrorBlock] = useState<string>("");
 
 
     const handleModal = () => {
@@ -59,16 +60,28 @@ const LoginPage = () =>{
 
 
         navigator("/");
-      } catch (error: any) {
-        console.log("error:", error);
-        setErrorMessage("Inavlid email or password");
+      }catch (error: any) {
+        console.log("error:", error.response.data);
+        setErrorBlock(error.response.data);
+
       }
+
+
+
       console.log("Data sent", state);
     };
-        
+    const handleGoogleAuthError = (error: string) =>{
+      setErrorBlock(error);
+
+    } 
 return(
     <>
     <div className="container col-6 offset-3">
+    {errorBlock && (
+          <div className="alert alert-danger mt-5" role="alert">
+            {errorBlock}
+          </div>
+        )}
           <h1 className="mt-2 mb-3 text-center">Log In</h1>
 
           <form onSubmit={onSubmitHandler}>
@@ -121,7 +134,7 @@ return(
             <hr></hr>
             <div className="text-center">
               <div className="col-md-12">
-                <GoogleAuth></GoogleAuth>
+                <GoogleAuth onError={handleGoogleAuthError}></GoogleAuth>
 
               </div>
             </div>

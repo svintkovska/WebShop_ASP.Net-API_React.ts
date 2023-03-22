@@ -60,14 +60,17 @@ const RegisterPage = () =>{
           .post("api/account/register", state, {
             headers: {"Content-Type": "multipart/form-data"}
           });
-          navigator("/");
+          navigator("/account/login");
         }
         catch(error: any){
           console.log ("error:", error);
         }
         console.log ("Data sent", state);       
     }
-
+    const handleGoogleAuthError = (error: string) => {
+      setErrorMessage(error);
+    };
+    
     return (
       <>
         <div className="container col-6 offset-3">
@@ -202,7 +205,7 @@ const RegisterPage = () =>{
             <hr></hr>
             <div className="text-center">
               <div className="col-md-12">
-              <GoogleAuth></GoogleAuth>
+              <GoogleAuth onError={handleGoogleAuthError }></GoogleAuth>
 
               </div>
             </div>

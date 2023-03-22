@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { APP_ENV } from "../../../../env";
 import jwt_decode from "jwt-decode";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import http from "../../../../http";
 import { useDispatch } from "react-redux";
 import { AuthActionType } from "../../types";
 import { setEmail, setImage } from "../../AuthReducer";
+import axios from "axios";
 
+type GoogleAuthProps = {
+  onError: (errorMessage: string) => void;
+};
 
 interface GoogleData {
   token: string;
@@ -18,9 +21,7 @@ interface GoogleData {
 }
 
 
-
-
-const GoogleAuth= ()=> {
+const GoogleAuth= ({ onError }: GoogleAuthProps)=> {
 const navigate = useNavigate();
 const dispatch = useDispatch();
 
@@ -31,7 +32,6 @@ const dispatch = useDispatch();
     imagePath: "",
     email: ""
   });
-
 
     const handleLogIn = async (resp: any) => {
       const { credential } = resp;
@@ -49,6 +49,7 @@ const dispatch = useDispatch();
         const result = await http
           .post("api/account/google/login", model)
           .then((resp) => {
+            
             if(resp.data.token == '')
             {
               const user = resp.data.user;
@@ -73,7 +74,9 @@ const dispatch = useDispatch();
             }           
           });
       } catch (error: any) {
-        console.log("error:", error);
+        console.log("error:", error.response.data);
+        onError(error.response.data);
+
       }
       console.log("Data sent", model);
     };
