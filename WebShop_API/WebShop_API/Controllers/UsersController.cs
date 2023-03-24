@@ -192,7 +192,7 @@ namespace WebShop_API.Controllers
             order.OrderStatusId = model.StatusId;
              _context.SaveChanges();
 
-            return Ok(model);
+            return Ok();
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Asn1.X509;
+using System;
 using System.Text.Json.Serialization;
 using WebShop_API.Data;
 using WebShop_API.Data.Entities;
@@ -158,9 +159,8 @@ namespace WebShop_API.Controllers
         {
             var productEdit = _context.Products.SingleOrDefault(c => c.Id == id);
             var productImages = await _context.ProductImages.Where(pi => pi.ProductId == id)
-                .Select(pi=>pi.Name)
-                .ToListAsync();
-
+                 .Select(pi => "http://localhost:5285/images/300_" + pi.Name)
+                 .ToListAsync();
 
             var categories = await _context.Categories
                 .ToListAsync();
@@ -175,38 +175,75 @@ namespace WebShop_API.Controllers
                 Name = productEdit.Name,
                 Description = productEdit.Description,
                 Id = id,
-                Price= productEdit.Price,
+                Price = productEdit.Price,
                 CategoryId = productEdit.CategoryId,
                 CurrentImages = productImages,
                 Categories = categoriesViewModel
             };
             return Ok(model);
         }
-       
+
         [HttpPut]
-        public async Task<IActionResult> Edit([FromForm] EditCategoryViewModel model)
+        public async Task<IActionResult> Edit([FromForm] ProductEditViewModel model)
         {
-            var edit = _context.Categories.SingleOrDefault(x => x.Id == model.Id);
+            var edit = _context.Products.SingleOrDefault(x => x.Id == model.Id);
             edit.Name = model.Name;
             edit.Description = model.Description;
+            edit.Price = model.Price;
+            edit.CategoryId = model.CategoryId;
 
             string imageName = String.Empty;
-            if (model.UploadImage != null)
+            if (model.Files != null)
             {
-                string exp = Path.GetExtension(model.UploadImage.FileName);
-                imageName = Path.GetRandomFileName() + exp;
-                string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", imageName);
-                using (var stream = System.IO.File.Create(dirSaveImage))
+                if(model.CurrentImages == null)
+                  DeleteAllProductImages(model.Id);
+                else
                 {
-                    await model.UploadImage.CopyToAsync(stream);
-                }
-                string oldImg = edit.Image;
-                edit.Image = imageName;
-                string dirDelImage = Path.Combine(Directory.GetCurrentDirectory(), "images", oldImg);
-                if (System.IO.File.Exists(dirDelImage))
-                    System.IO.File.Delete(dirDelImage);
-            }
+                    var prodImages = _context.ProductImages.Where(i => i.ProductId == model.Id).ToList();
+                    string[] imageSizes = ((string)_configuration.GetValue<string>("ImageSizes")).Split(" ");
 
+                    foreach (var prodImage in prodImages)
+                    {
+                        foreach(var name in model.CurrentImages)
+                        {
+                            var path = name.Replace("http://localhost:5285/images/300_", "");
+                            if (prodImage.Name != path)
+                            {
+                                foreach (var size in imageSizes)
+                                {
+                                    string dirDelProductImage = Path.Combine(Directory.GetCurrentDirectory(), "images", size + "_" + prodImage.Name);
+                                    if (System.IO.File.Exists(dirDelProductImage))
+                                        System.IO.File.Delete(dirDelProductImage);
+                                   
+                                }
+                                _context.ProductImages.Remove(prodImage);
+                                _context.SaveChanges();
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+
+
+                short priority = 1;
+                foreach (var image in model.Files)
+                {
+                    if (image != null)
+                    {
+                        imageName = AddSizedImage.AddIFormImage(_configuration, image);
+                        ProductImageEntity pi = new ProductImageEntity
+                        {
+                            Name = imageName,
+                            Priority = priority,
+                            ProductId = model.Id
+                        };
+                        _context.ProductImages.Add(pi);
+                        _context.SaveChanges();
+                    }
+                }
+            }
 
             _context.SaveChanges();
             return Ok();
@@ -219,6 +256,16 @@ namespace WebShop_API.Controllers
             if (productToDelete == null)
                 return NotFound();
 
+            DeleteAllProductImages(id);
+
+            _context.Products.Remove(productToDelete);
+
+            _context.SaveChanges();
+            return Ok();
+        }
+
+       private void DeleteAllProductImages(int id)
+        {
             var prodImages = _context.ProductImages.Where(i => i.ProductId == id).ToList();
             string[] imageSizes = ((string)_configuration.GetValue<string>("ImageSizes")).Split(" ");
 
@@ -233,23 +280,6 @@ namespace WebShop_API.Controllers
             }
             _context.ProductImages.RemoveRange(prodImages);
             _context.SaveChanges();
-
-            _context.Products.Remove(productToDelete);
-
-            _context.SaveChanges();
-            return Ok();
-        }
-
-        private async Task<string> SaveImage(IFormFile image)
-        {
-            string exp = Path.GetExtension(image.FileName);
-            var imageName = Path.GetRandomFileName() + exp;
-            string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", imageName);
-            using (var stream = System.IO.File.Create(dirSaveImage))
-            {
-                await image.CopyToAsync(stream);
-            }
-            return imageName;
         }
     }
 }

@@ -41,3 +41,14 @@ export enum BasketActionType {
     status: string;
     items: IOrderItem[]
   }
+
+
+  
+  export interface IDeliveryInfo {
+    phone: string;
+  city: string;
+  street: string;
+  apartment: string;
+  comment: string;
+  payment: string;
+  }

@@ -4,6 +4,7 @@ import http from "../../../../http";
 import upload from "../../../../assets/upload.png"
 import { ICategory, ICreateProduct, IEditProduct } from "../types";
 import SuccessMessage from "../../../common/SuccessMessage";
+import { APP_ENV } from "../../../../env";
 
 
 
@@ -34,23 +35,33 @@ const EditProductPage = () =>{
         categories: [],
         images: [],
         currentImages: [],
-        existingImages: [],
         files: []
       });
 
-     
+      console.log("images", product.images);
+
     console.log("initial product", product);
 
       
-     useEffect(() => {
-       const res =  http
-          .get<IEditProduct>(`api/Products/edit/${prodIdNumber}`)
-          .then((resp) => {
-            //setProduct({ ...product, categories: resp.data as any});
-            setProduct(resp.data);
-            console.log("useeffect", product);         
+    useEffect(() => {
+      const res = http
+        .get<IEditProduct>(`api/Products/edit/${prodIdNumber}`)
+        .then((resp) => {
+          setProduct({
+            id: resp.data.id,
+            name: resp.data.name,
+            price: resp.data.price,
+            description: resp.data.description,
+            categoryId: resp.data.categoryId,
+            categories: resp.data.categories,
+            images: resp.data.images ?? [],
+            currentImages: resp.data.currentImages,
+            files: []
           });
-      }, []);
+          console.log("useeffect", resp.data);
+        });
+    }, []);
+      console.log("useeffect", product);         
 
     const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) =>{
         setProduct({...product, [e.target.name]: e.target.value});
@@ -83,6 +94,7 @@ const EditProductPage = () =>{
         target.value = "";
       };
       
+
       const onDeleteImageHandler = (index: number) => {
         const updatedFiles = [...product.files];
         updatedFiles.splice(index, 1);
@@ -94,10 +106,11 @@ const EditProductPage = () =>{
       const onDeleteCurrentImageHandler = (index: number) => {
         const updatedFiles = [...product.files];
         updatedFiles.splice(index, 1);
-        const updatedImages = [...product.images];
+        const updatedImages = [...product.currentImages];
         updatedImages.splice(index, 1);
-        setProduct({ ...product, files: updatedFiles, existingImages: updatedImages });
+        setProduct({ ...product, files: updatedFiles, currentImages: updatedImages });
       };
+
       
       const onEditImageHandler = (index: number) => {
         setShowFileInput(false);
@@ -120,9 +133,7 @@ const EditProductPage = () =>{
         });
         input.click();
       };
-      const onEditCurrentImageHandler = (index: number) => {
-        setShowFileInput(false);
-
+      const onEditCurrentImageHandler = (index: number, imgName: string) => {
         const input = document.createElement("input");
         input.type = "file";
         input.accept = "image/*";
@@ -134,13 +145,21 @@ const EditProductPage = () =>{
               file,
               url: URL.createObjectURL(file),
             }));
-            const updatedImages = [...product.images];
-            updatedImages[index] = newImages[0];
-            setProduct({ ...product, existingImages: updatedImages });
+            const updatedCurrentImages = [...product.currentImages];
+            updatedCurrentImages[index] = newImages[0].url;
+            setProduct({
+              ...product,
+              currentImages: updatedCurrentImages,
+              images: product.images.map((image, i) => (i === index ? { ...image, url: newImages[0].url } : image)),
+            });
           }
         });
         input.click();
       };
+      
+      
+      
+      
       
       const onSelectImageHandler = (index: number) => {
         setShowFileInput(false);
@@ -166,31 +185,75 @@ const EditProductPage = () =>{
         inputElement.click();
       };
       
+    
+
+
+
+      const blobToFile = async (url: string): Promise<File | null> => {
+        try {
+          const response = await fetch(url);
+          const blob = await response.blob();
+          const filename = url.split("/").pop() || "filename.jpg";
+          const file = new File([blob], filename, { type: blob.type });
+          return file;
+        } catch (error) {
+          console.error(error);
+          return null;
+        }
+      };
       
+     
     const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-    const formData = new FormData();
+      const formData = new FormData();
 
-    formData.append("name", product.name);
-    formData.append("price", product.price.toString());
-    formData.append("description", product.description);
-    formData.append("categoryId", product.categoryId.toString());
+      formData.append("name", product.name);
+      formData.append("price", product.price.toString());
+      formData.append("description", product.description);
+      formData.append("categoryId", product.categoryId.toString());
+      formData.append("id", productId ? productId.toString() : "0");
 
-    for (let image of product.images) {
-      if (image.file) {
-        formData.append("files", image.file);
+      for (let image of product.images) {
+        if (image.file) {
+          formData.append("files", image.file);
+        }
       }
-    }
-    
+
+      const files: File[] = [];
+      const imgNames: string[] = [];
+
+      for (let image of product.currentImages) {
+        if (image) {
+          let file;
+          if (typeof image === "string" && image.startsWith("blob:")) {
+            file = await blobToFile(image);
+            console.log("1");
+          } else if (typeof image === "string") {
+            imgNames.push(image);
+          }
+          if (file) {
+            formData.append("files", file);
+            console.log("3");
+          }
+        }
+      }
+
+      for (let image of files) {
+        if (image) {
+          formData.append("files", image);
+        }
+      }
+      for (let name of imgNames) {
+        formData.append("currentImages", name);
+      }
       try {
-        const result = await http.post("api/Products", formData, {
+        const result = await http.put(`api/Products`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
-          
         });
         setSuccessMessage(true);
         setTimeout(() => {
           navigator("/admin/products/list");
-          }, 1000);
+        }, 1000);
       } catch (error: any) {
         console.log("error:", error);
       }
@@ -202,9 +265,9 @@ const EditProductPage = () =>{
     return (
       <>
         <div className="container col-6 offset-3">
-          <h1 className="mt-5 mb-4 text-center">Create Product</h1>
+          <h1 className="mt-5 mb-4 text-center">Update Product</h1>
           {successMessage && (
-        <SuccessMessage message="Succesufully created" />
+        <SuccessMessage message="Succesufully updated" />
       )}
           <form onSubmit={onSubmitHandler}>
             <div className="mb-3">
@@ -288,13 +351,13 @@ const EditProductPage = () =>{
                       className="d-inline-block position-relative mx-1"
                     >
                       <img
-                        src={"http://localhost:5285/images/" + "300_" + image}
+                        src={image}
                         alt="product-image"
                         className="mw-100 mh-100"
                         width="150px"
                         height="150px"
                         style={{ objectFit: "cover", cursor: "pointer" }}
-                        onClick={() => onEditCurrentImageHandler(index)}
+                        onClick={() => onEditCurrentImageHandler(index, image)}
                       />
                       <button
                         type="button"
@@ -351,13 +414,13 @@ const EditProductPage = () =>{
 
             <div className="text-center">
               <button type="submit" className="btn btn-success">
-                Create Product
+                Update Product
               </button>
             </div>
           </form>
           <Link to="/products/list">
             <button className="btn btn-outline-success">
-              Go to Products List
+              Go Back to Products 
             </button>
           </Link>
         </div>

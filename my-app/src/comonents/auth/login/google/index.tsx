@@ -59,7 +59,7 @@ const dispatch = useDispatch();
             else{
               localStorage.setItem("token", resp.data.token);
               localStorage.setItem("email", model.email);
-              localStorage.setItem("imagePath", model.imagePath);
+              localStorage.setItem("imagePath", resp.data.user.image);
 
 
               axios.defaults.headers.common = {
@@ -68,7 +68,7 @@ const dispatch = useDispatch();
 
               dispatch({type: AuthActionType.USER_LOGIN});
               dispatch(setEmail(model.email));
-              dispatch(setImage(model.imagePath));
+              dispatch(setImage(resp.data.user.image));
 
               navigate("/");
             }           

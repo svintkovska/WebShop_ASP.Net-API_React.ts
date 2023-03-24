@@ -53,7 +53,7 @@ export interface ICreateProduct {
     categoryId: number;
     categories: ICategory[];
     images: IProductImage[];
-    existingImages: IProductImage[];
     currentImages: string[];
     files: File[]
   }
+
