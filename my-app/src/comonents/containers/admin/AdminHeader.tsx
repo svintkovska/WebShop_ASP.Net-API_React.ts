@@ -62,7 +62,11 @@ const AdminHeader = () =>{
                     Users
                   </Link>
                 </li>
-              
+                <li className="nav-item">
+                  <Link to="/admin/orders/list" className="nav-link">
+                    Orders
+                  </Link>
+                </li>
               </ul>
               <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                 {isAuth ? (

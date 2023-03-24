@@ -6,6 +6,9 @@ using WebShop_API.Data.Entities.Identity;
 using WebShop_API.Data;
 using Microsoft.EntityFrameworkCore;
 using WebShop_API.Models;
+using WebShop_API.Mapper;
+using AutoMapper;
+using WebShop_API.Data.Entities;
 
 namespace WebShop_API.Controllers
 {
@@ -16,12 +19,14 @@ namespace WebShop_API.Controllers
         private readonly AppEFContext _context;
         private readonly UserManager<UserEntity> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
         public UsersController(UserManager<UserEntity> userManager, 
-            AppEFContext appEFContext,IConfiguration configuration)
+            AppEFContext appEFContext,IConfiguration configuration, IMapper mapper)
         {
             _userManager = userManager;
             _context = appEFContext;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
 
@@ -144,6 +149,50 @@ namespace WebShop_API.Controllers
 
             return Ok();
 
+        }
+
+        [HttpGet("allOrders")]
+        public async Task<IActionResult> GetAllOrders()
+        {
+            var orders = _context.Orders.ToList();
+
+            var list = new List<UserOrderViewModel>();
+
+            var statuses = _context.OrderStatuses.ToList();
+            var allSatuses = _mapper.Map<List<OrderStatusViewModel>>(statuses);
+
+            foreach (var order in orders)
+            {
+                var items = _context.OrderItems
+                    .Include(x => x.Product)
+                        .ThenInclude(p => p.ProductImages)
+                    .Where(x => x.OrderId == order.Id)
+                    .ToList(); var itemViewModels = _mapper.Map<List<OrderItemViewModel>>(items);
+
+                list.Add(new UserOrderViewModel
+                {
+                    Id = order.Id,
+                    Email = _context.Users.Where(x => x.Id == order.UserId).FirstOrDefault().Email,
+                    DateCreated = order.DateCreated,
+                    AllStatuses = allSatuses,
+                    Status = _context.OrderStatuses.Where(x => x.Id == order.OrderStatusId).FirstOrDefault().Name,
+                    StatusId = _context.OrderStatuses.Where(x => x.Id == order.OrderStatusId).FirstOrDefault().Id,
+                    Items = itemViewModels
+
+                });
+            }
+
+            return Ok(list.OrderBy(x=>x.DateCreated));
+        }
+
+        [HttpPost("changeOrderStatus")]
+        public IActionResult ChangeOrderStatus([FromBody]UserOrderViewModel model)
+        {
+            var order = _context.Orders.Where(x=>x.Id == model.Id).FirstOrDefault();
+            order.OrderStatusId = model.StatusId;
+             _context.SaveChanges();
+
+            return Ok(model);
         }
     }
 }

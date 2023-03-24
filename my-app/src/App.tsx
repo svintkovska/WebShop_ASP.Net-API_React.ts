@@ -26,6 +26,7 @@ import AdminLayout from './comonents/containers/admin';
 import AdminHomePage from './comonents/home/admin';
 import MakeOrderPage from './comonents/shop/order/makeOrder';
 import UserOrders from './comonents/shop/order/userOrders';
+import AdminOrders from './comonents/admin/orders';
 
 function App() {
 
@@ -71,7 +72,8 @@ function App() {
           <Route path="products/create" element={<CreateProductPage/>} />
           <Route path="products/edit/:productId" element={<EditProductPage></EditProductPage>} />
           <Route path="users/list" element={<UsersList/>} />
-          <Route path="users/edit/:userId" element={<EditUserPage></EditUserPage>} />      
+          <Route path="users/edit/:userId" element={<EditUserPage></EditUserPage>} />   
+          <Route path="orders/list" element={<AdminOrders/>} />   
         </Route>   
       </Routes>
   );

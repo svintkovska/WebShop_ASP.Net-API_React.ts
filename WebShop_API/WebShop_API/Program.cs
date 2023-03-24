@@ -12,6 +12,7 @@ using WebShop_API.Data.Entities.Identity;
 using WebShop_API.Services;
 using AutoMapper;
 using NETCore.MailKit.Core;
+using WebShop_API.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,7 @@ builder.Services.AddIdentity<UserEntity, RoleEntity>(options =>
 
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<ISmtpEmailService, SmtpEmailService>();
+builder.Services.AddAutoMapper(typeof(MapProfile));
 
 var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<String>("JWTSecretKey")));
 
