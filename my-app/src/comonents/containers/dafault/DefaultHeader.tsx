@@ -9,7 +9,9 @@ const DefaultHeader = () =>{
     const {isAuth} = useSelector((store: any) => store.auth as IAuthUser);
     const {email} = useSelector((store: any) => store.auth as IAuthUser);
     const {imagePath} = useSelector((store: any) => store.auth as IAuthUser);
-
+    const {roles} = useSelector((store: any) => store.auth as IAuthUser);
+    const isAdmin = roles.includes('admin');
+  
     const dispatch = useDispatch();
 
     const handleLogOut = () =>{
@@ -17,10 +19,13 @@ const DefaultHeader = () =>{
         localStorage.removeItem('email');
         localStorage.removeItem('imagePath');
         localStorage.removeItem('roles');
+        localStorage.removeItem('basket');
 
         navigator('/account/login');
         dispatch({type: AuthActionType.USER_LOGOUT})
     }
+
+ 
 
     return (
       <>
@@ -43,11 +48,22 @@ const DefaultHeader = () =>{
             </button>
 
             <div className="collapse navbar-collapse" id="navbarNav">
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                
+              {isAdmin ? (
+                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li className="nav-item">
+                    <Link
+                      to="/admin"
+                      className="nav-link active"
+                      aria-current="page"
+                    >
+                      Admin Center
+                    </Link>
+                  </li>
+                </ul>
+              ) : (
+                ""
+              )}
 
-                
-              </ul>
               <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                 {isAuth ? (
                   <>
@@ -63,6 +79,26 @@ const DefaultHeader = () =>{
                       <Link to="account/editProfile" className="nav-link">
                         <img
                           src="https://cdn-icons-png.flaticon.com/512/9653/9653837.png"
+                          width="40"
+                          height="40"
+                        ></img>
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to="shop/userOrders" className="nav-link">
+                        <img
+                          src="https://cdn-icons-png.flaticon.com/512/9973/9973202.png"
+                          width="40"
+                          height="40"
+                          title="My Orders"
+
+                        ></img>
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to="shop/basket" className="nav-link">
+                        <img
+                          src="https://cdn-icons-png.flaticon.com/512/7805/7805985.png"
                           width="40"
                           height="40"
                         ></img>

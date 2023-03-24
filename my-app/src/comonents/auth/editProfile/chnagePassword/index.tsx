@@ -2,6 +2,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import http from "../../../../http";
+import SuccessMessage from "../../../common/SuccessMessage";
 import { IAuthUser } from "../../types";
 
 
@@ -16,7 +17,7 @@ interface IChangePassword {
 const ChangePassword = () =>{
     const {email} = useSelector((store: any) => store.auth as IAuthUser);
     const [errorMessage, setErrorMessage] = useState<string>("");
-    const [passwordChanged, setPasswordChanged] = useState<boolean>(false);
+    const [successMessage, setSuccessMessage] = useState<boolean>(false);
 
     const [state, setState] = useState<IChangePassword>({
       email: email,
@@ -48,7 +49,7 @@ const ChangePassword = () =>{
           const result = await http
           .post(`api/Account/edit/changePassword`, state)
           .then(resp => {
-            setPasswordChanged(true);
+            setSuccessMessage(true);
           })
         }
         catch(error: any){
@@ -62,12 +63,10 @@ const ChangePassword = () =>{
         <>
         <div className="container col-6 offset-3">
           <h1 className="mt-5 mb-4 text-center">Change Password</h1>
-          {passwordChanged && (
-            <div className="alert alert-success" role="alert">
-              Password successfully changed
-            </div>
-          )}
-          {!passwordChanged && errorMessage && (
+          {successMessage && (
+        <SuccessMessage message="Password successfully changed" />
+      )}
+          {!successMessage && errorMessage && (
           <div className="alert alert-danger" role="alert">
             {errorMessage}
           </div>

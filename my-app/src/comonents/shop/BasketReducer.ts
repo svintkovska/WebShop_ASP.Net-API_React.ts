@@ -22,13 +22,13 @@ const initState: IBasket = {
           case "REMOVE_FROM_BASKET":
             return {
               ...state,
-              basket: state.basket.filter((item) => item.id !== action.payload),
+              basket: state.basket.filter((item) => item.productId !== action.payload),
             };
           case "UPDATE_BASKET":
             return {
               ...state,
               basket: state.basket.map((item) =>
-                item.id === action.payload.id ? action.payload : item
+                item.productId === action.payload.productId ? action.payload : item
               ),
             };
           default:

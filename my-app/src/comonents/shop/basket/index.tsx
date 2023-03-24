@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { APP_ENV } from "../../../env";
 import { IBasket, IBasketProduct } from "../types";
 
@@ -15,23 +16,23 @@ const BasketPage = () => {
   const handleRemoveProduct = (productId: number) => {
 
     dispatch({ type: "REMOVE_FROM_BASKET", payload: productId });
-    const updatedBasket = basket.filter((item) => item.id !== productId);
+    const updatedBasket = basket.filter((item) => item.productId !== productId);
     localStorage.setItem('basket', JSON.stringify(updatedBasket));
 
   };
   
   const onDecreaseQuantity = (productId: number) => {
-    const updatedProduct = basket.find((item) => item.id === productId);
+    const updatedProduct = basket.find((item) => item.productId === productId);
   if (updatedProduct) {
     const updatedQuantity = updatedProduct.quantity - 1;
     if (updatedQuantity > 0) {
       const updatedBasketProduct = { ...updatedProduct, quantity: updatedQuantity };
       dispatch({ type: "UPDATE_BASKET", payload: updatedBasketProduct });
-      const updatedBasket = basket.map((item) => item.id === productId ? updatedBasketProduct : item);
+      const updatedBasket = basket.map((item) => item.productId === productId ? updatedBasketProduct : item);
       localStorage.setItem('basket', JSON.stringify(updatedBasket));
     } else {
       dispatch({ type: "REMOVE_FROM_BASKET", payload: productId });
-      const updatedBasket = basket.filter((item) => item.id !== productId);
+      const updatedBasket = basket.filter((item) => item.productId !== productId);
       localStorage.setItem('basket', JSON.stringify(updatedBasket));
     }
   }
@@ -39,12 +40,12 @@ const BasketPage = () => {
   };
 
   const onIncreaseQuantity = (productId: number) => {
-    const updatedProduct = basket.find((item) => item.id === productId);
+    const updatedProduct = basket.find((item) => item.productId === productId);
     if (updatedProduct) {
       const updatedQuantity = updatedProduct.quantity + 1;
       const updatedBasketProduct = { ...updatedProduct, quantity: updatedQuantity };
       dispatch({ type: "UPDATE_BASKET", payload: updatedBasketProduct });
-      const updatedBasket = basket.map((item) => item.id === productId ? updatedBasketProduct : item);
+      const updatedBasket = basket.map((item) => item.productId === productId ? updatedBasketProduct : item);
       localStorage.setItem('basket', JSON.stringify(updatedBasket));
     }
 }
@@ -64,7 +65,7 @@ const BasketPage = () => {
         </thead>
         <tbody>
           {basket.map((item) => (
-            <tr key={item.id}>
+            <tr key={item.productId}>
               <td>
                 <img
                   src={APP_ENV.IMAGE_PATH + "300_" + item.image}
@@ -79,7 +80,7 @@ const BasketPage = () => {
                   <button
                     className="btn btn-outline-secondary"
                     type="button"
-                    onClick={() => onDecreaseQuantity(item.id)}
+                    onClick={() => onDecreaseQuantity(item.productId)}
                   >
                     -
                   </button>
@@ -92,7 +93,7 @@ const BasketPage = () => {
                   <button
                     className="btn btn-outline-secondary"
                     type="button"
-                    onClick={() => onIncreaseQuantity(item.id)}
+                    onClick={() => onIncreaseQuantity(item.productId)}
                   >
                     +
                   </button>
@@ -102,7 +103,7 @@ const BasketPage = () => {
               <td>
                 <button
                   className="btn btn-outline-danger"
-                  onClick={() => handleRemoveProduct(item.id)}
+                  onClick={() => handleRemoveProduct(item.productId)}
                 >
                   Remove
                 </button>
@@ -117,7 +118,9 @@ const BasketPage = () => {
               <strong>Order Price:</strong> {(calculateTotalPrice()).toFixed(2)} ₴
             </td>
             <td>
+              <Link to="/shop/makeOrder">
               <button className="btn btn-primary">Create Order</button>
+              </Link>
             </td>
           </tr>
         </tfoot>

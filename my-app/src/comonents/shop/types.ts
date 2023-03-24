@@ -5,7 +5,7 @@ export interface IBasket
 
 export interface IBasketProduct
 {
-    id: number;
+    productId: number;
     name: string;
     price: number;
     image: string;
@@ -18,3 +18,26 @@ export enum BasketActionType {
     REMOVE_FROM_BASKET ="REMOVE_FROM_BASKET_ACTION"
   }
 
+
+  export interface IOrder{
+
+    email: string;
+    items: IBasketProduct[];
+  }
+
+
+  export interface IOrderItem{
+    productId: number;
+    productName: string;
+    quantity: number;
+    price: number;
+    image: string;
+    orderId: number
+  }
+  
+  export interface IUserOrder{
+    id: number;
+    dateCreated: Date;
+    status: string;
+    items: IOrderItem[]
+  }

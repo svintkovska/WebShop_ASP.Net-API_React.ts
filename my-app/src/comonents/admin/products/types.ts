@@ -11,7 +11,8 @@ export interface IProductResult{
   products: Array<IProductItem>,
   pages: number,
   currentPage: number,
-  total: number
+  total: number,
+  categories: ICategory[]
 }
 export interface IProductSearch{
   name?: string,

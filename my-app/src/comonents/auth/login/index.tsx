@@ -1,10 +1,10 @@
 import { ChangeEvent, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import http from "../../../http";
 import { setEmail, setImage, setRoles } from "../AuthReducer";
 import SendEmailModal from "../resetPassword/sendEmailModal";
-import { AuthActionType } from "../types";
+import { AuthActionType, IAuthUser } from "../types";
 import GoogleAuth from "./google";
 import { LoginForm } from "./types";
 
@@ -22,7 +22,8 @@ const LoginPage = () =>{
     const [errorMessage, setErrorMessage] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [errorBlock, setErrorBlock] = useState<string>("");
-
+    const { roles } = useSelector((store: any) => store.auth as IAuthUser);
+    const isAdmin = roles.includes('admin');
 
     const handleModal = () => {
       setShowModal(!showModal);
@@ -58,8 +59,13 @@ const LoginPage = () =>{
         dispatch(setImage(resp.data.user.image));
         dispatch(setRoles(roles));
 
+        if(isAdmin){
+          navigator("/admin")
+        }
+        else{
+          navigator("/");
 
-        navigator("/");
+        }
       }catch (error: any) {
         console.log("error:", error.response.data);
         setErrorBlock(error.response.data);

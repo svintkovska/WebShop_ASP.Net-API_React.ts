@@ -6,6 +6,7 @@ import { useFormik } from "formik";
 import { CreateSchema } from "./validation";
 import classNames from "classnames";
 import InputGroup from "../../../common/inputGroup";
+import SuccessMessage from "../../../common/SuccessMessage";
 
 interface ICategoryCreate {
   name: string;
@@ -15,6 +16,7 @@ interface ICategoryCreate {
 
 const CreateCategoryPage = () => {
   const navigator = useNavigate();
+  const [successMessage, setSuccessMessage] = useState<boolean>(false);
 
   const [state, setState] = useState<ICategoryCreate>({
     name: "",
@@ -27,9 +29,6 @@ const CreateCategoryPage = () => {
     description: "",
     image: null,
   };
-  // const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) =>{
-  //     setState({...state, [e.target.name]: e.target.value});
-  // }
 
   const onSubmitFormik = async (values: ICategoryCreate) => {
     console.log("Fornik submit", values);
@@ -38,7 +37,12 @@ const CreateCategoryPage = () => {
       const result = await http.post("api/Categories", values, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      navigator("/");
+
+      setSuccessMessage(true);
+        setTimeout(() => {
+          navigator("/admin/categories/list");
+          }, 1000);
+
     } catch (error: any) {
       console.log("error:", error);
     }
@@ -71,8 +75,10 @@ const CreateCategoryPage = () => {
   return (
     <>
       <div className="container col-6 offset-3">
-        <h1 className="mt-5 mb-4 text-center">Add Category</h1>
-
+        <h1 className="mt-5 mb-4 text-center">Create Category</h1>
+        {successMessage && (
+        <SuccessMessage message="Succesufully created" />
+      )}
         <form onSubmit={handleSubmit}>
           <InputGroup
             field="name"
@@ -155,9 +161,9 @@ const CreateCategoryPage = () => {
             </button>
           </div>
         </form>
-        <Link to="/categories/list">
+        <Link to="/admin/categories/list">
           <button className="btn btn-outline-success">
-            Go to Categories List
+            Go Back to Categories
           </button>
         </Link>
       </div>

@@ -37,9 +37,7 @@ const CategoriesList = ()=>{
       const [deleteCategoryId, setDeleteCategoryId] = useState<number | null>(null);
 
       const handleDeleteCategory = async () => {
-        if (deleteCategoryId !== null) {
-          console.log("hereeeeeeeeeeeeeeeeeeee");
-          
+        if (deleteCategoryId !== null) {          
           await http.delete(`api/Categories/${deleteCategoryId}`).then((response) => {
           setCategories(categories.filter((category) => category.id !== deleteCategoryId));
           setDeleteCategoryId(null);
@@ -66,7 +64,7 @@ const CategoriesList = ()=>{
         <td>{category.name}</td>
         <td>{category.description}</td>
         <td>
-        <Link to={`/categories/edit/${category.id}`}>
+        <Link to={`/admin/categories/edit/${category.id}`}>
           <button className="btn" type="button" style={{marginTop: 10}}>
             <img 
             src={"https://cdn-icons-png.flaticon.com/512/143/143437.png"}
@@ -111,7 +109,7 @@ const CategoriesList = ()=>{
               alt="Reload"
             />
           </button>
-          <Link to="/categories/create">
+          <Link to="/admin/categories/create">
             <button className="btn btn-success" style={{ marginLeft: "15px" }}>
               Add Category
             </button>

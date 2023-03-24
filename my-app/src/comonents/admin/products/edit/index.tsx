@@ -3,12 +3,14 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import http from "../../../../http";
 import upload from "../../../../assets/upload.png"
 import { ICategory, ICreateProduct, IEditProduct } from "../types";
+import SuccessMessage from "../../../common/SuccessMessage";
 
 
 
 
 const EditProductPage = () =>{
     const navigator = useNavigate();
+    const [successMessage, setSuccessMessage] = useState<boolean>(false);
 
     const { productId } = useParams();
     let prodIdNumber = -1;
@@ -185,7 +187,10 @@ const EditProductPage = () =>{
           headers: { "Content-Type": "multipart/form-data" },
           
         });
-
+        setSuccessMessage(true);
+        setTimeout(() => {
+          navigator("/admin/products/list");
+          }, 1000);
       } catch (error: any) {
         console.log("error:", error);
       }
@@ -198,7 +203,9 @@ const EditProductPage = () =>{
       <>
         <div className="container col-6 offset-3">
           <h1 className="mt-5 mb-4 text-center">Create Product</h1>
-
+          {successMessage && (
+        <SuccessMessage message="Succesufully created" />
+      )}
           <form onSubmit={onSubmitHandler}>
             <div className="mb-3">
               <label htmlFor="name" className="form-label">

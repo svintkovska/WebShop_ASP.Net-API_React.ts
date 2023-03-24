@@ -22,6 +22,10 @@ import ProductItemPage from './comonents/shop/products/productItem';
 import BasketPage from './comonents/shop/basket';
 import UsersList from './comonents/admin/users/list';
 import EditUserPage from './comonents/admin/users/edit';
+import AdminLayout from './comonents/containers/admin';
+import AdminHomePage from './comonents/home/admin';
+import MakeOrderPage from './comonents/shop/order/makeOrder';
+import UserOrders from './comonents/shop/order/userOrders';
 
 function App() {
 
@@ -31,51 +35,48 @@ function App() {
       <Routes>
         <Route path="/" element={<DefaultLayout/>}>
         <Route index element={<HomePage />} />
-          <Route path="/categories/create" element={<CreateCategoryPage/>} />
-          <Route path="/categories/list" element={<CategoriesList/>} />
-          <Route path="/categories/edit/:categoryId" element={<EditCategoryPage></EditCategoryPage>} />
-          <Route path="/products/list" element={<ProductsList/>} />
-          <Route path="/products/create" element={<CreateProductPage/>} />
-          <Route path="/products/edit/:productId" element={<EditProductPage></EditProductPage>} />
-          <Route path="/users/list" element={<UsersList/>} />
-          <Route path="/users/edit/:userId" element={<EditUserPage></EditUserPage>} />
+          <Route path="categories/create" element={<CreateCategoryPage/>} />
+          <Route path="categories/list" element={<CategoriesList/>} />
+          <Route path="categories/edit/:categoryId" element={<EditCategoryPage></EditCategoryPage>} />
+          <Route path="products/list" element={<ProductsList/>} />
+          <Route path="products/create" element={<CreateProductPage/>} />
+          <Route path="products/edit/:productId" element={<EditProductPage></EditProductPage>} />
+          <Route path="users/list" element={<UsersList/>} />
+          <Route path="users/edit/:userId" element={<EditUserPage></EditUserPage>} />
 
 
-          <Route path="/account/register" element={<RegisterPage/>} />
-          <Route path="/account/register/googleRegistration" element={<ContinueRegistration/>} />
-          <Route path="/account/login" element={<LoginPage/>} />
-          <Route path="/resetpassword" element={<ResetPassword/>} />
-          <Route path="/account/editProfile" element={<EditProfile/>} />
-          <Route path="/account/editProfile/changePassword" element={<ChangePassword/>} />
+          <Route path="account/register" element={<RegisterPage/>} />
+          <Route path="account/register/googleRegistration" element={<ContinueRegistration/>} />
+          <Route path="account/login" element={<LoginPage/>} />
+          <Route path="resetpassword" element={<ResetPassword/>} />
+          <Route path="account/editProfile" element={<EditProfile/>} />
+          <Route path="account/editProfile/changePassword" element={<ChangePassword/>} />
 
-          <Route path="/shop/categories" element={<CategoriesPage/>} />
-          <Route path="/shop/products/:categoryId" element={<ProductsPage/>} />
-          <Route path="/shop/products/productItem/:productId" element={<ProductItemPage/>} />
-          <Route path="/shop/basket" element={<BasketPage/>} />
-
-
-
+          <Route path="shop/categories" element={<CategoriesPage/>} />
+          <Route path="shop/products/:categoryId" element={<ProductsPage/>} />
+          <Route path="shop/products/productItem/:productId" element={<ProductItemPage/>} />
+          <Route path="shop/basket" element={<BasketPage/>} />
+          <Route path="shop/makeOrder" element={<MakeOrderPage/>} />
+          <Route path="shop/userOrders" element={<UserOrders/>} />
 
           {/* <Route path="*" element={<NoMatch />} /> */}
-        </Route>         
+        </Route>    
+
+        <Route path="/admin" element={<AdminLayout/>}>
+        <Route index element={<AdminHomePage />} />
+          <Route path="categories/create" element={<CreateCategoryPage/>} />
+          <Route path="categories/list" element={<CategoriesList/>} />
+          <Route path="categories/edit/:categoryId" element={<EditCategoryPage></EditCategoryPage>} />
+          <Route path="products/list" element={<ProductsList/>} />
+          <Route path="products/create" element={<CreateProductPage/>} />
+          <Route path="products/edit/:productId" element={<EditProductPage></EditProductPage>} />
+          <Route path="users/list" element={<UsersList/>} />
+          <Route path="users/edit/:userId" element={<EditUserPage></EditUserPage>} />      
+        </Route>   
       </Routes>
   );
 }
 
-
-
-
-
-// function NoMatch() {
-//   return (
-//     <div>
-//       <h2>Not Found</h2>
-//       <p>
-//         <Link to="/">Go to the home page</Link>
-//       </p>
-//     </div>
-//   );
-// }
 
 
 export default App;

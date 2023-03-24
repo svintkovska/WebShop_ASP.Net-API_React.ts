@@ -3,13 +3,15 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import http from "../../../../http";
 import upload from "../../../../assets/upload.png"
 import { ICategory, ICreateProduct } from "../types";
+import SuccessMessage from "../../../common/SuccessMessage";
 
 
 
 
 const CreateProductPage = () =>{
     const navigator = useNavigate();
-    
+    const [successMessage, setSuccessMessage] = useState<boolean>(false);
+
     const [category, setCategory] = useState<ICategory>({
         id: 0,
         name: "",
@@ -142,7 +144,10 @@ const CreateProductPage = () =>{
           headers: { "Content-Type": "multipart/form-data" },
           
         });
-
+        setSuccessMessage(true);
+        setTimeout(() => {
+          navigator("/admin/products/list");
+          }, 1000);
       } catch (error: any) {
         console.log("error:", error);
       }
@@ -155,7 +160,9 @@ const CreateProductPage = () =>{
       <>
         <div className="container col-6 offset-3">
           <h1 className="mt-5 mb-4 text-center">Create Product</h1>
-
+          {successMessage && (
+        <SuccessMessage message="Succesufully created" />
+      )}
           <form onSubmit={onSubmitHandler}>
             <div className="mb-3">
               <label htmlFor="name" className="form-label">
@@ -281,9 +288,9 @@ const CreateProductPage = () =>{
               </button>
             </div>
           </form>
-          <Link to="/products/list">
-            <button className="btn btn-outline-success">
-              Go to Products List
+          <Link to="/admin/products/list">
+            <button className="btn btn-outline-success mb-5">
+              Go Back to Products 
             </button>
           </Link>
         </div>

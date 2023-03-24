@@ -74,7 +74,7 @@ const ProductsPage = ()=>{
 
             const handleAddToCart = (product: IProductItem) => {
               const selectedProduct: IBasketProduct = {
-                  id: product.id,
+                  productId: product.id,
                   name: product.name,
                   price: product.price,
                   image: product.images[0],
@@ -85,7 +85,7 @@ const ProductsPage = ()=>{
               let productExists = false;
             
               existingBasket = existingBasket.map((basketProduct) => {
-                if (basketProduct.id === selectedProduct.id) {
+                if (basketProduct.productId === selectedProduct.productId) {
                   basketProduct.quantity += selectedProduct.quantity;
                   productExists = true;
                 }

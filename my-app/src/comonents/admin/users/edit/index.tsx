@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { APP_ENV } from "../../../../env";
 import http from "../../../../http";
+import SuccessMessage from "../../../common/SuccessMessage";
 import { IEditUser } from "../types";
 
 const EditUserPage = () => {
@@ -42,7 +43,7 @@ const EditUserPage = () => {
         .put("api/users", user);
         setSuccessMessage(true);
         setTimeout(() => {
-            navigate('/users/list');
+            navigate('/admin/users/list');
           }, 1000);
       }
       catch(error: any){
@@ -90,133 +91,141 @@ const EditUserPage = () => {
   };
   return (
     <>
-      <div className="container " style={{ marginTop: 60, marginLeft: 350}}>
-      {successMessage && (
-            <div className="alert alert-success" role="alert">
-             Saved            
-            </div>
-          )}
-        <form onSubmit={handleFormSubmit} >
-          <div className=" row mb-5" >
-            <div className="col-2">
-              <div className="mb-5">
-                <img
-                  src={APP_ENV.IMAGE_PATH + "300_" + user.image}
-                  alt="select img"
-                  width="170px"
-                />
-              </div>
-              <div>
-                <label style={{ marginRight: "10px" }}>
-                  Roles:
-                  {user.allRoles.map((role) => (
-                    <label
-                      key={role.id}
-                      style={{ marginRight: "10px", marginLeft: "10px" }}
-                    >
-                      <input
-                        type="checkbox"
-                        name="selectedRoles"
-                        value={role.id}
-                        checked={user.selectedRoles.includes(role.id)}
-                        onChange={() => handleRoleCheckboxChange(role.id)}
-                      />
-                      {role.name}
-                    </label>
-                  ))}
-                </label>
-              </div>
-            </div>
 
-            <div className="col-8">
-              <div className="mb-1">
-                <label>
-                  First Name:
-                  <input
-                    type="text"
-                    name="firstName"
-                    value={user.firstName}
-                    disabled
-                    className="form-control"
-                  />
-                </label>
-              </div>
-              <div className="mb-3">
-                <label>
-                  Last Name:
-                  <input
-                    type="text"
-                    name="lastName"
-                    value={user.lastName}
-                    disabled
-                    className="form-control"
-                  />
-                </label>
-              </div>
-              <div className="mb-3">
-                <label>
-                  Username:
-                  <input
-                    type="text"
-                    name="userName"
-                    value={user.userName}
-                    disabled
-                    className="form-control"
-                  />
-                </label>
-              </div>
-              <div className="mb-3">
-                <label>
-                  Email:
-                  <input
-                    type="email"
-                    name="email"
-                    value={user.email}
-                    disabled
-                    className="form-control"
-                  />
-                </label>
-              </div>
-            </div>
-          </div>
+    <div>
+    {successMessage && (
+        <SuccessMessage message="Changes saved" />
+      )}
 
-          <div className="mb-3">
-            <label>
-              Locked Out:
-              <input
-                style={{ marginRight: "10px", marginLeft: "10px" }}
-                type="checkbox"
-                name="isLockedOut"
-                checked={user.isLockedOut}
-                onChange={handleInputChange}
-              />
-            </label>
-          </div>
+<div className="container d-flex align-items-center justify-content-center " >
 
-          {user.isLockedOut && (
-            <div className="mb-3">
-              <label>
-                Lockout End Date:
-                <input
-                  style={{ marginRight: "10px", marginLeft: "10px" }}
-                  type="date"
-                  name="lockoutEndDate"
-                  value={
-                    user.lockoutEndDate
-                      ? new Date(user.lockoutEndDate).toISOString().substr(0, 10)
-                      : ""
-                  }
-                  onChange={handleInputChange}
-                />
-              </label>
-            </div>
-          )}
-
-          <button type="submit" className="btn btn-success">
-            Save
-          </button>
-        </form>
+<form onSubmit={handleFormSubmit} >
+  <div className=" d-flex flex-row mb-5" >
+    <div className="me-5">
+      <div className="mt-1 mb-5">
+        <img
+          src={APP_ENV.IMAGE_PATH + "300_" + user.image}
+          alt="select img"
+          width="170px"
+        />
       </div>
+      <div>
+        <label className="me-5">
+          Roles:
+          {user.allRoles.map((role) => (
+            <label
+              key={role.id}
+              className="me-3 ms-3"
+            >
+              <input
+                type="checkbox"
+                name="selectedRoles"
+                value={role.id}
+                checked={user.selectedRoles.includes(role.id)}
+                onChange={() => handleRoleCheckboxChange(role.id)}
+              />
+              {role.name}
+            </label>
+          ))}
+        </label>
+      </div>
+    </div>
+
+    <div className="d-flex flex-column bd-highlight mb-3">
+      <div className="mb-1">
+        <label>
+          First Name:
+          <input
+            type="text"
+            name="firstName"
+            value={user.firstName}
+            disabled
+            width={"auto"}
+            className="form-control"
+          />
+        </label>
+      </div>
+      <div className="mb-3">
+        <label>
+          Last Name:
+          <input
+            type="text"
+            name="lastName"
+            value={user.lastName}
+            disabled
+            className="form-control"
+          />
+        </label>
+      </div>
+      <div className="mb-3">
+        <label>
+          Username:
+          <input
+            type="text"
+            name="userName"
+            value={user.userName}
+            disabled
+            className="form-control"
+          />
+        </label>
+      </div>
+      <div className="mb-3">
+        <label>
+          Email:
+          <input
+            type="email"
+            name="email"
+            value={user.email}
+            disabled
+            style={{minWidth: 200}}
+            className="form-control"
+          />
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div className="mb-3">
+    <label>
+      Locked Out:
+      <input
+        style={{ marginRight: "10px", marginLeft: "10px" }}
+        type="checkbox"
+        name="isLockedOut"
+        checked={user.isLockedOut}
+        onChange={handleInputChange}
+      />
+    </label>
+  </div>
+
+  {user.isLockedOut && (
+    <div className="mb-3">
+      <label>
+        Lockout End Date:
+        <input
+          style={{ marginRight: "10px", marginLeft: "10px" }}
+          type="date"
+          name="lockoutEndDate"
+          value={
+            user.lockoutEndDate
+              ? new Date(user.lockoutEndDate).toISOString().substr(0, 10)
+              : ""
+          }
+          onChange={handleInputChange}
+        />
+      </label>
+    </div>
+  )}
+  <div className="text-center mt-5">
+  <button type="submit" className="btn btn-success">
+    Save
+  </button>
+  </div>
+  
+</form>
+</div>
+    </div>
+      
     </>
   );
 };

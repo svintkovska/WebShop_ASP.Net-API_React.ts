@@ -2,6 +2,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import http from "../../../http";
+import SuccessMessage from "../../common/SuccessMessage";
 import { setImage } from "../AuthReducer";
 import { IAuthUser } from "../types";
 
@@ -20,8 +21,8 @@ const EditProfile = () =>{
     const navigator = useNavigate();
     const {email} = useSelector((store: any) => store.auth as IAuthUser);
     const dispatch = useDispatch();
+    const [successMessage, setSuccessMessage] = useState<boolean>(false);
 
-    const [profileChanged, setProfileChanged] = useState<boolean>(false);
 
     const [state, setState] = useState<IProfileEdit>({
         email: "",
@@ -65,7 +66,7 @@ const EditProfile = () =>{
           }).then(resp => {          
             localStorage.setItem("imagePath", resp.data);
             dispatch(setImage(resp.data));
-            setProfileChanged(true);
+            setSuccessMessage(true);
           })
         }
         catch(error: any){
@@ -78,16 +79,15 @@ const EditProfile = () =>{
         <>
         <div className="container col-6 offset-3">
           <h1 className="mt-5 mb-4 text-center">Update Profile</h1>
+          {successMessage && (
+        <SuccessMessage message="Changes saved" />
+      )}
           <div className="text-center">
           <Link to="/account/editProfile/changePassword">
                 <button className="btn btn-outline-primary">Change Password</button>
           </Link>
           </div>
-          {profileChanged && (
-            <div className="alert alert-success" role="alert">
-              Profile successfully updated
-            </div>
-          )}
+
           <form onSubmit={onSubmitHandler}>
             <div className="mb-3">
               <label htmlFor="firstName" className="form-label">

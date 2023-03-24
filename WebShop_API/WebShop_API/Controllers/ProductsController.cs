@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1.X509;
 using System.Text.Json.Serialization;
 using WebShop_API.Data;
 using WebShop_API.Data.Entities;
@@ -85,14 +86,24 @@ namespace WebShop_API.Controllers
             int total = query.Count();
             int pages = (int)Math.Ceiling(total / (double)pageSize);
 
-
+            var categories = _context.Categories.ToList();
+            var allCategories = new List<CategoryViewModel>();
+            foreach (var cat in categories)
+            {
+                allCategories.Add(new CategoryViewModel
+                {
+                    Id = cat.Id,
+                    Name = cat.Name,
+                });
+            }
             return Ok(new ProductSearchResultViewModel
             {
                 Products = list,
                 Total = total,
                 CurrentPage = page,
-                Pages= pages
-            });
+                Pages = pages,
+                Categories = allCategories
+            }) ;
         }
 
         [HttpGet("create")]

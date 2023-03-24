@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import http from "../../../../http";
+import SuccessMessage from "../../../common/SuccessMessage";
 
 
 interface ICategoryEdit {
@@ -14,6 +15,7 @@ interface ICategoryEdit {
 
 const EditCategoryPage = () =>{
     const navigator = useNavigate();
+    const [successMessage, setSuccessMessage] = useState<boolean>(false);
 
     const { categoryId } = useParams();
     let catIdNumber = -1;
@@ -64,7 +66,10 @@ const EditCategoryPage = () =>{
           .put("api/Categories", state, {
             headers: {"Content-Type": "multipart/form-data"}
           });
-          navigator("/");
+          setSuccessMessage(true);
+        setTimeout(() => {
+          navigator("/admin/categories/list");
+          }, 1000);
         }
         catch(error: any){
           console.log ("error:", error);
@@ -76,7 +81,9 @@ const EditCategoryPage = () =>{
         <>
         <div className="container col-6 offset-3">
           <h1 className="mt-5 mb-4 text-center">Edit Category</h1>
-
+          {successMessage && (
+        <SuccessMessage message="Succesufully changed" />
+      )}
           <form onSubmit={onSubmitHandler}>
             <div className="mb-3">
               <label htmlFor="name" className="form-label">
@@ -133,8 +140,8 @@ const EditCategoryPage = () =>{
               </button>
             </div>
           </form>
-          <Link to="/categories/list">
-                <button className="btn btn-outline-success">Go to Categories List</button>
+          <Link to="/admin/categories/list">
+                <button className="btn btn-outline-success">Go Back to Categories</button>
           </Link>
         </div>
       </>

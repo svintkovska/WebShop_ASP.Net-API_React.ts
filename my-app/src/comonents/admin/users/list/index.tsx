@@ -50,7 +50,7 @@ console.log("users", users);
           </td>
 
           <td>
-            <Link to={`/users/edit/${user.id}`}>
+            <Link to={`/admin/users/edit/${user.id}`}>
               <button className="btn" type="button" style={{ marginTop: 10 }}>
                 <img
                   src={"https://cdn-icons-png.flaticon.com/512/143/143437.png"}

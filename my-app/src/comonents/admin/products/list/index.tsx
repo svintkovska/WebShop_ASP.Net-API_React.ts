@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import qs from "qs";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { Link, useSearchParams } from 'react-router-dom';
 import { APP_ENV } from "../../../../env";
 import http from "../../../../http";
@@ -17,7 +17,8 @@ const ProductsList = ()=>{
       pages: 0,
       products: [],
       total: 0,
-      currentPage:0
+      currentPage:0,
+      categories: []
   });
 
   const [search, setSearch] = useState<IProductSearch>({
@@ -48,7 +49,9 @@ const ProductsList = ()=>{
       </li>
     ));
 
-
+    const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) =>{
+      setSearch({...search, [e.target.name]: e.target.value});
+  }
 
 
     const [deleteProductId, setDeleteProductId] = useState<number | null>(null);
@@ -66,7 +69,7 @@ const ProductsList = ()=>{
     const handleShowDeleteModal = (id: number) => {
       setDeleteProductId(id);
     };
-  
+
     const handleCloseDeleteModal = () => {
       setDeleteProductId(null);
     };
@@ -99,7 +102,7 @@ const ProductsList = ()=>{
         <td>{product.price}</td>
         <td>{product.description}</td>
         <td>
-        <Link to={`/Products/edit/${product.id}`}>
+        <Link to={`/admin/products/edit/${product.id}`}>
           <button className="btn" type="button" style={{marginTop: 10}}>
             <img 
             src={"https://cdn-icons-png.flaticon.com/512/143/143437.png"}
@@ -120,21 +123,73 @@ const ProductsList = ()=>{
       </tr>
     ));
 
-
+    const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const { name, value } = event.target;
+  
+      setSearch((prevProduct) => ({
+        ...prevProduct,
+        [name]: parseInt(value),
+      }));
+    };
 
     return (
       <>
         <h1 className="text-center mt-3 mb-4">Products</h1>
 
         <div className="d-flex justify-content-center mb-4">
-
-          <Link to="/products/create">
+          <Link to="/admin/products/create">
             <button className="btn btn-success" style={{ marginLeft: "15px" }}>
               Add Product
             </button>
           </Link>
         </div>
-
+        <div className="d-flex flex-row justify-content-center ">
+          <div className="mb-3 col-2 me-5">
+            <label htmlFor="name" className="form-label">
+              Name
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              name="name"
+              value={search.name}
+              onChange={onChangeInputHandler}
+              placeholder="Search by name"
+            />
+          </div>
+          <div className="mb-3 col-2 me-5">
+            <label htmlFor="description" className="form-label">
+              Description
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              name="description"
+              value={search.description}
+              onChange={onChangeInputHandler}
+              placeholder="Search by description"
+            />
+          </div>
+          <div className="mb-3 col-2 me-5">
+              <label htmlFor="categoryId" className="form-label">
+                Category
+              </label>
+              <select
+                className="form-select"
+                id="categoryId"
+                name="categoryId"
+                value={search.categoryId}
+                onChange={handleCategoryChange}
+              >
+                <option value="">Select a category</option>
+                {data.categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+        </div>
         <div className="container col-10">
           <table className="table table-striped table-dark">
             <thead className="table-light">
@@ -152,19 +207,24 @@ const ProductsList = ()=>{
             </thead>
             <tbody>{content}</tbody>
           </table>
+          <div className="d-flex flex-row justify-content-center">
           <nav>
             <ul className="pagination">{pagination}</ul>
           </nav>
+          </div>
+          
         </div>
 
         <ProductDeleteModal
-        show={deleteProductId !== null}
-        onHide={handleCloseDeleteModal}
-        onDelete={handleDeleteProduct}
-        productName={
-          deleteProductId !== null ? products.find((c) => c.id === deleteProductId)?.name || '' : ''
-        }
-      />
+          show={deleteProductId !== null}
+          onHide={handleCloseDeleteModal}
+          onDelete={handleDeleteProduct}
+          productName={
+            deleteProductId !== null
+              ? products.find((c) => c.id === deleteProductId)?.name || ""
+              : ""
+          }
+        />
       </>
     );
 }
