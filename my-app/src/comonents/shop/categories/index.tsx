@@ -31,14 +31,14 @@ const CategoriesPage = ()=>{
           
     const cardItem = categories.map((category) => (
         <Col key={category.id}>
-        <Card style={{backgroundColor: "gray"}}>
+        <Card style={{backgroundColor: "transparent", border: "1px solid rgb(57, 119, 135)"}}>
           <Card.Img variant="top" src={APP_ENV.IMAGE_PATH + "300_" + category.image} alt={category.name}
           style={{ maxHeight: "200px", minHeight: "200px", cursor: "pointer" }} 
           onClick={() => handleCategoryClick(category.id, category.name)}
           />
           
           <Card.Body className="text-center">
-            <Card.Title>{category.name}</Card.Title>
+            <Card.Title style={{ color: "rgb(57, 119, 135)" }}>{category.name}</Card.Title>
           </Card.Body>
           
         </Card>

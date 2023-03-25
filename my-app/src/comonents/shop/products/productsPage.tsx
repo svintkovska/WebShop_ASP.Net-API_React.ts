@@ -156,7 +156,7 @@ const ProductsPage = ()=>{
           
     const cardItem = products.map((product) => (
       <Col key={product.id}>
-        <Card style={{ backgroundColor: "gray" }}>
+        <Card style={{ backgroundColor: "transparent", border: "1px solid rgb(57, 119, 135)" }}>
           <Card.Img
             variant="top"
             src={APP_ENV.IMAGE_PATH + "300_" + product.images[0]}
@@ -170,17 +170,18 @@ const ProductsPage = ()=>{
           />
 
           <Card.Body>
-            <Card.Title className="text-center">{product.name}</Card.Title>
-            <Card.Text className="text-truncate" style={{ maxHeight: "100px" }}>
+            <Card.Title className="text-center" style={{ color: "rgb(57, 119, 135)" }}>{product.name}</Card.Title>
+            <Card.Text className="text-truncate" style={{ maxHeight: "100px", color: "rgb(57, 119, 135)"  }}>
               {" "}
               {product.description}{" "}
             </Card.Text>
           </Card.Body>
+          <hr style={{ color: "rgb(57, 119, 135)" }}></hr>
           <Card.Footer>
             <div className="d-flex d-row justify-content-center align-items-center ">
              
               <div className="d-flex justify-content-center align-items-center me-5">
-                <Card.Text>₴ {product.price}</Card.Text>
+                <Card.Text style={{ color: "rgb(57, 119, 135)" }}>₴ {product.price}</Card.Text>
               </div>
               <div className="d-flex justify-content-center align-items-center ">
                 <Button

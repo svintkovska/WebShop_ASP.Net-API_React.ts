@@ -138,9 +138,6 @@ namespace WebShop_API.Data
                 }
 
             }
-        }
-
-        
+        }     
     }
-
 }

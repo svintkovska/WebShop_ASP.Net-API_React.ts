@@ -123,7 +123,8 @@ namespace WebShop_API.Controllers
                 Name = model.Name,
                 DateCreated = DateTime.UtcNow,
                 Price = model.Price,
-                CategoryId = model.CategoryId
+                CategoryId = model.CategoryId,
+                Description= model.Description
                 
             };
             _context.Products.Add(entity);
@@ -192,6 +193,10 @@ namespace WebShop_API.Controllers
             edit.Price = model.Price;
             edit.CategoryId = model.CategoryId;
 
+
+            var prodImages = _context.ProductImages.Where(i => i.ProductId == model.Id).ToList();
+            string[] imageSizes = ((string)_configuration.GetValue<string>("ImageSizes")).Split(" ");
+
             string imageName = String.Empty;
             if (model.Files != null)
             {
@@ -199,8 +204,6 @@ namespace WebShop_API.Controllers
                   DeleteAllProductImages(model.Id);
                 else
                 {
-                    var prodImages = _context.ProductImages.Where(i => i.ProductId == model.Id).ToList();
-                    string[] imageSizes = ((string)_configuration.GetValue<string>("ImageSizes")).Split(" ");
 
                     foreach (var prodImage in prodImages)
                     {
@@ -243,6 +246,32 @@ namespace WebShop_API.Controllers
                         _context.SaveChanges();
                     }
                 }
+            }else if(model.CurrentImages != null)
+            {
+           
+
+                foreach (var prodImage in prodImages)
+                {
+                    foreach (var name in model.CurrentImages)
+                    {
+                        var path = name.Replace("http://localhost:5285/images/300_", "");
+                        if (prodImage.Name != path)
+                        {
+                            foreach (var size in imageSizes)
+                            {
+                                string dirDelProductImage = Path.Combine(Directory.GetCurrentDirectory(), "images", size + "_" + prodImage.Name);
+                                if (System.IO.File.Exists(dirDelProductImage))
+                                    System.IO.File.Delete(dirDelProductImage);
+
+                            }
+                            _context.ProductImages.Remove(prodImage);
+                            _context.SaveChanges();
+                        }
+
+                    }
+
+                }
+
             }
 
             _context.SaveChanges();
