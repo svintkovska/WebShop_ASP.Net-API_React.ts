@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import http from "../../../../http";
 import { useDispatch } from "react-redux";
 import { AuthActionType } from "../../types";
-import { setEmail, setImage } from "../../AuthReducer";
+import { setEmail, setImage, setRoles } from "../../AuthReducer";
 import axios from "axios";
 
 type GoogleAuthProps = {
@@ -60,7 +60,8 @@ const dispatch = useDispatch();
               localStorage.setItem("token", resp.data.token);
               localStorage.setItem("email", model.email);
               localStorage.setItem("imagePath", resp.data.user.image);
-
+              const roles: string[] = resp.data.roles;
+              localStorage.setItem('roles', JSON.stringify(roles));
 
               axios.defaults.headers.common = {
                 Authorization: `Bearer ${resp.data.token}`,
@@ -69,7 +70,7 @@ const dispatch = useDispatch();
               dispatch({type: AuthActionType.USER_LOGIN});
               dispatch(setEmail(model.email));
               dispatch(setImage(resp.data.user.image));
-
+              dispatch(setRoles(roles));
               navigate("/");
             }           
           });

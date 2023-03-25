@@ -17,7 +17,7 @@ const AdminLayout = () => {
   return (
     <>
       <AdminHeader />
-      <div className="container bg-light p-0">
+      <div >
         { isAuth && isAdmin && <Outlet /> }
       </div>
     </>

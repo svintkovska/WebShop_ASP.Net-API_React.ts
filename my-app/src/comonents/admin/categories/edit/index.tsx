@@ -79,13 +79,14 @@ const EditCategoryPage = () =>{
 
     return (
         <>
-        <div className="container col-6 offset-3">
-          <h1 className="mt-5 mb-4 text-center">Edit Category</h1>
+        <div className="cotainer vh-100 d-flex flex-column justify-content-start align-items-center">
+          <h1 className="mt-5 mb-4 text-center text-info">Edit Category</h1>
           {successMessage && (
         <SuccessMessage message="Succesufully changed" />
       )}
-          <form onSubmit={onSubmitHandler}>
-            <div className="mb-3">
+          <form onSubmit={onSubmitHandler} className="border border-info pb-2 pt-5 ps-5 pe-5"
+            style={{ width: 500 }}>
+            <div className="mb-3 text-info">
               <label htmlFor="name" className="form-label">
                 Name
               </label>
@@ -101,7 +102,7 @@ const EditCategoryPage = () =>{
               <div className="invalid-feedback">Please enter a valid name.</div>
             </div>
 
-            <div className="mb-3">
+            <div className="mb-3 text-info">
               <label htmlFor="description" className="form-label">
                 Description
               </label>
@@ -135,13 +136,13 @@ const EditCategoryPage = () =>{
             </div>
 
             <div className="text-center">
-              <button type="submit" className="btn btn-success">
+              <button type="submit" className="btn btn-info mb-2">
                 Edit Category
               </button>
             </div>
           </form>
           <Link to="/admin/categories/list">
-                <button className="btn btn-outline-success">Go Back to Categories</button>
+                <button className="btn btn-outline-info mt-5">Go Back to Categories</button>
           </Link>
         </div>
       </>

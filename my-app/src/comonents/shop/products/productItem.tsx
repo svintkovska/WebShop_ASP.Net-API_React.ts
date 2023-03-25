@@ -113,23 +113,23 @@ const navigate = useNavigate();
   
     const navigation  = ()=>{
       return (
-        <nav className="d-flex justify-content-left">
-          <ul className="list-unstyled">
+        <nav className="d-flex justify-content-left mb-3 mt-3">
+        <ul className="list-unstyled me-2">
             <li>
               <a href="/">Home Page  -{'>'}</a>
             </li>
           </ul>
-          <ul className="list-unstyled">
+          <ul className="list-unstyled me-2">
             <li>
               <a href="/shop/categories"> Menu -{'>'} </a>
             </li>
           </ul>
-          <ul className="list-unstyled">
+          <ul className="list-unstyled me-2">
             <li>
               <a onClick={() => handleCategoryClick(categoryId, categoryName)} href={`/shop/products/${categoryId}`}>{categoryName}  -{'>'} </a>
             </li>
           </ul>
-          <ul className="list-unstyled">
+          <ul className="list-unstyled me-2">
             <li>
               <a href={`/shop/products/productItem/${productId}`}>{product.name} </a>
             </li>
@@ -142,7 +142,7 @@ const navigate = useNavigate();
         <Container>
           <div>{navigation()}</div>
           <Row className="my-4">
-            <Col md={6}>
+            <Col md={6} >
               <div className="d-flex flex-column align-items-center">
                 <img
                   src={APP_ENV.IMAGE_PATH + "300_" + mainImage}
@@ -170,40 +170,41 @@ const navigate = useNavigate();
               </div>
             </Col>
             <Col md={6}>
-              <Card className="h-100">
-                <Card.Body className="d-flex flex-column justify-content-top">
-                  <div>
-                    <Card.Title className="mb-5" style={{ fontSize: "30px" }}>
+              <Card className="h-100"  style={{backgroundImage: "url(https://img.freepik.com/premium-photo/black-friday-sale-banner-concept-design-shopping-bag-black-background-with-copy-space-3d-render_46250-3239.jpg)", backgroundSize: "cover"}}>
+                <Card.Body className="d-flex flex-column justify-content-top p-5">
+                  <div >
+                    <Card.Title className="mb-5 text-center text-info" style={{ fontSize: "30px" }}>
                       {product.name}
                     </Card.Title>
+                    <Card.Text className="mb-5" style={{color: "rgb(57, 119, 135)"}}>
+                      {product.description}
+                    </Card.Text>
                     <Card.Subtitle
                       className="mb-5 text-muted"
                       style={{ fontSize: "20px" }}
                     >
                       ₴ {product.price.toFixed(2)}
                     </Card.Subtitle>
-                    <Card.Text className="mb-5">
-                      {product.description}
-                    </Card.Text>
+                   
                   </div>
 
-                  <div className="d-flex justify-content-center align-items-center mt-5">
-                    <Row>
-                      <Col>
+                  <div className="d-flex justify-content-center align-items-center mt-0">
+                      <div className="d-flex justify-content-center align-items-center me-5">
                         <div className="input-group">
                           <span className="input-group-prepend">
                             <button
                               className="btn btn-outline-secondary"
                               type="button"
                               onClick={handleDecreaseQuantity}
+                             
                             >
                               -
                             </button>
                           </span>
                           <input
                             type="number"
-                            className="form-control"
-                            style={{ maxWidth: "80px", minWidth: "50px" }}
+                            className="form-control text-center"
+                            style={{ maxWidth: "70px", minWidth: "50px"}}
                             value={quantity}
                             onChange={handleQuantityChange}
                           />
@@ -216,22 +217,31 @@ const navigate = useNavigate();
                               +
                             </button>
                           </span>
-                        </div>
-                      </Col>
+                          </div>
+                      </div>
 
-                      <Col>
+                      <div className="d-flex justify-content-center align-items-center me-5">
                         <Button
-                          variant="primary"
+                          variant="outline-0"
                           size="lg"
                           onClick={handleAddToCart}
+                          style={{
+                            backgroundColor: "transparent",
+                            margin: "0",
+                            padding: "0",
+                          }}
                         >
-                          Add to Cart
+                          <img
+                            src="https://cdn-icons-png.flaticon.com/512/6811/6811606.png"
+                            width={110}
+                          />
                         </Button>
-                        <AddToBasketModal show={showModal} onClose={() => setShowModal(false)} />
-
-                      </Col>
-                    </Row>
-                  </div>
+                        <AddToBasketModal
+                          show={showModal}
+                          onClose={() => setShowModal(false)}
+                        />
+                      </div>
+                    </div>
                 </Card.Body>
               </Card>
             </Col>

@@ -74,12 +74,14 @@ const CreateCategoryPage = () => {
 
   return (
     <>
-      <div className="container col-6 offset-3">
-        <h1 className="mt-5 mb-4 text-center">Create Category</h1>
-        {successMessage && (
-        <SuccessMessage message="Succesufully created" />
-      )}
-        <form onSubmit={handleSubmit}>
+      <div className="cotainer vh-100 d-flex flex-column justify-content-start align-items-center">
+        <h1 className="mt-2 mb-4 text-center text-info">Create Category</h1>
+        {successMessage && <SuccessMessage message="Succesufully created" />}
+        <form
+          onSubmit={handleSubmit}
+          className="border border-info pb-2 pt-5 ps-5 pe-5"
+          style={{ width: 500 }}
+        >
           <InputGroup
             field="name"
             label="Name"
@@ -87,28 +89,9 @@ const CreateCategoryPage = () => {
             error={errors.name}
             touched={touched.name}
           />
-          {/* <div className="mb-3">
-            <label htmlFor="name" className="form-label">
-              Name
-            </label>
-            <input
-              type="text"
-              className={classNames("form-control", {
-                "is-invalid": touched.name && errors.name,
-                "is-valid": touched.name && !errors.name,
-              })}
-              name="name"
-              value={values.name}
-              onChange={handleChange}
-              placeholder="Enter Name"
-            />
-            {touched.name && errors.name && (
-              <div className="invalid-feedback">{errors.name}</div>
-            )}
-          </div> */}
 
           <div className="mb-3">
-            <label htmlFor="description" className="form-label">
+            <label htmlFor="description" className="form-label text-info">
               Description
             </label>
             <textarea
@@ -150,19 +133,19 @@ const CreateCategoryPage = () => {
 
             {touched["image"] && errors["image"] && (
               <div className="alert alert-danger" role="alert">
-               {errors["image"]}
+                {errors["image"]}
               </div>
             )}
           </div>
 
           <div className="text-center">
-            <button type="submit" className="btn btn-success">
+            <button type="submit" className="btn btn-info mb-2">
               Add Category
             </button>
           </div>
         </form>
         <Link to="/admin/categories/list">
-          <button className="btn btn-outline-success">
+          <button className="btn btn-outline-info mt-3">
             Go Back to Categories
           </button>
         </Link>

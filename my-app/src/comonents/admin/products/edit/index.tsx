@@ -264,50 +264,55 @@ const EditProductPage = () =>{
 
     return (
       <>
-        <div className="container col-6 offset-3">
-          <h1 className="mt-5 mb-4 text-center">Update Product</h1>
-          {successMessage && (
-        <SuccessMessage message="Succesufully updated" />
-      )}
-          <form onSubmit={onSubmitHandler}>
-            <div className="mb-3">
-              <label htmlFor="name" className="form-label">
-                Name
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                name="name"
-                value={product.name}
-                onChange={onChangeInputHandler}
-                placeholder="Enter Name"
-                required
-              />
-              <div className="invalid-feedback">Please enter a valid name.</div>
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="price" className="form-label">
-                Price
-              </label>
-              <input
-                type="number"
-                step="0.01"
-                min="0"
-                className="form-control"
-                id="price"
-                name="price"
-                value={product.price}
-                onChange={onChangeInputHandler}
-                required
-              />
-              <div className="invalid-feedback">
-                Please enter a valid price.
+        <div className="cotainer vh-100 d-flex flex-column justify-content-start align-items-center">
+          <h1 className="mt-5 mb-4 text-center text-info">Update Product</h1>
+          {successMessage && <SuccessMessage message="Succesufully updated" />}
+          <form
+            onSubmit={onSubmitHandler}
+            className="border border-info pb-2 pt-5 ps-5 pe-5"
+            style={{ width: 700 }}
+          >
+            <div className="d-flex flex-row justify-content-baseline align-items-center">
+              <div className="mb-3 me-5 col-6">
+                <label htmlFor="name" className="form-label text-info">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="name"
+                  value={product.name}
+                  onChange={onChangeInputHandler}
+                  placeholder="Enter Name"
+                  required
+                />
+                <div className="invalid-feedback">
+                  Please enter a valid name.
+                </div>
+              </div>
+              <div className="mb-3 ">
+                <label htmlFor="price" className="form-label text-info">
+                  Price
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  className="form-control"
+                  id="price"
+                  name="price"
+                  value={product.price}
+                  onChange={onChangeInputHandler}
+                  required
+                />
+                <div className="invalid-feedback">
+                  Please enter a valid price.
+                </div>
               </div>
             </div>
 
             <div className="mb-3">
-              <label htmlFor="description" className="form-label">
+              <label htmlFor="description" className="form-label text-info">
                 Description
               </label>
               <textarea
@@ -322,8 +327,8 @@ const EditProductPage = () =>{
                 Please enter a valid description.
               </div>
             </div>
-            <div className="mb-3">
-              <label htmlFor="categoryId" className="form-label">
+            <div className="mb-3 col-4">
+              <label htmlFor="categoryId" className="form-label text-info">
                 Category
               </label>
               <select
@@ -344,7 +349,7 @@ const EditProductPage = () =>{
 
             <div className="mb-3">
               <label htmlFor="image" className="form-label">
-              {product.currentImages.length > 0 &&
+                {product.currentImages.length > 0 &&
                   product.currentImages.map((image, index) => (
                     <div
                       key={index}
@@ -413,14 +418,14 @@ const EditProductPage = () =>{
             </div>
 
             <div className="text-center">
-              <button type="submit" className="btn btn-success">
+              <button type="submit" className="btn btn-info mb-3">
                 Update Product
               </button>
             </div>
           </form>
           <Link to="/products/list">
-            <button className="btn btn-outline-success">
-              Go Back to Products 
+            <button className="btn btn-outline-info mt-3 mb-3">
+              Go Back to Products
             </button>
           </Link>
         </div>

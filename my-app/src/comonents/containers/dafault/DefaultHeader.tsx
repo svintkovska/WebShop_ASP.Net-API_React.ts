@@ -48,23 +48,32 @@ const DefaultHeader = () =>{
             </button>
 
             <div className="collapse navbar-collapse" id="navbarNav">
-              {isAdmin ? (
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                <li className="nav-item">
+                  <Link
+                    to="/shop/categories"
+                    className="nav-link active"
+                    aria-current="page"
+                  >
+                    Menu
+                  </Link>
+                </li>
+                {isAdmin ? (
                   <li className="nav-item">
                     <Link
                       to="/admin"
-                      className="nav-link active"
+                      className="nav-link"
                       aria-current="page"
                     >
                       Admin Center
                     </Link>
                   </li>
-                </ul>
-              ) : (
-                ""
-              )}
+                ) : (
+                  ""
+                )}
+              </ul>
 
-              <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+              <ul className="navbar-nav ms-auto mb-2 mb-lg-0 flex align-items-center">
                 {isAuth ? (
                   <>
                     <li className="nav-item nav-link active">Hello {email}</li>
@@ -78,29 +87,30 @@ const DefaultHeader = () =>{
                     <li className="nav-item">
                       <Link to="account/editProfile" className="nav-link">
                         <img
-                          src="https://cdn-icons-png.flaticon.com/512/9653/9653837.png"
+                          src="https://cdn-icons-png.flaticon.com/512/8423/8423772.png"
                           width="40"
                           height="40"
+                          title="Edit Profile"
                         ></img>
                       </Link>
                     </li>
                     <li className="nav-item">
                       <Link to="shop/userOrders" className="nav-link">
                         <img
-                          src="https://cdn-icons-png.flaticon.com/512/9973/9973202.png"
+                          src="https://cdn-icons-png.flaticon.com/512/1069/1069189.png"
                           width="40"
                           height="40"
                           title="My Orders"
-
                         ></img>
                       </Link>
                     </li>
                     <li className="nav-item">
                       <Link to="shop/basket" className="nav-link">
                         <img
-                          src="https://cdn-icons-png.flaticon.com/512/7805/7805985.png"
+                          src="https://cdn-icons-png.flaticon.com/512/9408/9408611.png"
                           width="40"
                           height="40"
+                          title="Basket"
                         ></img>
                       </Link>
                     </li>
@@ -110,9 +120,10 @@ const DefaultHeader = () =>{
                         className="nav-link btn btn-link"
                       >
                         <img
-                          src="https://cdn-icons-png.flaticon.com/512/3168/3168315.png"
+                          src="https://cdn-icons-png.flaticon.com/512/1828/1828490.png"
                           width="40"
                           height="40"
+                          title="Log out"
                         />
                       </button>
                     </li>

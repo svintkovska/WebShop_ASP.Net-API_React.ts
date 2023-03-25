@@ -17,17 +17,19 @@ const AddToBasketModal: React.FC<Props> = ({ show, onClose }) => {
 
   const modal = (
     <div
-      className={`modal fade ${show ? "show" : ""}`}
+      className={`modal fade ${show ? "show" : ""}` }
       tabIndex={-1}
       role="dialog"
-      style={{ display: show ? "block" : "none", width: 150, position: "fixed",
+      style={{ display: show ? "block" : "none", padding: 10,
+      width: 200, position: "fixed",
       top: "50%",
       left: "50%",
-      transform: "translate(-50%, -50%)", }}
+      transform: "translate(-50%, -50%)" 
+      }}
     
     >
-      <div className="modal-dialog modal-dialog-centered" role="document">
-        <div className="modal-content">
+      <div className="modal-dialog modal-dialog-centered" role="document" >
+        <div className="modal-content" >
           <div className="modal-header border-0">
             <h5 className="modal-title fw-bold">Added</h5>
             <button
@@ -36,9 +38,9 @@ const AddToBasketModal: React.FC<Props> = ({ show, onClose }) => {
               onClick={onClose}
             ></button>
           </div>
-          <div className="modal-body">
+          <div className="modal-body  ms-2 mb-2">
             <img
-              src="https://cdn-icons-png.flaticon.com/512/5290/5290058.png"
+              src="https://cdn-icons-png.flaticon.com/512/1828/1828640.png"
               width={100}
             />
           </div>

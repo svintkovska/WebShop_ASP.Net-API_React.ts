@@ -158,50 +158,56 @@ const CreateProductPage = () =>{
 
     return (
       <>
-        <div className="container col-6 offset-3">
-          <h1 className="mt-5 mb-4 text-center">Create Product</h1>
-          {successMessage && (
-        <SuccessMessage message="Succesufully created" />
-      )}
-          <form onSubmit={onSubmitHandler}>
-            <div className="mb-3">
-              <label htmlFor="name" className="form-label">
-                Name
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                name="name"
-                value={product.name}
-                onChange={onChangeInputHandler}
-                placeholder="Enter Name"
-                required
-              />
-              <div className="invalid-feedback">Please enter a valid name.</div>
-            </div>
+        <div className="cotainer vh-100 d-flex flex-column justify-content-start align-items-center">
+          <h1 className="mt-5 mb-4 text-center text-info">Create Product</h1>
+          {successMessage && <SuccessMessage message="Succesufully created" />}
+          <form
+            onSubmit={onSubmitHandler}
+            className="border border-info pb-2 pt-5 ps-5 pe-5"
+            style={{ width: 500 }}
+          >
+            <div className="d-flex flex-row justify-content-baseline align-items-center">
+              <div className="mb-3 col-8 me-5">
+                <label htmlFor="name" className="form-label text-info">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="name"
+                  value={product.name}
+                  onChange={onChangeInputHandler}
+                  placeholder="Enter Name"
+                  required
+                />
+                <div className="invalid-feedback">
+                  Please enter a valid name.
+                </div>
+              </div>
 
-            <div className="mb-3">
-              <label htmlFor="price" className="form-label">
-                Price
-              </label>
-              <input
-                type="number"
-                step="0.01"
-                min="0"
-                className="form-control"
-                id="price"
-                name="price"
-                value={product.price}
-                onChange={onChangeInputHandler}
-                required
-              />
-              <div className="invalid-feedback">
-                Please enter a valid price.
+              <div className="mb-3">
+                <label htmlFor="price" className="form-label text-info">
+                  Price
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  className="form-control"
+                  id="price"
+                  name="price"
+                  value={product.price}
+                  onChange={onChangeInputHandler}
+                  required
+                />
+                <div className="invalid-feedback">
+                  Please enter a valid price.
+                </div>
               </div>
             </div>
 
             <div className="mb-3">
-              <label htmlFor="description" className="form-label">
+              <label htmlFor="description" className="form-label text-info">
                 Description
               </label>
               <textarea
@@ -217,7 +223,7 @@ const CreateProductPage = () =>{
               </div>
             </div>
             <div className="mb-3">
-              <label htmlFor="categoryId" className="form-label">
+              <label htmlFor="categoryId" className="form-label text-info">
                 Category
               </label>
               <select
@@ -236,7 +242,7 @@ const CreateProductPage = () =>{
               </select>
             </div>
 
-            <div className="mb-3">
+            <div className="mb-1">
               <label htmlFor="image" className="form-label">
                 {product.images.length > 0 &&
                   product.images.map((image, index) => (
@@ -283,14 +289,14 @@ const CreateProductPage = () =>{
             </div>
 
             <div className="text-center">
-              <button type="submit" className="btn btn-success">
+              <button type="submit" className="btn btn-info mb-2">
                 Create Product
               </button>
             </div>
           </form>
           <Link to="/admin/products/list">
-            <button className="btn btn-outline-success mb-5">
-              Go Back to Products 
+            <button className="btn btn-outline-info mb-3 mt-3">
+              Go Back to Products
             </button>
           </Link>
         </div>

@@ -27,7 +27,7 @@ const AdminHeader = () =>{
     return (
       <>
       
-        <nav className="navbar navbar-expand-lg " style={{ backgroundColor: 'rgb(172, 191, 248)' }}>
+        <nav className="navbar navbar-expand-lg " style={{ backgroundColor: 'rgb(105, 185, 224)' }}>
           <div className="container">
             <Link className="navbar-brand" to="/admin">
               Admin
@@ -68,7 +68,7 @@ const AdminHeader = () =>{
                   </Link>
                 </li>
               </ul>
-              <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+              <ul className="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
                 {isAuth ? (
                   <>
                     <li className="nav-item nav-link active">Hello {email}</li>

@@ -82,18 +82,25 @@ const LoginPage = () =>{
     } 
 return(
     <>
-    <div className="container col-6 offset-3">
+   <div className="d-flex flex-column justify-content-baseline align-items-center vh-100"
+  style={{
+    backgroundImage: "url(https://img.freepik.com/premium-photo/black-friday-sale-banner-concept-design-shopping-bag-black-background-with-copy-space-3d-render_46250-3239.jpg)",
+    backgroundSize: "cover",
+
+  }}>
+       
     {errorBlock && (
-          <div className="alert alert-danger mt-5" role="alert">
-            {errorBlock}
+          <div className="mt-3 text-center text-danger">
+            <h5>{errorBlock}</h5>
           </div>
         )}
-          <h1 className="mt-2 mb-3 text-center">Log In</h1>
+          <h1 className="mt-2 mb-3 text-center text-info">Log In</h1>
 
-          <form onSubmit={onSubmitHandler}>
+          <form onSubmit={onSubmitHandler} className="border border-info pb-2 pt-5 ps-5 pe-5"
+          style={{width: 500, height: 400}}>
         
             <div className="mb-3">
-              <label htmlFor="email" className="form-label">
+              <label htmlFor="email" className="form-label text-info">
                 Email
               </label>
               <input
@@ -109,7 +116,7 @@ return(
             </div>
 
             <div className="mb-1">
-              <label htmlFor="password" className="form-label">
+              <label htmlFor="password" className="form-label text-info">
                 Password
               </label>
               <input
@@ -127,13 +134,13 @@ return(
             </div>
              
             <div className="text-center mb-3">
-              <button type="button" className="btn btn-link" onClick={onClickHandler} >
+              <button type="button" className="btn btn-link text-info" onClick={onClickHandler} >
                 Forgot password?
               </button>
               {showModal && <SendEmailModal showModal={showModal} handleModal={handleModal} />}
             </div>
             <div className="text-center">
-              <button type="submit" className="btn btn-success mb-3">
+              <button type="submit" className="btn btn-info mb-1">
                 Log In
               </button>
             </div>
@@ -145,9 +152,9 @@ return(
               </div>
             </div>
           </form>
-          <p className="text-center">Not a member? 
+          <p className="text-center mt-5 text-info">Not a member? 
           <Link to="/account/register">
-                <button className="btn btn-outline-success" style={{marginLeft: 10}}>Register</button>
+                <button className="btn btn-outline-info " style={{marginLeft: 10}}>Register</button>
           </Link>
           </p>
         </div>

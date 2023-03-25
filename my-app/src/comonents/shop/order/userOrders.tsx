@@ -28,7 +28,7 @@ const UserOrders = () => {
   return (
     <>
       <div className="d-flex  flex-column justify-content-center align-items-center">
-        <h1>Orders</h1>
+        <h1 className="text-info mt-3 mb-3">Orders</h1>
         {orders.map((order) => (
           <div className="accordion accordion-flush mb-3 col-6" key={order.id}>
             <div className="accordion-item">

@@ -90,7 +90,9 @@ namespace WebShop_API.Controllers
             }
             token = await _jwtTokenService.CreateToken(user);
 
-            return Ok(new { isNewUser, user, token });
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(new { isNewUser, user, token, roles });
         }
 
         [HttpPost("google/registartion")]

@@ -61,8 +61,8 @@ const ChangePassword = () =>{
 
     return (
         <>
-        <div className="container col-6 offset-3">
-          <h1 className="mt-5 mb-4 text-center">Change Password</h1>
+        <div className="cotainer vh-100 d-flex flex-column justify-content-start align-items-center">
+          <h1 className="mt-5 mb-4 text-center text-info">Change Password</h1>
           {successMessage && (
         <SuccessMessage message="Password successfully changed" />
       )}
@@ -71,9 +71,10 @@ const ChangePassword = () =>{
             {errorMessage}
           </div>
         )}
-          <form onSubmit={onSubmitHandler}>
+          <form onSubmit={onSubmitHandler} className="border border-info pb-2 pt-5 ps-5 pe-5"
+            style={{ width: 500 }}>
             <div className="mb-3">
-              <label htmlFor="oldPassword" className="form-label">
+              <label htmlFor="oldPassword" className="form-label text-info">
                 Old Password
               </label>
               <input
@@ -88,7 +89,7 @@ const ChangePassword = () =>{
             </div>
 
             <div className="mb-3">
-              <label htmlFor="newPassword" className="form-label">
+              <label htmlFor="newPassword" className="form-label text-info">
                 New Password
               </label>
               <input
@@ -103,7 +104,7 @@ const ChangePassword = () =>{
             </div>
 
             <div className="mb-3">
-              <label htmlFor="confirmPassword" className="form-label">
+              <label htmlFor="confirmPassword" className="form-label text-info">
               Confirm Password
               </label>
               <input
@@ -117,14 +118,14 @@ const ChangePassword = () =>{
               />
             </div>
            
-            <div className="text-center">
-              <button type="submit" className="btn btn-success">
+            <div className="text-center mb-3">
+              <button type="submit" className="btn btn-info">
               Change Password
               </button>
             </div>
           </form>
           <Link to="/account/editProfile">
-                <button className="btn btn-outline-success">Go Back To Profile</button>
+                <button className="btn btn-outline-info mt-5">Go Back To Profile</button>
           </Link>
         </div>
       </>

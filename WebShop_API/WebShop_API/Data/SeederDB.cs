@@ -33,7 +33,7 @@ namespace WebShop_API.Data
 
                     CategoryEntity cat = new CategoryEntity()
                     {
-                        Name = "Pizza",
+                        Name = "Cats",
                         DateCreated = DateTime.UtcNow,
                         Image = AddSizedImage.AddImage(app, faker.Image.LoremFlickrUrl())
                     };

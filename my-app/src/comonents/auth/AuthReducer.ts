@@ -19,7 +19,7 @@ export const AuthReducer = (state = initState, action: any)=>{
         return {
             ...state,
             isAuth: true
-        }
+     }
     }
     case AuthActionType.USER_LOGOUT: {
         return {

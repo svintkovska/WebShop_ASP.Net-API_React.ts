@@ -31,13 +31,13 @@ const CategoriesPage = ()=>{
           
     const cardItem = categories.map((category) => (
         <Col key={category.id}>
-        <Card>
+        <Card style={{backgroundColor: "gray"}}>
           <Card.Img variant="top" src={APP_ENV.IMAGE_PATH + "300_" + category.image} alt={category.name}
           style={{ maxHeight: "200px", minHeight: "200px", cursor: "pointer" }} 
           onClick={() => handleCategoryClick(category.id, category.name)}
           />
           
-          <Card.Body>
+          <Card.Body className="text-center">
             <Card.Title>{category.name}</Card.Title>
           </Card.Body>
           
@@ -53,8 +53,8 @@ const CategoriesPage = ()=>{
 
       const navigation  = ()=>{
         return (
-          <nav className="d-flex justify-content-left">
-            <ul className="list-unstyled">
+          <nav className="d-flex justify-content-left mb-3 mt-3">
+            <ul className="list-unstyled me-2">
               <li>
                 <a href="/">Home Page -{'>'}</a>
               </li>
@@ -71,14 +71,13 @@ const CategoriesPage = ()=>{
 
     return (
       <>
-         <Container className="my-3" style={{ maxWidth: "900px" }}>
-         <div>{navigation()}</div>
+        <Container className="my-3" style={{ maxWidth: "900px" }}>
+          <div>{navigation()}</div>
 
-      <h1>Categories</h1>
-      <Row xs={1} md={2} lg={3} className="g-4">
-        {cardItem}
-      </Row>
-    </Container>
+          <Row xs={1} md={2} lg={3} className="g-4">
+            {cardItem}
+          </Row>
+        </Container>
       </>
     );
 }

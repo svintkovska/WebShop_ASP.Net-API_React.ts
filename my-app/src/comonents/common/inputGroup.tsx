@@ -29,7 +29,7 @@ const InputGroup: React.FC<InputGoupProps> = ({
 }: InputGoupProps) => {
   return (
     <div className="mb-3">
-      <label htmlFor={field} className="form-label">
+      <label htmlFor={field} className="form-label text-info">
         {label}
       </label>
       <input

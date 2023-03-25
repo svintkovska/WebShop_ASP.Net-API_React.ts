@@ -105,7 +105,7 @@ const ProductsList = ()=>{
         <Link to={`/admin/products/edit/${product.id}`}>
           <button className="btn" type="button" style={{marginTop: 10}}>
             <img 
-            src={"https://cdn-icons-png.flaticon.com/512/143/143437.png"}
+            src={"https://cdn-icons-png.flaticon.com/512/1828/1828270.png"}
             width="40"
             />
           </button>
@@ -134,45 +134,46 @@ const ProductsList = ()=>{
 
     return (
       <>
-        <h1 className="text-center mt-3 mb-4">Products</h1>
+        <div className="cotainer vh-100 d-flex flex-column justify-content-start align-items-center">
+          <h1 className="text-center mt-3 mb-4 text-info">Products</h1>
 
-        <div className="d-flex justify-content-center mb-4">
-          <Link to="/admin/products/create">
-            <button className="btn btn-success" style={{ marginLeft: "15px" }}>
-              Add Product
-            </button>
-          </Link>
-        </div>
-        <div className="d-flex flex-row justify-content-center ">
-          <div className="mb-3 col-2 me-5">
-            <label htmlFor="name" className="form-label">
-              Name
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              name="name"
-              value={search.name}
-              onChange={onChangeInputHandler}
-              placeholder="Search by name"
-            />
+          <div className="d-flex justify-content-center mb-4 ">
+            <Link to="/admin/products/create">
+              <button
+                className="btn btn-info"
+                style={{ marginLeft: "15px" }}
+              >
+                Add Product
+              </button>
+            </Link>
           </div>
-          <div className="mb-3 col-2 me-5">
-            <label htmlFor="description" className="form-label">
-              Description
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              name="description"
-              value={search.description}
-              onChange={onChangeInputHandler}
-              placeholder="Search by description"
-            />
-          </div>
-          <div className="mb-3 col-2 me-5">
-              <label htmlFor="categoryId" className="form-label">
-                Category
+          <div className="d-flex flex-row justify-content-center ">
+            <div className="mb-3 col-4 me-5">
+              <label htmlFor="name" className="form-label d-none">
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="name"
+                value={search.name}
+                onChange={onChangeInputHandler}
+                placeholder="Search by name"
+              />
+            </div>
+            <div className="mb-3 col-4 me-5">
+              <label htmlFor="description" className="form-label d-none">
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="description"
+                value={search.description}
+                onChange={onChangeInputHandler}
+                placeholder="Search by description"
+              />
+            </div>
+            <div className="mb-3 col-4 me-5">
+              <label htmlFor="categoryId" className="form-label d-none">
               </label>
               <select
                 className="form-select"
@@ -189,42 +190,42 @@ const ProductsList = ()=>{
                 ))}
               </select>
             </div>
-        </div>
-        <div className="container col-10">
-          <table className="table table-striped table-dark">
-            <thead className="table-light">
-              <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Image</th>
-                <th scope="col">Name</th>
-                <th scope="col">Category</th>
-                <th scope="col">Price</th>
-                <th scope="col">Description</th>
-
-                <th scope="col"></th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody>{content}</tbody>
-          </table>
-          <div className="d-flex flex-row justify-content-center">
-          <nav>
-            <ul className="pagination">{pagination}</ul>
-          </nav>
           </div>
-          
-        </div>
+          <div className="container col-8">
+            <table className="table table-striped table-dark">
+              <thead className="table-light">
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Image</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Description</th>
 
-        <ProductDeleteModal
-          show={deleteProductId !== null}
-          onHide={handleCloseDeleteModal}
-          onDelete={handleDeleteProduct}
-          productName={
-            deleteProductId !== null
-              ? products.find((c) => c.id === deleteProductId)?.name || ""
-              : ""
-          }
-        />
+                  <th scope="col"></th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>{content}</tbody>
+            </table>
+            <div className="d-flex flex-row justify-content-center">
+              <nav>
+                <ul className="pagination">{pagination}</ul>
+              </nav>
+            </div>
+          </div>
+
+          <ProductDeleteModal
+            show={deleteProductId !== null}
+            onHide={handleCloseDeleteModal}
+            onDelete={handleDeleteProduct}
+            productName={
+              deleteProductId !== null
+                ? products.find((c) => c.id === deleteProductId)?.name || ""
+                : ""
+            }
+          />
+        </div>
       </>
     );
 }

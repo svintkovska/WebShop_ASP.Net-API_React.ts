@@ -43,12 +43,12 @@ const AdminOrders = () => {
 
   return (
     <>
-      <div className="d-flex  flex-column justify-content-center align-items-center offset-1">
-        <h1>Orders</h1>
-
+      <div  className="cotainer vh-100 d-flex flex-column justify-content-start align-items-center">
+        <h1 className="text-info mt-3">Orders</h1>
+        <div className="d-flex flex-column justify-content-center align-items-center col-8">
         <table className="table ">
           <thead>
-            <tr >
+            <tr className="text-info">
               <th className="col-6 text-center">Order</th>
               <th className="col-4 ">Status</th>
             </tr>
@@ -71,9 +71,9 @@ const AdminOrders = () => {
                         aria-controls={`flush-collapse-${order.id}`}
                       >
                         <div className="d-flex flex-row justify-content-around align-items-center ">
-                          <div className="me-5">#{order.id}</div>
-                          <div className="me-5">{order.email}</div>
-                          <div className="me-5">
+                          <div className="me-5 text-info">#{order.id}</div>
+                          <div className="me-5 text-info">{order.email}</div>
+                          <div className="me-5 text-info">
                             {new Date(order.dateCreated).toLocaleTimeString()}{" "}
                             {new Date(order.dateCreated).toDateString()}
                           </div>
@@ -86,7 +86,7 @@ const AdminOrders = () => {
                       aria-labelledby={`flush-heading-${order.id}`}
                       data-bs-parent={`#accordionFlushExample-${order.id}`}
                     >
-                      <div className="accordion-body">
+                      <div className="accordion-body bg-light">
                         <table className="table">
                           <thead>
                             <tr>
@@ -149,6 +149,10 @@ const AdminOrders = () => {
             ))}
           </tbody>
         </table>
+
+        </div>
+
+       
       </div>
     </>
   );

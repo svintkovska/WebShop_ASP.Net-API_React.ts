@@ -67,7 +67,7 @@ const CategoriesList = ()=>{
         <Link to={`/admin/categories/edit/${category.id}`}>
           <button className="btn" type="button" style={{marginTop: 10}}>
             <img 
-            src={"https://cdn-icons-png.flaticon.com/512/143/143437.png"}
+            src={"https://cdn-icons-png.flaticon.com/512/1828/1828270.png"}
             width="40"
             />
           </button>
@@ -85,61 +85,49 @@ const CategoriesList = ()=>{
       </tr>
     ));
 
- const onReloadClickHandler = ()=> {
-     http.get<Array<ICategoryItem>>("api/Categories")
-     .then((resp) =>{
-        setCategories(resp.data);
-     });
-}
+
+
 
     return (
       <>
-        <h1 className="text-center mt-3 mb-4">Categories</h1>
+        <div className="cotainer vh-100 d-flex flex-column justify-content-start align-items-center">
+          <h1 className="text-center mt-3 mb-4 text-info">Categories</h1>
 
-        <div className="d-flex justify-content-center mb-4">
-          <button
-            className="btn me-2"
-            style={{ marginTop: "-10px" }}
-            onClick={onReloadClickHandler}
-          >
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/6711/6711474.png"
-              width={45}
-              height={45}
-              alt="Reload"
-            />
-          </button>
-          <Link to="/admin/categories/create">
-            <button className="btn btn-success" style={{ marginLeft: "15px" }}>
-              Add Category
-            </button>
-          </Link>
+          <div className="d-flex justify-content-center mb-4">
+            <Link to="/admin/categories/create">
+              <button className="btn btn-info" style={{ marginLeft: "15px" }}>
+                Add Category
+              </button>
+            </Link>
+          </div>
+
+          <div className="container col-8 ">
+            <table className="table table-striped table-dark mb-4">
+              <thead className="table-light">
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Image</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Description</th>
+                  <th scope="col"></th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>{content}</tbody>
+            </table>
+          </div>
+
+          <CategoryDeleteModal
+            show={deleteCategoryId !== null}
+            onHide={handleCloseDeleteModal}
+            onDelete={handleDeleteCategory}
+            categoryName={
+              deleteCategoryId !== null
+                ? categories.find((c) => c.id === deleteCategoryId)?.name || ""
+                : ""
+            }
+          />
         </div>
-
-        <div className="container col-10">
-          <table className="table table-striped table-dark">
-            <thead className="table-light">
-              <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Image</th>
-                <th scope="col">Name</th>
-                <th scope="col">Description</th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody>{content}</tbody>
-          </table>
-        </div>
-
-        <CategoryDeleteModal
-        show={deleteCategoryId !== null}
-        onHide={handleCloseDeleteModal}
-        onDelete={handleDeleteCategory}
-        categoryName={
-        deleteCategoryId !== null ? categories.find((c) => c.id === deleteCategoryId)?.name || '' : ''
-        }
-      />
       </>
     );
 }

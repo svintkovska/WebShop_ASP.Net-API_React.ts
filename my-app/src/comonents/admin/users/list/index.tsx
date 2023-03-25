@@ -62,34 +62,31 @@ console.log("users", users);
         </tr>
       ));
 
-    return(
-        <>
-        <h1 className="text-center mt-3 mb-4">Users</h1>
+    return (
+      <>
+        <div className="cotainer vh-100 d-flex flex-column justify-content-start align-items-center">
+          <h1 className="text-center mt-3 mb-4 text-info">Users</h1>
 
-        <div className="d-flex justify-content-center mb-4">
-          
-
-        <div className="container col-10">
-          <table className="table table-striped table-dark">
-            <thead className="table-light">
-              <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Image</th>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">User Name</th>
-                <th scope="col">Roles</th>
-                <th scope="col">Is Locked Out</th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody>{content}</tbody>
-          </table>
+          <div className="container col-8">
+            <table className="table table-striped table-dark">
+              <thead className="table-light">
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Image</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">User Name</th>
+                  <th scope="col">Roles</th>
+                  <th scope="col">Is Locked Out</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>{content}</tbody>
+            </table>
+          </div>
         </div>
-        </div>
-
       </>
-    )
+    );
 }
 
 export default UsersList;
