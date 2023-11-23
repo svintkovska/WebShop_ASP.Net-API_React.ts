@@ -7,10 +7,13 @@ const DefaultLayout = () =>{
 
     return (
       <>
-        <DefaultHeader />
+      <div className="hero_area">
+      <DefaultHeader />
         <div >
           <Outlet />
         </div>
+      </div>
+    
       </>
     );
 }

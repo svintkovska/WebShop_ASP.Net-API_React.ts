@@ -1,6 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import './styles/css/style.css';
 import HomePage from './comonents/home';
 import { Routes, Route, Outlet, Link, useNavigate } from "react-router-dom";
 import RegisterPage from './comonents/auth/register';

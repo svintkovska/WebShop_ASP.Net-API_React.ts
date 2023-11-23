@@ -7,7 +7,7 @@ const AdminHomePage = ()=>{
     return (
       <>
         <div
-          className="cotainer vh-100 d-flex flex-column justify-content-start align-items-center"
+          className="cotainer"
           style={{
             backgroundImage: "url(https://wallpaperaccess.com/full/16668.jpg",
             backgroundSize: "cover",
