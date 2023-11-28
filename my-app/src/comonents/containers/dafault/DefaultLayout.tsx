@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import { IAuthUser } from "../../auth/types";
 import DefaultHeader from "./DefaultHeader";
+import Footer from "./Footer";
 
 const DefaultLayout = () =>{
 
@@ -12,6 +13,7 @@ const DefaultLayout = () =>{
         <div >
           <Outlet />
         </div>
+        <Footer/>
       </div>
     
       </>

@@ -3,6 +3,16 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate, NavLink } from "react-router-dom";
 import { APP_ENV } from "../../../env";
 import { AuthActionType, IAuthUser } from "../../auth/types";
+import { useEffect, useState } from "react";
+import http from "../../../http";
+import { Dropdown } from "react-bootstrap";
+
+interface ICategoryItem{
+  id: number,
+  name: string,
+  image: string,
+  description: string
+}
 
 const DefaultHeader = () =>{
     const navigator = useNavigate()
@@ -25,128 +35,41 @@ const DefaultHeader = () =>{
         dispatch({type: AuthActionType.USER_LOGOUT})
     }
 
- 
 
+    const [categories, setCategories] = useState<Array<ICategoryItem>>([]);
+
+      useEffect(() => {
+        http.
+            get<Array<ICategoryItem>>("api/Categories")
+            .then((resp) => {
+              setCategories(resp.data);
+            });
+        }, []);
+ 
+        const handleCategoryClick = (categoryId: number, categoryName: string) => {
+          navigator(`/shop/products/${categoryId}`, { state: { categoryName, categoryId } });
+        };
+
+        const renderCategoryDropdown = () => {
+          return (
+            <Dropdown>
+              <Dropdown.Toggle variant="danger" style={{backgroundColor: "#f9ece6", color: "#514f4f"}} id="dropdown-basic">
+                All Categories
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {categories.map(category => (
+                  <Dropdown.Item key={category.id}>
+                  <NavLink className="nav-link" to={`/shop/products/${category.id}`}>
+                    {category.name}
+                  </NavLink>
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          );
+        };
     return (
       <>
-        {/* <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-          <div className="container">
-            <Link className="navbar-brand" to="/">
-              Shop
-            </Link>
-
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarNav"
-              aria-controls="navbarNav"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
-
-            <div className="collapse navbar-collapse" id="navbarNav">
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                <li className="nav-item">
-                  <Link
-                    to="/shop/categories"
-                    className="nav-link active"
-                    aria-current="page"
-                  >
-                    Menu
-                  </Link>
-                </li>
-                {isAdmin ? (
-                  <li className="nav-item">
-                    <Link
-                      to="/admin"
-                      className="nav-link"
-                      aria-current="page"
-                    >
-                      Admin Center
-                    </Link>
-                  </li>
-                ) : (
-                  ""
-                )}
-              </ul>
-
-              <ul className="navbar-nav ms-auto mb-2 mb-lg-0 flex align-items-center">
-                {isAuth ? (
-                  <>
-                    <li className="nav-item nav-link active">Hello {email}</li>
-                    <li className="nav-item nav-link">
-                      <img
-                        src={APP_ENV.IMAGE_PATH + "300_" + imagePath}
-                        width="40"
-                        height="40"
-                      ></img>
-                    </li>
-                    <li className="nav-item">
-                      <Link to="account/editProfile" className="nav-link">
-                        <img
-                          src="https://cdn-icons-png.flaticon.com/512/8423/8423772.png"
-                          width="40"
-                          height="40"
-                          title="Edit Profile"
-                        ></img>
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link to="shop/userOrders" className="nav-link">
-                        <img
-                          src="https://cdn-icons-png.flaticon.com/512/1069/1069189.png"
-                          width="40"
-                          height="40"
-                          title="My Orders"
-                        ></img>
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link to="shop/basket" className="nav-link">
-                        <img
-                          src="https://cdn-icons-png.flaticon.com/512/9408/9408611.png"
-                          width="40"
-                          height="40"
-                          title="Basket"
-                        ></img>
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <button
-                        onClick={handleLogOut}
-                        className="nav-link btn btn-link"
-                      >
-                        <img
-                          src="https://cdn-icons-png.flaticon.com/512/1828/1828490.png"
-                          width="40"
-                          height="40"
-                          title="Log out"
-                        />
-                      </button>
-                    </li>
-                  </>
-                ) : (
-                  <>
-                    <li className="nav-item">
-                      <Link to="account/register" className="nav-link">
-                        Register
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link to="account/login" className="nav-link">
-                        Log In
-                      </Link>
-                    </li>
-                  </>
-                )}
-              </ul>
-            </div>
-          </div>
-        </nav> */}
-
         <header className="header_section">
           <nav className="navbar navbar-expand-lg custom_nav-container">
             <NavLink className="navbar-brand" to="/">
@@ -169,6 +92,9 @@ const DefaultHeader = () =>{
                   <NavLink className="nav-link" to="/shop/categories">
                     Shop
                   </NavLink>
+                </li>
+                <li className="nav-item ">
+                {renderCategoryDropdown()}
                 </li>
                 {isAdmin ? (
                   <NavLink className="nav-link" to="/admin">

@@ -44,7 +44,29 @@ const CategoriesPage = ()=>{
         </Card>
       </Col>
     ));
-
+    const customCardItem = categories.map((category) => (
+      <>
+        <div className="news-card" key={category.id} onClick={() => handleCategoryClick(category.id, category.name)}>
+          <a href="#" className="news-card__card-link"></a>
+          <img
+            src={APP_ENV.IMAGE_PATH + "300_" + category.image}
+            alt={category.name}
+            className="news-card__image"
+            
+          />
+          <div className="news-card__text-wrapper">
+            <h2 className="news-card__title">
+             {category.name}
+            </h2>
+            <div className="news-card__details-wrapper">
+              <p className="news-card__excerpt">
+                {category.description}
+              </p>
+            </div>
+          </div>
+        </div>
+      </>
+    ));
     const navigate = useNavigate();
 
   const handleCategoryClick = (categoryId: number, categoryName: string) => {
@@ -71,13 +93,19 @@ const CategoriesPage = ()=>{
 
     return (
       <>
-        <Container className="my-3" style={{ maxWidth: "900px" }}>
+        {/* <Container className="my-3" style={{ maxWidth: "900px" }}>
           <div>{navigation()}</div>
 
           <Row xs={1} md={2} lg={3} className="g-4">
             {cardItem}
           </Row>
-        </Container>
+        </Container> */}
+
+
+          <div>{navigation()}</div>
+
+          <div className="content-wrapper">{customCardItem}</div>
+
       </>
     );
 }
