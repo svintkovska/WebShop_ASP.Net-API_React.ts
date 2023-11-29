@@ -3,6 +3,7 @@ import { Card, Col, Container, Row } from "react-bootstrap";
 import { Link, useNavigate } from 'react-router-dom';
 import { APP_ENV } from "../../../env";
 import http from "../../../http";
+import React from "react";
 
 
 
@@ -28,24 +29,8 @@ const CategoriesPage = ()=>{
         }, []);
 
 
-          
-    const cardItem = categories.map((category) => (
-        <Col key={category.id}>
-        <Card style={{backgroundColor: "transparent", border: "1px solid rgb(57, 119, 135)"}}>
-          <Card.Img variant="top" src={APP_ENV.IMAGE_PATH + "300_" + category.image} alt={category.name}
-          style={{ maxHeight: "200px", minHeight: "200px", cursor: "pointer" }} 
-          onClick={() => handleCategoryClick(category.id, category.name)}
-          />
-          
-          <Card.Body className="text-center">
-            <Card.Title style={{ color: "rgb(57, 119, 135)" }}>{category.name}</Card.Title>
-          </Card.Body>
-          
-        </Card>
-      </Col>
-    ));
-    const customCardItem = categories.map((category) => (
-      <>
+    const сardItem = categories.map((category) => (
+      <React.Fragment key={category.id}>
         <div className="news-card" key={category.id} onClick={() => handleCategoryClick(category.id, category.name)}>
           <a href="#" className="news-card__card-link"></a>
           <img
@@ -65,7 +50,7 @@ const CategoriesPage = ()=>{
             </div>
           </div>
         </div>
-      </>
+      </React.Fragment>
     ));
     const navigate = useNavigate();
 
@@ -104,7 +89,7 @@ const CategoriesPage = ()=>{
 
           <div>{navigation()}</div>
 
-          <div className="content-wrapper">{customCardItem}</div>
+          <div className="content-wrapper">{сardItem}</div>
 
       </>
     );

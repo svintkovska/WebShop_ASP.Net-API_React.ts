@@ -101,7 +101,7 @@ const ProductItemPage = () => {
     };
     const location = useLocation();
     const categoryName = location.state && location.state.categoryName;
-console.log("location.state", location);
+console.log("===========location.state", location);
 
 const categoryId = location.state && location.state.categoryId;
 
@@ -139,9 +139,9 @@ const navigate = useNavigate();
     }
     return (
       <>
-        <Container>
+        <Container  className="mb-5">
           <div>{navigation()}</div>
-          <Row className="my-4">
+          {/* <Row className="my-4">
             <Col md={6} >
               <div className="d-flex flex-column align-items-center">
                 <img
@@ -245,7 +245,85 @@ const navigate = useNavigate();
                 </Card.Body>
               </Card>
             </Col>
-          </Row>
+          </Row> */}
+
+          <section className="product">
+            <div className="product__photo">
+              <div className="photo-container">
+                <div className="photo-main">
+                  <img
+                    src={APP_ENV.IMAGE_PATH + "300_" + mainImage}
+                    alt={product.name}
+                  />
+                </div>
+                <div className="photo-album">
+                  <ul>
+                    {product.images.map((image, index) => (
+                      <li>
+                        <img
+                          src={APP_ENV.IMAGE_PATH + "300_" + image}
+                          alt={product.name}
+                          
+                          style={{ cursor: "pointer"}}
+                          onClick={() => handleImageClick(image)}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+
+                 
+                </div>
+              </div>
+            </div>
+            <div className="product__info">
+              <div className="title">
+                <h1> {product.name}</h1>
+              </div>
+              <div className="price">
+              ₴ <span> {product.price.toFixed(2)}</span>
+              </div>
+              
+              <div className="description">
+                <h3>{product.description}</h3>
+              </div>
+
+              <div className="d-flex justify-content-center align-items-center mb-5">
+                        <div className="input-group">
+                          <span className="input-group-prepend">
+                            <button
+                              className="btn btn-outline-danger"
+                              type="button"
+                              onClick={handleDecreaseQuantity}
+                             
+                            >
+                              -
+                            </button>
+                          </span>
+                          <input
+                            type="number"
+                            className="form-control text-center"
+                            style={{ maxWidth: "70px", minWidth: "50px"}}
+                            value={quantity}
+                            onChange={handleQuantityChange}
+                          />
+                          <span className="input-group-append">
+                            <button
+                              className="btn btn-outline-danger"
+                              type="button"
+                              onClick={handleIncreaseQuantity}
+                            >
+                              +
+                            </button>
+                          </span>
+                          </div>
+                      </div>
+              <button className="buy--btn" onClick={handleAddToCart}>ADD TO CART</button>
+            </div>
+          </section>
+          <AddToBasketModal
+                          show={showModal}
+                          onClose={() => setShowModal(false)}
+                        />
         </Container>
       </>
     );

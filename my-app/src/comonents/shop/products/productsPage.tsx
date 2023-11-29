@@ -18,6 +18,7 @@ import { addToBasket } from "../BasketReducer";
 import { IBasket, IBasketProduct } from "../types";
 import AddToBasketModal from "./addToBasketModal";
 import { IProductItem, IProductResult, IProductSearch } from "./types";
+import React from "react";
 
 const ProductsPage = () => {
   const { categoryId } = useParams<{ categoryId?: string }>();
@@ -128,7 +129,8 @@ const ProductsPage = () => {
 
   const location = useLocation();
   const categoryName = location.state && location.state.categoryName;
-
+  
+  console.log("====================",location.state);
   const handleProductClick = (productId: number, productName: string) => {
     navigate(`/shop/products/productItem/${productId}`, {
       state: { categoryName, categoryId, productName },
@@ -158,8 +160,8 @@ const ProductsPage = () => {
   };
 
   const cardItem = products.map((product) => (
-    <>
-        <div className="product-grid" key={product.id}>
+    <React.Fragment key={product.id}>
+        <div className="product-grid">
           <div className="product-image">
             <a href="#" className="image">
               <img
@@ -184,10 +186,7 @@ const ProductsPage = () => {
               </li>
             </ul>
           </div>
-          <AddToBasketModal
-            show={showModal}
-            onClose={() => setShowModal(false)}
-          />
+
           <div className="product-content">
             <h3 className="title">
               <a href="#">{product.name}</a>
@@ -195,7 +194,7 @@ const ProductsPage = () => {
             <div className="price">₴ {product.price}</div>
           </div>
         </div>
-    </>
+    </React.Fragment>
   ));
 
   return (
@@ -238,6 +237,10 @@ const ProductsPage = () => {
             <ul className="pagination mt-5">{pagination}</ul>
           </nav>
         </div>
+        <AddToBasketModal
+            show={showModal}
+            onClose={() => setShowModal(false)}
+          />
       </Container>
     </>
   );
