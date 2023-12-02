@@ -28,10 +28,10 @@ const UserOrders = () => {
   return (
     <>
       <div className="d-flex  flex-column justify-content-center align-items-center">
-        <h1 className="text-info mt-3 mb-3">Orders</h1>
+        <h1 className="text-light mt-3 mb-3">Order History</h1>
         {orders.map((order) => (
-          <div className="accordion accordion-flush mb-3 col-6" key={order.id}>
-            <div className="accordion-item">
+          <div className="accordion accordion-flush mb-3 col-6" key={order.id}   style={{ backgroundColor: "#f9ece6", border: "10px solid #f9ece6" }}>
+            <div className="accordion-item" style={{backgroundColor: "#f9ece6"}}>
               <h2 className="accordion-header" id={`flush-heading-${order.id}`}>
                 <button
                   className="accordion-button collapsed"

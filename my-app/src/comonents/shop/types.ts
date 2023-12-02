@@ -45,10 +45,9 @@ export enum BasketActionType {
 
   
   export interface IDeliveryInfo {
+    name: string;
     phone: string;
-  city: string;
-  street: string;
-  apartment: string;
-  comment: string;
-  payment: string;
+    novaPoshtaAddress: string;
+    comment: string;
+    payment: string;
   }
