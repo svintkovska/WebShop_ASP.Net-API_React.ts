@@ -11,34 +11,45 @@ import { OrderSchema } from "./validation";
 import Novaposhta from "./novaPoshta_API";
 
 const MakeOrderPage = () =>{
-  const [order, setOrder] = useState<IOrder>();
-  const initValues: IDeliveryInfo = {
-      name: "",
-      phone: "",
-      novaPoshtaAddress: "",
-      comment: "",
-      payment: "",
-    };
-    const [selectedCityWarehouse, setSelectedCityWarehouse] = useState<string | null>(null);
+   const [order, setOrder] = useState<IOrder>();
+   const {basket}  = useSelector((store: any) => store.basket as IBasket);
+   const {email} = useSelector((store: any) => store.auth as IAuthUser);
+   const [successMessage, setSuccessMessage] = useState<boolean>(false);
+   const [selectedCity, setSelectedCity] = useState<string | null>(null);
+   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(null);
 
-    const handleCityWarehouseSelect = (cityWarehouse: string) => {
-      setSelectedCityWarehouse(cityWarehouse);
+   const navigator = useNavigate();
+   const initValues: IDeliveryInfo = {
+    receiverName: "",
+    receiverPhone: "",
+    comment: "",
+    novaPoshtaCity: "",
+    novaPoshtaWarehouse: ""
     };
-  const {basket}  = useSelector((store: any) => store.basket as IBasket);
-  const {email} = useSelector((store: any) => store.auth as IAuthUser);
-  const [successMessage, setSuccessMessage] = useState<boolean>(false);
-  const navigator = useNavigate();
-  useEffect(()=>{
-      setOrder({
-          email: email,
-          items: basket
-      })
-  }, []);
-  
-  const onSubmitFormik = async (values: IDeliveryInfo) => {
+
+    const handleCitySelect = (city: string| null) => {
+      setSelectedCity(city);
+    };
+
+    const handleWarehouseSelect = (warehouse: string| null) => {
+      setSelectedWarehouse(warehouse);
+    };
+   
+    
+    const onSubmitFormik = async (values: IDeliveryInfo) => {
 
       console.log("Fornik submit", values);
-  
+      setOrder((prevOrder) => ({
+        ...prevOrder,
+        email: email,
+        receiverName: values.receiverName,
+        receiverPhone: values.receiverPhone,
+        comment: values.comment,
+        novaPoshtaCity: values.novaPoshtaCity,
+        novaPoshtaWarehouse: values.novaPoshtaWarehouse,
+        items: basket,
+      }));
+    console.log(order);
       http.
       post<IOrder>("api/shop/makeOrder", order)
       .then((resp) => {
@@ -55,20 +66,20 @@ const MakeOrderPage = () =>{
       console.log("data sent", order);
     };
 
-const formik = useFormik({
-  initialValues: initValues,
-  validationSchema: OrderSchema,
-  onSubmit: onSubmitFormik,
-});
+  const formik = useFormik({
+    initialValues: initValues,
+    validationSchema: OrderSchema,
+    onSubmit: onSubmitFormik,
+  });
 
-const { values, errors, touched, handleSubmit, handleChange } = formik;
+  const { values, errors, touched, handleSubmit, handleChange } = formik;
 
 
 
     return (
       <>
         <div className="cart-card">
-        {successMessage && (
+          {successMessage && (
             <SuccessMessage message="Your order has been successfully placed. Expect a clarification call withing 5 minutes" />
           )}
           <form className="row" onSubmit={handleSubmit}>
@@ -81,97 +92,128 @@ const { values, errors, touched, handleSubmit, handleChange } = formik;
                     </h4>
                   </div>
                   <div>
-                    <label htmlFor="name">Full Name:</label>
+                    <label htmlFor="receiverName" style={{ color: "#e8baba", fontSize: "20px" }}>
+                      Receiver Name:
+                    </label>
                     <input
                       type="text"
-                      id="name"
-                      name="name"
-                      value={values.name}
+                      id="receiverName"
+                      name="receiverName"
+                      value={values.receiverName}
                       onChange={handleChange}
-                      className={classNames("form-control", {
-                        "is-invalid": touched.name && errors.name,
-                        "is-valid": touched.name && !errors.name,
+                      className={classNames("form-control mb-2", {
+                        "is-invalid":
+                          touched.receiverName && errors.receiverName,
+                        "is-valid":
+                          touched.receiverName && !errors.receiverName,
                       })}
                     />
-                    {touched.name && errors.name && (
-                      <div className="invalid-feedback">{errors.name}</div>
+                    {touched.receiverName && errors.receiverName && (
+                      <div className="invalid-feedback">
+                        {errors.receiverName}
+                      </div>
                     )}
                   </div>
                   <div>
-                    <label htmlFor="phone">Phone Number:</label>
+                    <label htmlFor="receiverPhone" style={{ color: "#e8baba", fontSize: "20px" }}>
+                      Receiver Phone Number:
+                    </label>
                     <input
                       type="phone"
-                      id="phone"
-                      name="phone"
-                      value={values.phone}
+                      id="receiverPhone"
+                      name="receiverPhone"
+                      value={values.receiverPhone}
                       onChange={handleChange}
-                      className={classNames("form-control", {
-                        "is-invalid": touched.phone && errors.phone,
-                        "is-valid": touched.phone && !errors.phone,
+                      className={classNames("form-control mb-2", {
+                        "is-invalid":
+                          touched.receiverPhone && errors.receiverPhone,
+                        "is-valid":
+                          touched.receiverPhone && !errors.receiverPhone,
                       })}
                     />
-                    {touched.phone && errors.phone && (
-                      <div className="invalid-feedback">{errors.phone}</div>
+                    {touched.receiverPhone && errors.receiverPhone && (
+                      <div className="invalid-feedback">
+                        {errors.receiverPhone}
+                      </div>
                     )}
                   </div>
                   <div className="d-flex flex-column">
-                    <label htmlFor="comment" className="text-info mb-2 mt-2">
+                    <label
+                      htmlFor="comment"
+                      className=" mb-2 mt-2"
+                      style={{ color: "#e8baba", fontSize: "20px" }}
+                    >
                       Additional Comment:
                     </label>
                     <textarea
                       id="comment"
                       name="comment"
+                      className="mb-2"
                       value={values.comment}
                       onChange={handleChange}
                     />
                   </div>
                   <div className="d-flex flex-column">
-                    <label htmlFor="novaPoshtaAddress">
-                      Nova Poshta Address:
+                    <label
+                      htmlFor="novaPoshtaCity"
+                      style={{ color: "#e8baba", fontSize: "20px" }}
+                    >
+                      Nova Poshta City:
                     </label>
                     <input
                       type="text"
-                      id="novaPoshtaAddress"
-                      name="novaPoshtaAddress"
-                      value={ values.novaPoshtaAddress = selectedCityWarehouse || ""}
-                      readOnly
+                      id="novaPoshtaCity"
+                      name="novaPoshtaCity"
+                      value={(values.novaPoshtaCity = selectedCity || "")}
                       onChange={handleChange}
-                      className={classNames("form-control", {
-                        "is-invalid": touched.novaPoshtaAddress && errors.novaPoshtaAddress,
-                        "is-valid": touched.novaPoshtaAddress && !errors.novaPoshtaAddress,
+                      readOnly
+                      className={classNames("form-control mb-2", {
+                        "is-invalid":
+                          touched.novaPoshtaCity && errors.novaPoshtaCity,
+                        "is-valid":
+                          touched.novaPoshtaCity && !errors.novaPoshtaCity,
                       })}
                     />
+                    {touched.novaPoshtaCity && errors.novaPoshtaCity && (
+                      <div className="invalid-feedback">
+                        {errors.novaPoshtaCity}
+                      </div>
+                    )}
+                  </div>
+                  <div className="d-flex flex-column">
+                    <label
+                      htmlFor="novaPoshtaWarehouse"
+                      style={{ color: "#e8baba", fontSize: "20px" }}
+                    >
+                      Nova Poshta Warehouse:
+                    </label>
+                    <input
+                      type="text"
+                      id="novaPoshtaWarehouse"
+                      name="novaPoshtaWarehouse"
+                      value={
+                        (values.novaPoshtaWarehouse = selectedWarehouse || "")
+                      }
+                      onChange={handleChange}
+                      readOnly
+                      className={classNames("form-control mb-2", {
+                        "is-invalid":
+                          touched.novaPoshtaWarehouse &&
+                          errors.novaPoshtaWarehouse,
+                        "is-valid":
+                          touched.novaPoshtaWarehouse &&
+                          !errors.novaPoshtaWarehouse,
+                      })}
+                    />
+                     {touched.novaPoshtaWarehouse && errors.novaPoshtaWarehouse && (
+                      <div className="invalid-feedback">
+                        {errors.novaPoshtaWarehouse}
+                      </div>
+                    )}
                   </div>
                   <div className="d-flex flex-row mt-2">
-              <label className="text-info mb-2 me-3">Payment:</label>
-              <div>
-                <label className="text-info mb-2  me-3">
-                  <input
-                    type="radio"
-                    name="payment"
-                    value="cash"
-                    checked={values.payment === "cash"}
-                    onChange={handleChange}
-                  />
-                  Cash
-                </label>
-              </div>
-              <div>
-                <label className="text-info mb-2">
-                  <input
-                    type="radio"
-                    name="payment"
-                    value="LIQpayment"
-                    checked={values.payment === "LIQpayment"}
-                    onChange={handleChange}
-                  />
-                  LiqPay
-                </label>
-                {touched.payment && errors.payment && (
-                  <div className="invalid-feedback">{errors.payment}</div>
-                )}
-              </div>
-            </div>
+                    <label className="mb-2 me-3" style={{ color: "#e8baba" }}>*Payment will be done upon receiving</label>
+                  </div>
                 </div>
               </div>
 
@@ -202,16 +244,19 @@ const { values, errors, touched, handleSubmit, handleChange } = formik;
                 }}
               >
                 <div className="col text-right">
-                <Novaposhta onCityWarehouseSelect={handleCityWarehouseSelect} />
+                  <Novaposhta
+                    onCitySelect={handleCitySelect}
+                    onWarehouseSelect={handleWarehouseSelect}
+                  />
                 </div>
               </div>
-                <button
-                  type="submit"
-                  className="cart-btn"
-                  disabled={basket.length < 1}
-                >
-                  Make Order
-                </button>
+              <button
+                type="submit"
+                className="cart-btn"
+                disabled={basket.length < 1}
+              >
+                Make Order
+              </button>
             </div>
           </form>
         </div>

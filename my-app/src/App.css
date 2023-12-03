@@ -170,8 +170,10 @@ body {
 .proudcts-container {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
+    width: 1600px;
+    flex-wrap: wrap;
 }
 
 .product-grid {
@@ -296,6 +298,7 @@ body {
     color: #1abc9c;
     font-size: 20px;
     font-weight: 400;
+    height: 10px;
     animation: color-animate 5s infinite linear;
 }
 
@@ -307,43 +310,25 @@ body {
 
 @keyframes color-animate {
     0% {
-        color: #00b894;
-    }
-    20% {
-        color: #00cec9;
-    }
-    40% {
-        color: #0984e3;
-    }
-    60% {
-        color: #6c5ce7;
-    }
-    80% {
         color: #e84393;
     }
+    50% {
+        color: #d9629c;
+    }
     100% {
-        color: #00b894;
+        color: #88556e;
     }
 }
 
 @keyframes bg-animate {
     0% {
-        background-color: #00b894;
-    }
-    20% {
-        background-color: #00cec9;
-    }
-    40% {
-        background-color: #0984e3;
-    }
-    60% {
-        background-color: #6c5ce7;
-    }
-    80% {
         background-color: #e84393;
     }
+    50% {
+        background-color: #d9629c;
+    }
     100% {
-        background-color: #00b894;
+        background-color: #88556e;
     }
 }
 
@@ -444,7 +429,9 @@ body {
 
 .product__info {
     padding: 0.8em 2em;
-    justify-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .title h1 {

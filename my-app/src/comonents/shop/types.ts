@@ -22,6 +22,11 @@ export enum BasketActionType {
   export interface IOrder{
 
     email: string;
+    receiverName: string;
+    receiverPhone: string;
+    comment: string;
+    novaPoshtaCity: string ;
+    novaPoshtaWarehouse: string;
     items: IBasketProduct[];
   }
 
@@ -45,9 +50,9 @@ export enum BasketActionType {
 
   
   export interface IDeliveryInfo {
-    name: string;
-    phone: string;
-    novaPoshtaAddress: string;
+    receiverName: string;
+    receiverPhone: string;
     comment: string;
-    payment: string;
+    novaPoshtaCity: string ;
+    novaPoshtaWarehouse: string;
   }

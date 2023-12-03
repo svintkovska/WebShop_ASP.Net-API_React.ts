@@ -63,7 +63,7 @@ const BasketPage = () => {
 
  
   return (
-    <div className="cart-card">
+    <div className="cart-card" >
       <div className="row">
         <div className="col-md-8 cart">
           <div className="title">
@@ -149,8 +149,7 @@ const BasketPage = () => {
                 Back to shop
                 </a>
               </Link>
-            {/* <a href="#">&leftarrow;</a>
-            <span className="text-muted">Back to shop</span> */}
+
           </div>
         </div>
         <div className="col-md-4 summary">

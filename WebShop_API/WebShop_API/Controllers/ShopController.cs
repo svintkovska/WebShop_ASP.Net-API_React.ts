@@ -116,10 +116,14 @@ namespace WebShop_API.Controllers
             var order = new OrderEntity()
             {
                 UserId = user.Id,
+                ReceiverName= model.ReceiverName,
+                ReceiverPhone= model.ReceiverPhone,
+                Comment= model.Comment,
+                NovaPoshtaCity=model.NovaPoshtaCity,
+                NovaPoshtaWarehouse =model.NovaPoshtaWarehouse,
                 DateCreated = DateTime.UtcNow,
                 OrderStatusId = _context.OrderStatuses.Where(x=>x.Name == OrderStatuses.Pending).FirstOrDefault().Id,
             };
-            // _context.Orders.Add(order);
 
             await _context.Set<OrderEntity>().AddAsync(order);
             await _context.SaveChangesAsync();

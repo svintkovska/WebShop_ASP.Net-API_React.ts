@@ -13,6 +13,12 @@ namespace WebShop_API.Models
     public class OrderViewModel
     {
         public string Email { get; set; }
+        public string ReceiverName { get; set; }
+        public string ReceiverPhone { get; set; }
+        public string Comment { get; set; }
+        public string NovaPoshtaCity { get; set; }
+        public string NovaPoshtaWarehouse { get; set; }
+
         public List<BasketItemViewModel> Items { get; set; }
     }
 

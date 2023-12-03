@@ -199,7 +199,7 @@ const ProductsPage = () => {
 
   return (
     <>
-      <Container style={{ width: "100%" }}>
+      <Container >
         <div>{navigation()}</div>
 
         <div className="d-flex flex-row justify-content-center mb-3">
@@ -227,7 +227,7 @@ const ProductsPage = () => {
           </div>
         </div>
 
-        <div className="proudcts-container">
+        <div className="proudcts-container" >
           {cardItem}
         </div>
 

@@ -61,8 +61,12 @@ const ChangePassword = () =>{
 
     return (
         <>
-        <div className="cotainer vh-100 d-flex flex-column justify-content-start align-items-center">
-          <h1 className="mt-5 mb-4 text-center text-info">Change Password</h1>
+        <div className="cart-card text-center " style={{width: "600px"}}>
+          <div className=" cart" style={{ borderRadius: "1rem" }}>
+            <div className="title">
+            <h4>
+                  <b>Change Password</b>
+                </h4>
           {successMessage && (
         <SuccessMessage message="Password successfully changed" />
       )}
@@ -71,10 +75,10 @@ const ChangePassword = () =>{
             {errorMessage}
           </div>
         )}
-          <form onSubmit={onSubmitHandler} className="border border-info pb-2 pt-5 ps-5 pe-5"
+          <form onSubmit={onSubmitHandler} className=" pb-2 pt-5 ps-5 pe-5"
             style={{ width: 500 }}>
             <div className="mb-3">
-              <label htmlFor="oldPassword" className="form-label text-info">
+              <label htmlFor="oldPassword" className="form-label" style={{color: "#e8baba"}}>
                 Old Password
               </label>
               <input
@@ -89,7 +93,7 @@ const ChangePassword = () =>{
             </div>
 
             <div className="mb-3">
-              <label htmlFor="newPassword" className="form-label text-info">
+              <label htmlFor="newPassword" className="form-label" style={{color: "#e8baba"}}>
                 New Password
               </label>
               <input
@@ -104,7 +108,7 @@ const ChangePassword = () =>{
             </div>
 
             <div className="mb-3">
-              <label htmlFor="confirmPassword" className="form-label text-info">
+              <label htmlFor="confirmPassword" className="form-label " style={{color: "#e8baba"}}>
               Confirm Password
               </label>
               <input
@@ -119,14 +123,16 @@ const ChangePassword = () =>{
             </div>
            
             <div className="text-center mb-3">
-              <button type="submit" className="btn btn-info">
+              <button type="submit" className="cart-btn" style={{width: "300px"}}>
               Change Password
               </button>
             </div>
           </form>
           <Link to="/account/editProfile">
-                <button className="btn btn-outline-info mt-5">Go Back To Profile</button>
+                <button className="back-btn" style={{padding: "10px", width: "200px"}}>Go Back To Profile</button>
           </Link>
+        </div>
+        </div>
         </div>
       </>
 
