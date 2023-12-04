@@ -2,6 +2,7 @@
 using MimeKit;
 using WebShop_API.Abstract;
 using WebShop_API.Models;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 
 namespace WebShop_API.Services
@@ -9,17 +10,21 @@ namespace WebShop_API.Services
     public class SmtpEmailService : ISmtpEmailService
     {
         private readonly EmailConfiguration _configuration;
-        public SmtpEmailService()
+        private readonly IConfiguration _config;
+
+        public SmtpEmailService(IConfiguration config)
         {
+            _config = config;
             _configuration = new EmailConfiguration()
             {
                 From = "tanyasv_97@ukr.net",
                 SmtpServer = "smtp.ukr.net",
                 Port = 2525,
                 UserName = "tanyasv_97@ukr.net",
-                Password = "BLLOcy5Knp2IEbiu"
+                Password = config.GetValue<string>("smtpPassword")
             };
         }
+
         public void Send(Message message)
         {
             var body = new TextPart("html")

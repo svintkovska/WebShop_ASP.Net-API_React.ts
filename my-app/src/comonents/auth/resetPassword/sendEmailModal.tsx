@@ -46,7 +46,7 @@ const SendEmailModal = ({ showModal, handleModal }: MyModalProps) => {
 
     return (
       <>
-        <Modal show={showModal} onHide={handleModal}>
+        <Modal show={showModal} onHide={handleModal} style={{marginTop:"200px"}}>
         {successMessage && (
             <div className="alert alert-success" role="alert">
              Email with the password reset link has been successfully sent            
@@ -58,11 +58,11 @@ const SendEmailModal = ({ showModal, handleModal }: MyModalProps) => {
           </div>
         )}
           <Modal.Header closeButton>
-            <Modal.Title>Enter your email</Modal.Title>
+            <Modal.Title style={{color: "#e8baba"}}>Enter your email</Modal.Title>
           </Modal.Header>
           <Modal.Body>
           <div className="mb-3">
-              <label htmlFor="email" className="form-label">
+              <label htmlFor="email" className="form-label" style={{color: "#e8baba"}}>
                 Email
               </label>
               <input
@@ -78,10 +78,10 @@ const SendEmailModal = ({ showModal, handleModal }: MyModalProps) => {
 
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleModal}>
+            <Button className="back-btn" style={{padding: "10px", width: "100px", marginTop: "0" }} onClick={handleModal}>
               Close
             </Button>
-            <Button variant="primary" onClick={sendEmail}>
+            <Button className="cart-btn" style={{width: "200px",  marginTop: "0"}} onClick={sendEmail}>
               Send Email
             </Button>
           </Modal.Footer>

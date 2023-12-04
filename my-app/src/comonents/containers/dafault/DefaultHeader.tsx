@@ -37,6 +37,7 @@ const DefaultHeader = () =>{
 
 
     const [categories, setCategories] = useState<Array<ICategoryItem>>([]);
+    const [selectedCategory, setSelectedCategory] = useState<ICategoryItem | null>(null);
 
       useEffect(() => {
         http.
@@ -48,18 +49,22 @@ const DefaultHeader = () =>{
  
         const handleCategoryClick = (categoryId: number, categoryName: string) => {
           navigator(`/shop/products/${categoryId}`, { state: { categoryName, categoryId } });
+          const selectedCategory = categories.find(category => category.id === categoryId);
+          setSelectedCategory(selectedCategory || null);
         };
 
         const renderCategoryDropdown = () => {
           return (
             <Dropdown>
               <Dropdown.Toggle variant="danger" style={{backgroundColor: "#f9ece6", color: "#514f4f"}} id="dropdown-basic">
-                All Categories
+              {selectedCategory ? selectedCategory.name : 'All Categories'}
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 {categories.map(category => (
                   <Dropdown.Item key={category.id}>
-                  <NavLink className="nav-link" to={`/shop/products/${category.id}`}>
+                  <NavLink className="nav-link" to={`/shop/products/${category.id}`}
+                  onClick={() => handleCategoryClick(category.id, category.name)}
+                  >
                     {category.name}
                   </NavLink>
                   </Dropdown.Item>

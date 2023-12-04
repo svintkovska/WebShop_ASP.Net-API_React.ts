@@ -29,11 +29,14 @@ const AddToBasketModal: React.FC<Props> = ({ show, onClose }) => {
     
     >
       <div className="modal-dialog modal-dialog-centered" role="document" >
-        <div className="modal-content" >
-          <div className="modal-body">
+        <div className="modal-content " >
+          <div className="modal-body d-flex flex-column justify-content-center align-items-center">
+            <h4 className="mb-2"> Added </h4>
             <img
+              className="m-0"
               src="https://cdn-icons-png.flaticon.com/512/9460/9460264.png"
               width={100}
+              height={100}
             />
           </div>
         </div>
