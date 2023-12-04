@@ -6,15 +6,11 @@ const AdminHomePage = ()=>{
   
     return (
       <>
+        <h1 className="text-light text-center mt-5 mb-5">ADMIN CENTER</h1>
         <div
-          className="cotainer"
-          style={{
-            backgroundImage: "url(https://wallpaperaccess.com/full/16668.jpg",
-            backgroundSize: "cover",
-          }}
+          className="cotainer text-center"
         >
-        <h1 className="text-light mt-5 mb-5">ADMIN CENTER</h1>
-          <Link to="/shop/categories">
+          <Link to="/">
             <button className="btn btn-outline-info">Go to the shop </button>
           </Link>
         </div>

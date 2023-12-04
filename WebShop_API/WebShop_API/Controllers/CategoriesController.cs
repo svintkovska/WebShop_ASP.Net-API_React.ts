@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebShop_API.Data;
 using WebShop_API.Data.Entities;
 using WebShop_API.Models;
@@ -33,6 +34,57 @@ namespace WebShop_API.Controllers
                 })
                 .ToList();  
             return Ok(list);
+        }
+
+        [HttpGet("search")]
+        public IActionResult GetList([FromQuery] CategorySearchViewModel search)
+        {
+            var query = _context.Categories
+                .Select(x => new CategoryItemViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Image = x.Image,
+                    Description = x.Description,
+                })
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(search.Name))
+            {
+                query = query.Where(x => x.Name.ToLower().Contains(search.Name.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(search.Description))
+            {
+                query = query.Where(x => x.Description.ToLower().Contains(search.Description.ToLower()));
+            }
+            
+
+            int page = search.Page;
+            int pageSize = 5;
+
+            var list = query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new CategoryItemViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,                
+                    Image = x.Image
+                })
+                .ToList();
+
+            int total = query.Count();
+            int pages = (int)Math.Ceiling(total / (double)pageSize);
+
+            
+            return Ok(new CategorySearchResultViewModel
+            {
+                Categories = list,
+                Total = total,
+                CurrentPage = page,
+                Pages = pages,
+            });
         }
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CategoryCreateViewModel model)

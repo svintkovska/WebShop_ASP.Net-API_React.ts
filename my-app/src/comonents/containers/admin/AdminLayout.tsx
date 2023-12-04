@@ -16,9 +16,16 @@ const AdminLayout = () => {
 
   return (
     <>
-      <AdminHeader />
-      <div >
+    <div style={{
+       backgroundImage: "url(https://wallpaperaccess.com/full/16668.jpg",
+       backgroundSize: "cover",
+       height: "130vh",
+    }}>
+
+      <AdminHeader/>
+      <div style={{margin: "0", padding: "0"}}>
         { isAuth && isAdmin && <Outlet /> }
+      </div>
       </div>
     </>
   );

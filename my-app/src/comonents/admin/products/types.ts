@@ -21,6 +21,25 @@ export interface IProductSearch{
   page?: number | string | null
 }
 
+export interface ICategoryItem{
+  id: number,
+  name: string,
+  image: string,
+  description: string
+}
+
+export interface ICategoryResult{
+  categories: Array<ICategoryItem>,
+  pages: number,
+  currentPage: number,
+  total: number,
+
+}
+export interface ICategorySearch{
+  name?: string,
+  description?: string,
+  page?: number | string | null
+}
 
 
 

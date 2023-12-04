@@ -27,12 +27,15 @@ const AdminHeader = () =>{
     return (
       <>
       
-        <nav className="navbar navbar-expand-lg " style={{ backgroundColor: 'rgb(105, 185, 224)' }}>
+        <nav className="navbar navbar-expand-lg" style={{ backgroundColor: 'rgb(105, 185, 224)' }}>
           <div className="container">
-            <Link className="navbar-brand" to="/admin">
+            <Link className="navbar-brand m-4" to="/admin">
               Admin
             </Link>
 
+            <Link className="navbar-brand m-4" to="/" style={{color: "red"}}>
+            Shop
+          </Link>
             <button
               className="navbar-toggler"
               type="button"
@@ -47,22 +50,22 @@ const AdminHeader = () =>{
 
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
+              <li className="nav-item m-3">
                   <Link to="/admin/categories/list" className="nav-link " aria-current="page">
                     Categories
                   </Link>
                 </li>
-                <li className="nav-item">
+                <li className="nav-item m-3">
                   <Link to="/admin/products/list" className="nav-link">
                     Products
                   </Link>
                 </li>
-                <li className="nav-item">
+                <li className="nav-item m-3">
                   <Link to="/admin/users/list" className="nav-link">
                     Users
                   </Link>
                 </li>
-                <li className="nav-item">
+                <li className="nav-item m-3">
                   <Link to="/admin/orders/list" className="nav-link">
                     Orders
                   </Link>

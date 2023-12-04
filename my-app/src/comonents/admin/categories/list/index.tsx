@@ -1,18 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useSelector } from "react-redux";
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { APP_ENV } from "../../../../env";
 import http from "../../../../http";
 import { IAuthUser } from "../../../auth/types";
 import CategoryDeleteModal from "../CategoryDeleteModal";
+import { ICategoryItem, ICategoryResult, ICategorySearch } from "../../products/types";
+import classNames from "classnames";
+import qs from "qs";
 
 
-interface ICategoryItem{
-    id: number,
-    name: string,
-    image: string,
-    description: string
-}
 
 
 const CategoriesList = ()=>{
@@ -25,14 +22,53 @@ const CategoriesList = ()=>{
     console.log("token", token);  
   }
     const [categories, setCategories] = useState<Array<ICategoryItem>>([]);
+    const [searchParams, setSearchParams] = useSearchParams();
 
-      useEffect(() => {
-        http.
-            get<Array<ICategoryItem>>("api/Categories")
-            .then((resp) => {
-              setCategories(resp.data);
-            });
-        }, []);
+    const [data, setData] = useState<ICategoryResult>({
+        pages: 0,
+        categories: [],
+        total: 0,
+        currentPage:0,
+    });
+  
+    const [search, setSearch] = useState<ICategorySearch>({
+        name: searchParams.get("name") || "",
+        description: searchParams.get("description") || "",
+        page: searchParams.get("page") || 1,
+    });
+  
+    function filterNonNull(obj: ICategorySearch) {
+        return Object.fromEntries(Object.entries(obj).filter(([k, v]) => v));
+      }
+  
+      const buttons = [];
+      for (let i = 1; i <= data.pages; i++) {
+        buttons.push(i);
+      }
+  
+      const pagination = buttons.map((page) => (
+        <li key={page} className="page-item">
+          <Link
+            className={classNames("page-link", { active: data.currentPage === page })}
+            onClick={() => setSearch({ ...search, page })}
+            to={"?" + qs.stringify(filterNonNull({ ...search, page }))}
+          >
+            {page}
+          </Link>
+        </li>
+      ));
+  
+      const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) =>{
+        setSearch({...search, [e.target.name]: e.target.value});
+    }
+  
+      // useEffect(() => {
+      //   http.
+      //       get<Array<ICategoryItem>>("api/Categories")
+      //       .then((resp) => {
+      //         setCategories(resp.data);
+      //       });
+      //   }, []);
 
       const [deleteCategoryId, setDeleteCategoryId] = useState<number | null>(null);
 
@@ -52,6 +88,20 @@ const CategoriesList = ()=>{
       const handleCloseDeleteModal = () => {
         setDeleteCategoryId(null);
       };
+
+      useEffect(() => {
+        console.log("search", search);
+        http.
+            get<ICategoryResult>("api/Categories/search", {
+                params: search
+            })
+            .then((resp) => {
+                console.log("categories list", resp.data);
+                setData(resp.data);
+                setCategories(resp.data.categories);
+            });
+        }, [search]);
+
     const content = categories.map((category) => (
       <tr key={category.id}>
         <th scope="row">{category.id}</th>
@@ -100,7 +150,33 @@ const CategoriesList = ()=>{
               </button>
             </Link>
           </div>
-
+          <div className="d-flex flex-row justify-content-center ">
+            <div className="mb-3 col-4 me-5">
+              <label htmlFor="name" className="form-label d-none">
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="name"
+                value={search.name}
+                onChange={onChangeInputHandler}
+                placeholder="Search by name"
+              />
+            </div>
+            <div className="mb-3 col-4 me-5">
+              <label htmlFor="description" className="form-label d-none">
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="description"
+                value={search.description}
+                onChange={onChangeInputHandler}
+                placeholder="Search by description"
+              />
+            </div>
+            
+          </div>
           <div className="container col-8 ">
             <table className="table table-striped table-dark mb-4">
               <thead className="table-light">
@@ -115,6 +191,12 @@ const CategoriesList = ()=>{
               </thead>
               <tbody>{content}</tbody>
             </table>
+
+            <div className="d-flex flex-row justify-content-center">
+              <nav>
+                <ul className="pagination">{pagination}</ul>
+              </nav>
+            </div>
           </div>
 
           <CategoryDeleteModal
