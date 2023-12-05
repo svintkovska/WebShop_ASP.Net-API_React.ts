@@ -300,11 +300,10 @@ namespace WebShop_API.Controllers
             var frontendURL = _configuration.GetValue<string>("FrontEndURL");
             var callbackURL = $"{frontendURL}/resetpassword?userId={user.Id}&" + $"code={WebUtility.UrlEncode(token)}";
 
-            string basePath = AppContext.BaseDirectory; // Get the application's base directory
+            string basePath = AppContext.BaseDirectory; 
             string htmlFilePath = Path.Combine(basePath, "html", "messageHtml.html");
             string htmlContent = System.IO.File.ReadAllText(htmlFilePath);
 
-            // Replace dynamic content (e.g., {{callbackURL}}) with the actual value
             htmlContent = htmlContent.Replace("{{callbackURL}}", callbackURL);
 
             var message = new Message()
@@ -313,12 +312,7 @@ namespace WebShop_API.Controllers
                 Subject = "Reset Password",
                 Body = htmlContent,
             };
-            //var message = new Message()
-            //{
-            //    To = user.Email,
-            //    Subject = "Reset Password",
-            //    Body = "To reset the password follow the link -> " + $"<a href='{callbackURL}'> Reset Password </a>"
-            //};
+
             _emailService.Send(message);
         
             return Ok();

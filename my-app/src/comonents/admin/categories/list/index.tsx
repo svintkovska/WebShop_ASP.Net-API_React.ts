@@ -151,7 +151,7 @@ const CategoriesList = ()=>{
             </Link>
           </div>
           <div className="d-flex flex-row justify-content-center ">
-            <div className="mb-3 col-4 me-5">
+            <div className="mb-3 col-6 me-5">
               <label htmlFor="name" className="form-label d-none">
               </label>
               <input
@@ -163,7 +163,7 @@ const CategoriesList = ()=>{
                 placeholder="Search by name"
               />
             </div>
-            <div className="mb-3 col-4 me-5">
+            <div className="mb-3 col-6 me-5">
               <label htmlFor="description" className="form-label d-none">
               </label>
               <input

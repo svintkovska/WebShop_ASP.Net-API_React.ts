@@ -44,7 +44,12 @@ export enum BasketActionType {
     id: number;
     dateCreated: Date;
     status: string;
-    items: IOrderItem[]
+    items: IOrderItem[];
+    receiverName: string;
+    receiverPhone: string;
+    comment: string;
+    novaPoshtaCity: string ;
+    novaPoshtaWarehouse: string;
   }
 
 
@@ -55,4 +60,16 @@ export enum BasketActionType {
     comment: string;
     novaPoshtaCity: string ;
     novaPoshtaWarehouse: string;
+  }
+
+  export interface IOrderResult{
+    orders: Array<IUserOrder>,
+    pages: number,
+    currentPage: number,
+    total: number,
+  
+  }
+  export interface IOrderSearch{
+    dateCreated?: string,
+    page?: number | string | null
   }

@@ -1,4 +1,5 @@
-﻿using MailKit.Search;
+﻿using AutoMapper;
+using MailKit.Search;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +18,14 @@ namespace WebShop_API.Controllers
     {
         private readonly AppEFContext _context;
         private readonly UserManager<UserEntity> _userManager;
+        private readonly IMapper _mapper;
 
-        public ShopController(AppEFContext context, UserManager<UserEntity> userManager)
+        public ShopController(AppEFContext context, UserManager<UserEntity> userManager, IMapper mapper)
         {
 
             _context = context;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         [HttpGet("products/{categoryid}")]
@@ -107,6 +110,7 @@ namespace WebShop_API.Controllers
 
 
         [HttpPost("makeOrder")]
+        
         public async Task<IActionResult> MakeOrder([FromBody] OrderViewModel model )
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -147,49 +151,90 @@ namespace WebShop_API.Controllers
 
             return Ok();
         }
+      
+        
         [HttpGet("getUserOrders/{email}")]
-        public async Task<IActionResult> GetUserOrders(string email)
+        public async Task<IActionResult> GetUserOrders(string email, [FromQuery] OrderSearchViewModel search)
         {
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
                 return BadRequest("User Not Found");
 
-            var orders = _context.Orders.Where(x => x.UserId == user.Id).ToList();
 
-            var list = new List<UserOrderViewModel>();
+            var orders = _context.Orders
+                 .Where(x => x.UserId == user.Id)
+                 .Include(o => o.User)
+                 .Include(o => o.OrderStatus)
+                 .Include(o => o.OrderItems)
+                     .ThenInclude(oi => oi.Product)
+                         .ThenInclude(p => p.ProductImages)
+                 .ToList();
 
-            foreach (var order in orders)
+            var allSatuses = _mapper.Map<List<OrderStatusViewModel>>(_context.OrderStatuses.ToList());
+
+            var query = orders.Select(order => new UserOrderViewModel
             {
-                var items = _context.OrderItems.Where(x => x.OrderId == order.Id).ToList();
-                var orderItems = new List<OrderItemViewModel>();
-                foreach (var item in items)
-                {
-                    orderItems.Add(new OrderItemViewModel
-                    {
-                        OrderId = item.OrderId,
-                        ProductId = item.ProductId,
-                        ProductName = _context.Products.Where(x => x.Id == item.ProductId).FirstOrDefault().Name,
-                        Price = item.PriceBuy,
-                        Quantity = item.Count,
-                        Image = _context.ProductImages.Where(x => x.ProductId == item.ProductId).FirstOrDefault().Name
+                Id = order.Id,
+                Email = order.User?.Email,
+                DateCreated = order.DateCreated,
+                AllStatuses = allSatuses,
+                Status = order.OrderStatus.Name,
+                StatusId = order.OrderStatus.Id,
+                Items = _mapper.Map<List<OrderItemViewModel>>(order.OrderItems),
+                Comment = order.Comment,
+                ReceiverName = order.ReceiverName,
+                ReceiverPhone = order.ReceiverPhone,
+                NovaPoshtaCity = order.NovaPoshtaCity,
+                NovaPoshtaWarehouse = order.NovaPoshtaWarehouse,
+            }).OrderByDescending(x => x.DateCreated).AsQueryable();
 
-                    });
+            if (!string.IsNullOrEmpty(search.Email))
+            {
+                query = query.Where(x => x.Email.ToLower().Contains(search.Email.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(search.DateCreated))
+            {
+                if (DateTime.TryParse(search.DateCreated, out var date))
+                {
+                    query = query.Where(x => x.DateCreated.Date == date.Date);
                 }
-
-                var model = new UserOrderViewModel()
-                {
-                    Id = order.Id,
-                    DateCreated = order.DateCreated,
-                    Status = _context.OrderStatuses.Where(x => x.Id == order.OrderStatusId).FirstOrDefault().Name,
-                    Items = orderItems
-                };
-
-                list.Add(model);
             }
 
-           
 
-            return Ok(list);
+            int page = search.Page;
+            int pageSize = 5;
+
+            var list = query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new UserOrderViewModel
+                {
+                    Id = x.Id,
+                    Email = x.Email,
+                    DateCreated = x.DateCreated,
+                    AllStatuses = allSatuses,
+                    Status = x.Status,
+                    StatusId = x.StatusId,
+                    Items = _mapper.Map<List<OrderItemViewModel>>(x.Items),
+                    Comment= x.Comment,
+                    ReceiverName= x.ReceiverName,
+                    ReceiverPhone= x.ReceiverPhone,
+                    NovaPoshtaCity= x.NovaPoshtaCity,
+                    NovaPoshtaWarehouse  = x.NovaPoshtaWarehouse,
+                })
+                .ToList();
+
+            int total = query.Count();
+            int pages = (int)Math.Ceiling(total / (double)pageSize);
+
+
+            return Ok(new OrderSearchResultViewModel
+            {
+                Orders = list,
+                Total = total,
+                CurrentPage = page,
+                Pages = pages,
+            });
         }
 
     }
