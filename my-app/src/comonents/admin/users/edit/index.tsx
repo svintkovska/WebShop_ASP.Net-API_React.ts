@@ -23,14 +23,16 @@ const EditUserPage = () => {
     isLockedOut: false,
     allRoles: [],
     selectedRoles: [],
-    lockoutEndDate: null,
+    lockoutEndDate:null,
   });
   const [successMessage, setSuccessMessage] = useState<boolean>(false);
 
   useEffect(() => {
     http.get<IEditUser>(`api/users/edit/${userId}`).then((resp) => {
       setUser(resp.data);
-    });
+
+    console.log("0000", user)
+  });
   }, []);
 
   console.log("user", user);
@@ -207,9 +209,7 @@ const EditUserPage = () => {
                     name="lockoutEndDate"
                     value={
                       user.lockoutEndDate
-                        ? new Date(user.lockoutEndDate)
-                            .toISOString()
-                            .substr(0, 10)
+                      ? new Date(user.lockoutEndDate).toISOString().split('T')[0]     
                         : ""
                     }
                     onChange={handleInputChange}

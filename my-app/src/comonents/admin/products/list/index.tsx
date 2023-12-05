@@ -125,11 +125,13 @@ const ProductsList = ()=>{
 
     const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
       const { name, value } = event.target;
-  
+      const categoryId = value !== "" ? parseInt(value, 10) : null;
+
       setSearch((prevProduct) => ({
         ...prevProduct,
-        [name]: parseInt(value),
+        [name]: categoryId,
       }));
+      console.log(search);
     };
 
     return (

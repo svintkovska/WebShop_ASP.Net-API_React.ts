@@ -62,14 +62,6 @@ const CategoriesList = ()=>{
         setSearch({...search, [e.target.name]: e.target.value});
     }
   
-      // useEffect(() => {
-      //   http.
-      //       get<Array<ICategoryItem>>("api/Categories")
-      //       .then((resp) => {
-      //         setCategories(resp.data);
-      //       });
-      //   }, []);
-
       const [deleteCategoryId, setDeleteCategoryId] = useState<number | null>(null);
 
       const handleDeleteCategory = async () => {

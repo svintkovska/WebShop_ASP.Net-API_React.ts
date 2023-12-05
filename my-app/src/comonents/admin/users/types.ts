@@ -27,5 +27,18 @@ export interface IEditUser{
     isLockedOut: boolean;
     allRoles: ISelectRole[];
     selectedRoles: number[];
-    lockoutEndDate: Date | null;
+    lockoutEndDate: Date | null 
+}
+
+export interface IUserResult{
+  users: Array<IUser>,
+  pages: number,
+  currentPage: number,
+  total: number,
+
+}
+export interface IUserSearch{
+  email?: string,
+  dateCreated?: string,
+  page?: number | string | null
 }

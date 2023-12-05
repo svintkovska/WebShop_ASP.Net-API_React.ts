@@ -58,6 +58,51 @@ namespace WebShop_API.Controllers
             return Ok(list);
         }
 
+        [HttpGet("search")]
+        public IActionResult GetList([FromQuery] UserSearchViewModel search)
+        {
+            var query = _context.Users
+               .Include(u => u.UserRoles)
+               .ThenInclude(ur => ur.Role)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(search.Email))
+            {
+                query = query.Where(x => x.Email.ToLower().Contains(search.Email.ToLower()));
+            }
+    
+
+            int page = search.Page;
+            int pageSize = 10;
+
+            var list = query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new UserItemViewModel
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    UserName = x.UserName,
+                    Email = x.Email,
+                    Image = x.Image,
+                    UserRoles = x.UserRoles.Select(ur => ur.Role.Name).ToList(),
+                    IsLockedOut = x.LockoutEnd.HasValue && x.LockoutEnd > DateTime.UtcNow
+                })
+                .ToList();
+
+            int total = query.Count();
+            int pages = (int)Math.Ceiling(total / (double)pageSize);
+
+
+            return Ok(new UserSearchResultViewModel
+            {
+                Users = list,
+                Total = total,
+                CurrentPage = page,
+                Pages = pages,
+            });
+        }
         [HttpGet("edit/{id}")]
         public async Task<IActionResult> EditUser(int id)
         {

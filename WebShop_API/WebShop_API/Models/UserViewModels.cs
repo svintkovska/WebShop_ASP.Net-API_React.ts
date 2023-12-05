@@ -34,4 +34,20 @@ namespace WebShop_API.Models
         public List<int> SelectedRoles { get; set; }
         public DateTimeOffset? LockoutEndDate { get; set; }
     }
+
+    public class UserSearchViewModel
+    {
+        public string Email { get; set; }
+        public int Page { get; set; } = 1;
+        public string CategoryId { get; set; }
+    }
+
+    public class UserSearchResultViewModel
+    {
+        public List<UserItemViewModel> Users { get; set; }
+        public int Pages { get; set; }
+        public int CurrentPage { get; set; }
+        public int Total { get; set; }
+    }
+
 }
