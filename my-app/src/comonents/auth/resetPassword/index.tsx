@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import http from "../../../http";
 import imgCosmetics from "../../../assets/images/cosmetics.jpg"
+import { useTranslation } from 'react-i18next';
 
 interface IForgotPasswordForm{
     userId: string | null ;
@@ -12,6 +13,8 @@ interface IForgotPasswordForm{
 }
 
 const ResetPassword = ()=>{
+  const { t } = useTranslation();
+
     const navigator = useNavigate();
     let [searchParams] = useSearchParams();
     const [state, setState] = useState<IForgotPasswordForm>({
@@ -32,11 +35,11 @@ const ResetPassword = ()=>{
         const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>)=>{
             e.preventDefault();
             if (state.newPassword.length <6) {
-              setErrorMessage("Password length should be at least 6");
+              setErrorMessage(t('messages.passwordShort'));
               return;
             }
             if (state.newPassword !== state.confirmPassword) {
-                setErrorMessage("Passwords do not match");
+                setErrorMessage(t('messages.passwordsDontMatch') );
                 return;
               }
               setErrorMessage("");
@@ -63,11 +66,11 @@ const ResetPassword = ()=>{
                 <div className="row">
                   <div className="col">
                     <h1 className="mt-2 mb-5 text-center" style={{color: "#e8baba"}}>
-                      Create New Password
+                    {t('auth.createNewPassword')} 
                     </h1>
                     {successMessage && (
                       <div className="alert alert-success" role="alert">
-                        Password has been changed
+                        {t('auth.passwordChanged')} 
                       </div>
                     )}
                     {!successMessage && errorMessage && (
@@ -78,7 +81,7 @@ const ResetPassword = ()=>{
                     <form onSubmit={onSubmitHandler} className="m-5">
                       <div className="mb-3">
                         <label htmlFor="newPassword" className="form-label" style={{color: "#e8baba"}}>
-                          New Password
+                        {t('auth.newPassword')} 
                         </label>
                         <input
                           type="password"
@@ -86,7 +89,7 @@ const ResetPassword = ()=>{
                           name="newPassword"
                           value={state.newPassword}
                           onChange={onChangeInputHandler}
-                          placeholder="Enter new password"
+                          placeholder={t('auth.enterNewPassword')} 
                           style={{width:"500px"}}
                           required
                         />
@@ -97,7 +100,7 @@ const ResetPassword = ()=>{
 
                       <div className="mb-3">
                         <label htmlFor="confirmPassword" className="form-label" style={{color: "#e8baba"}}>
-                          Confirm Password
+                        {t('auth.confirmPassword')} 
                         </label>
                         <input
                           type="password"
@@ -107,7 +110,7 @@ const ResetPassword = ()=>{
                           name="confirmPassword"
                           value={state.confirmPassword}
                           onChange={onChangeInputHandler}
-                          placeholder="Confirm password"
+                          placeholder={t('auth.confirmPassword')} 
                           style={{width:"500px"}}
                           required
                         />
@@ -118,7 +121,7 @@ const ResetPassword = ()=>{
 
                       <div className="text-center">
                         <button type="submit" className="cart-btn mb-5" style={{width:"300px"}}>
-                          Change Password
+                        {t('auth.changePassword')} 
                         </button>
                       </div>
                     </form>

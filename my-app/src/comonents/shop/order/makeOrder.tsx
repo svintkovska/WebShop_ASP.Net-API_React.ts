@@ -9,8 +9,10 @@ import SuccessMessage from "../../common/SuccessMessage";
 import { IBasket, IBasketProduct, IDeliveryInfo, IOrder } from "../types";
 import { OrderSchema } from "./validation";
 import Novaposhta from "./novaPoshta_API";
+import { useTranslation } from 'react-i18next';
 
 const MakeOrderPage = () =>{
+  const { t } = useTranslation();
    const [order, setOrder] = useState<IOrder>();
    const {basket}  = useSelector((store: any) => store.basket as IBasket);
    const {email} = useSelector((store: any) => store.auth as IAuthUser);
@@ -80,7 +82,7 @@ const MakeOrderPage = () =>{
       <>
         <div className="cart-card">
           {successMessage && (
-            <SuccessMessage message="Your order has been successfully placed. Expect a clarification call withing 5 minutes" />
+            <SuccessMessage message={t('shop.product.successOrder')} />
           )}
           <form className="row" onSubmit={handleSubmit}>
             <div className="col-md-8 cart">
@@ -88,12 +90,12 @@ const MakeOrderPage = () =>{
                 <div className="row">
                   <div className="col">
                     <h4>
-                      <b>Delivery Information</b>
+                      <b>{t('shop.product.deliveryInfo')}</b>
                     </h4>
                   </div>
                   <div>
                     <label htmlFor="receiverName" style={{ color: "#e8baba", fontSize: "20px" }}>
-                      Receiver Name:
+                    {t('shop.product.receiverName')}:
                     </label>
                     <input
                       type="text"
@@ -116,7 +118,7 @@ const MakeOrderPage = () =>{
                   </div>
                   <div>
                     <label htmlFor="receiverPhone" style={{ color: "#e8baba", fontSize: "20px" }}>
-                      Receiver Phone Number:
+                    {t('shop.product.receiverPhone')}:
                     </label>
                     <input
                       type="phone"
@@ -143,7 +145,7 @@ const MakeOrderPage = () =>{
                       className=" mb-2 mt-2"
                       style={{ color: "#e8baba", fontSize: "20px" }}
                     >
-                      Additional Comment:
+                      {t('shop.product.additionalComment')}:
                     </label>
                     <textarea
                       id="comment"
@@ -158,7 +160,7 @@ const MakeOrderPage = () =>{
                       htmlFor="novaPoshtaCity"
                       style={{ color: "#e8baba", fontSize: "20px" }}
                     >
-                      Nova Poshta City:
+                      {t('shop.product.novaposhtaCity')}:
                     </label>
                     <input
                       type="text"
@@ -185,7 +187,7 @@ const MakeOrderPage = () =>{
                       htmlFor="novaPoshtaWarehouse"
                       style={{ color: "#e8baba", fontSize: "20px" }}
                     >
-                      Nova Poshta Warehouse:
+                      {t('shop.product.novaposhtaWarehouse')}:
                     </label>
                     <input
                       type="text"
@@ -212,7 +214,7 @@ const MakeOrderPage = () =>{
                     )}
                   </div>
                   <div className="d-flex flex-row mt-2">
-                    <label className="mb-2 me-3" style={{ color: "#e8baba" }}>*Payment will be done upon receiving</label>
+                    <label className="mb-2 me-3" style={{ color: "#e8baba" }}>*{t('shop.product.payment')}</label>
                   </div>
                 </div>
               </div>
@@ -220,7 +222,7 @@ const MakeOrderPage = () =>{
               <div className="back-to-shop">
                 <Link to="/shop/basket">
                   <a className="back-btn" style={{ padding: "10px" }}>
-                    Back to Cart
+                  {t('shop.product.backToCart')}
                   </a>
                 </Link>
               </div>
@@ -255,7 +257,7 @@ const MakeOrderPage = () =>{
                 className="cart-btn"
                 disabled={basket.length < 1}
               >
-                Make Order
+                 {t('shop.product.makeOrder')}
               </button>
             </div>
           </form>

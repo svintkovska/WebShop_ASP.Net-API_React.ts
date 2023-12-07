@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   show: boolean;
@@ -7,6 +8,8 @@ interface Props {
 }
 
 const AddToBasketModal: React.FC<Props> = ({ show, onClose }) => {
+  const { t } = useTranslation();
+
   useEffect(() => {
     if (show) {
       setTimeout(() => {
@@ -31,7 +34,7 @@ const AddToBasketModal: React.FC<Props> = ({ show, onClose }) => {
       <div className="modal-dialog modal-dialog-centered" role="document" >
         <div className="modal-content " >
           <div className="modal-body d-flex flex-column justify-content-center align-items-center">
-            <h4 className="mb-2"> Added </h4>
+            <h4 className="mb-2"> {t('shop.product.added')} </h4>
             <img
               className="m-0"
               src="https://cdn-icons-png.flaticon.com/512/9460/9460264.png"

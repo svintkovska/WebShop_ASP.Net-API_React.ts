@@ -1,13 +1,12 @@
 import classNames from "classnames";
 import qs from "qs";
 import { useState, useEffect, ChangeEvent } from "react";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Link,
   useLocation,
   useNavigate,
-  useNavigation,
   useParams,
   useSearchParams,
 } from "react-router-dom";
@@ -19,10 +18,11 @@ import { IBasket, IBasketProduct } from "../types";
 import AddToBasketModal from "./addToBasketModal";
 import { IProductItem, IProductResult, IProductSearch } from "./types";
 import React from "react";
+import { useTranslation } from 'react-i18next';
 
 const ProductsPage = () => {
+  const { t } = useTranslation();
   const { categoryId } = useParams<{ categoryId?: string }>();
-
   const [products, setProducts] = useState<Array<IProductItem>>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const { basket } = useSelector((store: any) => store.basket as IBasket);
@@ -137,27 +137,6 @@ const ProductsPage = () => {
     });
   };
 
-  const navigation = () => {
-    return (
-      <nav className="d-flex justify-content-left mb-3 mt-3">
-        <ul className="list-unstyled me-2">
-          <li>
-            <a href="/">Home Page -{">"} </a>
-          </li>
-        </ul>
-        <ul className="list-unstyled me-2">
-          <li>
-            <a href="/shop/categories">Menu -{">"} </a>
-          </li>
-        </ul>
-        <ul className="list-unstyled me-2">
-          <li>
-            <a href={`/shop/products/${categoryId}`}>{categoryName} </a>
-          </li>
-        </ul>
-      </nav>
-    );
-  };
 
   const cardItem = products.map((product) => (
     <React.Fragment key={product.id}>
@@ -173,7 +152,7 @@ const ProductsPage = () => {
             <ul className="product-links">
               <li>
                 <a href="#" onClick={() => handleAddToCart(product)}>
-                  <i className="fa fa-shopping-bag"></i> Add to cart
+                  <i className="fa fa-shopping-bag"></i> {t('shop.product.addToCart')}
                 </a>
               </li>
               <li>
@@ -181,7 +160,7 @@ const ProductsPage = () => {
                   href="#"
                   onClick={() => handleProductClick(product.id, product.name)}
                 >
-                  <i className="fa fa-search"></i> Quick View
+                  <i className="fa fa-search"></i> {t('shop.product.quickView')}
                 </a>
               </li>
             </ul>
@@ -200,9 +179,7 @@ const ProductsPage = () => {
   return (
     <>
       <Container >
-        <div>{navigation()}</div>
-
-        <div className="d-flex flex-row justify-content-center mb-3">
+        <div className="d-flex flex-row justify-content-center mt-3 mb-3">
           <div className="mb-3  me-5 ">
             <label htmlFor="name" className="form-label d-none"></label>
             <input
@@ -211,7 +188,7 @@ const ProductsPage = () => {
               name="name"
               value={search.name}
               onChange={onChangeInputHandler}
-              placeholder="Search by name"
+              placeholder= {t('common.searchByName')}
             />
           </div>
           <div className="mb-3 me-5">
@@ -222,7 +199,7 @@ const ProductsPage = () => {
               name="description"
               value={search.description}
               onChange={onChangeInputHandler}
-              placeholder="Search by description"
+              placeholder= {t('common.searchByDescription')}
             />
           </div>
         </div>

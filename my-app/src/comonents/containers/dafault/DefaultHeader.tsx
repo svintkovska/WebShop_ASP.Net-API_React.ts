@@ -6,6 +6,8 @@ import { AuthActionType, IAuthUser } from "../../auth/types";
 import { useEffect, useState } from "react";
 import http from "../../../http";
 import { Dropdown } from "react-bootstrap";
+import LanguageSelector from "../../common/LanguageSelector";
+import { useTranslation } from 'react-i18next';
 
 interface ICategoryItem{
   id: number,
@@ -15,6 +17,7 @@ interface ICategoryItem{
 }
 
 const DefaultHeader = () =>{
+    const { t } = useTranslation();
     const navigator = useNavigate()
     const {isAuth} = useSelector((store: any) => store.auth as IAuthUser);
     const {email} = useSelector((store: any) => store.auth as IAuthUser);
@@ -57,7 +60,7 @@ const DefaultHeader = () =>{
           return (
             <Dropdown>
               <Dropdown.Toggle variant="danger" style={{backgroundColor: "#f9ece6", color: "#514f4f"}} id="dropdown-basic">
-              {selectedCategory ? selectedCategory.name : 'All Categories'}
+              {selectedCategory ? selectedCategory.name : t('header.allCategories')}
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 {categories.map(category => (
@@ -90,12 +93,12 @@ const DefaultHeader = () =>{
               <ul className="navbar-nav me-auto">
                 <li className="nav-item">
                   <NavLink className="nav-link" to="/">
-                    Home
+                  {t('header.home')}
                   </NavLink>
                 </li>
                 <li className="nav-item">
                   <NavLink className="nav-link" to="/shop/categories">
-                    Shop
+                  {t('header.shop')}
                   </NavLink>
                 </li>
                 <li className="nav-item ">
@@ -103,7 +106,7 @@ const DefaultHeader = () =>{
                 </li>
                 {isAdmin ? (
                   <NavLink className="nav-link" to="/admin">
-                    <span className="text-danger">Admin Center</span>
+                    <span className="text-danger">{t('header.adminCenter')}</span>
                   </NavLink>
                 ) : (
                   ""
@@ -111,9 +114,11 @@ const DefaultHeader = () =>{
               </ul>
 
               <ul className="navbar-nav">
+              <LanguageSelector />
                 {isAuth ? (
                   <>
-                    <li className="nav-item nav-link active">Hello {email}</li>
+                   
+                    <li className="nav-item nav-link active">{t('header.hello')} {email}</li>
                     <li className="nav-item nav-link">
                       <img
                         src={APP_ENV.IMAGE_PATH + "300_" + imagePath}
@@ -127,7 +132,7 @@ const DefaultHeader = () =>{
                           src="		https://cdn-icons-png.flaticon.com/512/2657/2657960.png"
                           width="40"
                           height="40"
-                          title="Edit Profile"
+                          title= {t('header.editProfile')}
                         ></img>
                       </Link>
                     </li>
@@ -137,7 +142,7 @@ const DefaultHeader = () =>{
                           src="https://cdn-icons-png.flaticon.com/512/7544/7544599.png"
                           width="40"
                           height="40"
-                          title="My Orders"
+                          title= {t('header.myOrders')}
                         ></img>
                       </Link>
                     </li>
@@ -147,7 +152,7 @@ const DefaultHeader = () =>{
                           src="	https://cdn-icons-png.flaticon.com/512/4675/4675305.png"
                           width="40"
                           height="40"
-                          title="Basket"
+                          title={t('header.cart')}
                         ></img>
                       </Link>
                     </li>
@@ -160,7 +165,7 @@ const DefaultHeader = () =>{
                           src="	https://cdn-icons-png.flaticon.com/512/5593/5593396.png"
                           width="40"
                           height="40"
-                          title="Log out"
+                          title={t('header.logout')}
                         />
                       </button>
                     </li>
@@ -169,14 +174,15 @@ const DefaultHeader = () =>{
                   <>
                     <li className="nav-item">
                       <Link to="account/register" className="nav-link">
-                        Register
+                      {t('header.register')}
                       </Link>
                     </li>
                     <li className="nav-item">
                       <Link to="account/login" className="nav-link">
-                        Log In
+                      {t('header.login')}
                       </Link>
                     </li>
+                   
                   </>
                 )}
               </ul>

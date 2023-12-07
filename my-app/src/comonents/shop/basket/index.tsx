@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { APP_ENV } from "../../../env";
 import { IBasket, IBasketProduct } from "../types";
-import empty_cart from '../../../assets/images/empty_cart.jpg'
+import empty_cart from '../../../assets/images/empty_cart.png'
+import { useTranslation } from 'react-i18next';
 
 const BasketPage = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { basket } = useSelector((store: any) => store.basket as IBasket);
 
@@ -70,17 +71,19 @@ const BasketPage = () => {
             <div className="row">
               <div className="col">
                 <h4>
-                  <b>Shopping Cart</b>
+                  <b> {t('shop.product.cart')}</b>
                 </h4>
               </div>
               <div className="col align-self-center text-right text-muted">
-                Your items
+              {t('shop.product.items')}
               </div>
             </div>
           </div>
           {basket.length < 1 ? (
             <div className="text-center mt-5">
-              <img src={empty_cart} style={{width: "500px"}}/>     
+              <img src={empty_cart} style={{width: "500px"}}/> 
+              <p><b className="text-danger">{t('shop.product.emptyCart')}</b></p>    
+              <p>{t('shop.product.makeMeHappy')}</p>    
             </div>
           ) : (
             <section>
@@ -146,7 +149,7 @@ const BasketPage = () => {
           <div className="back-to-shop">
           <Link to="/shop/categories">
                 <a className="back-btn" style={{padding: "10px"}}>
-                Back to shop
+                {t('common.backToShop')}
                 </a>
               </Link>
 
@@ -155,20 +158,20 @@ const BasketPage = () => {
         <div className="col-md-4 summary">
           <div>
             <h5>
-              <b>Summary</b>
+              <b>{t('shop.product.summary')}</b>
             </h5>
           </div>
           <div
             className="row"
             style={{ borderTop: "1px solid rgba(0,0,0,.1)", padding: "2vh 0" }}
           >
-            <div className="col">TOTAL PRICE</div>
+            <div className="col">{t('shop.product.totalPrice')}</div>
             <div className="col text-right">
-              &euro; {calculateTotalPrice().toFixed(2)} ₴
+               {calculateTotalPrice().toFixed(2)} ₴
             </div>
           </div>
           <Link to="/shop/makeOrder">
-          <button className="cart-btn" disabled={basket.length < 1}>CHECKOUT</button>
+          <button className="cart-btn" disabled={basket.length < 1}>{t('shop.product.checkout')}</button>
           </Link>
         </div>
       </div>

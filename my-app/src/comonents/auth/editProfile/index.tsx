@@ -5,6 +5,7 @@ import http from "../../../http";
 import SuccessMessage from "../../common/SuccessMessage";
 import { setImage } from "../AuthReducer";
 import { IAuthUser } from "../types";
+import { useTranslation } from 'react-i18next';
 
 
 interface IProfileEdit {
@@ -18,6 +19,7 @@ interface IProfileEdit {
 
 
 const EditProfile = () =>{
+  const { t } = useTranslation();
     const navigator = useNavigate();
     const {email} = useSelector((store: any) => store.auth as IAuthUser);
     const dispatch = useDispatch();
@@ -81,14 +83,14 @@ const EditProfile = () =>{
           <div className=" cart" style={{ borderRadius: "1rem" }}>
             <div className="title">
               <h4>
-                  <b>Update Profile</b>
+                  <b>{t('auth.update')}</b>
                 </h4>
-                {successMessage && <SuccessMessage message="Changes saved" />}
+                {successMessage && <SuccessMessage message={t('profile.changesSaved')} />}
                 <div className="text-center">
                   
                   <Link to="/account/editProfile/changePassword">
                     <button className="cart-btn" style={{width: "300px"}}>
-                      Change Password
+                    {t('auth.changePassword')}
                     </button>
                   </Link>
                 </div>
@@ -104,7 +106,7 @@ const EditProfile = () =>{
                         className="form-label"
                         style={{color: "#e8baba"}}
                       >
-                        First Name
+                        {t('auth.firstName')}
                       </label>
                       <input
                         type="text"
@@ -112,11 +114,11 @@ const EditProfile = () =>{
                         name="firstName"
                         value={state.firstName}
                         onChange={onChangeInputHandler}
-                        placeholder="Enter First Name"
+                        placeholder={t('auth.enterFirstName')}
                         required
                       />
                       <div className="invalid-feedback">
-                        Please enter a valid first name.
+                      {t('messages.fistNameNotValid')}
                       </div>
                     </div>
 
@@ -126,7 +128,7 @@ const EditProfile = () =>{
                         className="form-label"
                         style={{color: "#e8baba"}}
                       >
-                        Last Name
+                        {t('auth.lastName')}
                       </label>
                       <input
                         type="text"
@@ -134,19 +136,19 @@ const EditProfile = () =>{
                         name="lastName"
                         value={state.lastName}
                         onChange={onChangeInputHandler}
-                        placeholder="Enter Last Name"
+                        placeholder={t('auth.enterLastName')}
                         required
                       />
                     </div>
 
                     <div className="invalid-feedback">
-                      Please enter a valid last name.
+                    {t('messages.lastNameNotValid')}
                     </div>
                   </div>
 
                   <div className="mb-3">
                     <label htmlFor="userName" className="form-label" style={{color: "#e8baba"}}>
-                      User Name
+                    {t('auth.userName')}
                     </label>
                     <input
                       type="text"
@@ -154,11 +156,11 @@ const EditProfile = () =>{
                       name="userName"
                       value={state.userName}
                       onChange={onChangeInputHandler}
-                      placeholder="Enter User Name"
+                      placeholder={t('auth.enterUserName')}
                       required
                     />
                     <div className="invalid-feedback">
-                      Please enter a valid user name.
+                    {t('auth.userNameNotValid')}
                     </div>
                   </div>
 
@@ -188,7 +190,7 @@ const EditProfile = () =>{
 
                   <div className="text-center">
                     <button type="submit"  className="back-btn" style={{padding: "10px", width: "200px"}}>
-                      Update Profile
+                    {t('auth.update')}
                     </button>
                   </div>
                 </form>

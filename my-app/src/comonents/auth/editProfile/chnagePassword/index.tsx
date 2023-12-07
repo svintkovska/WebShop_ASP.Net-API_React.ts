@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import http from "../../../../http";
 import SuccessMessage from "../../../common/SuccessMessage";
 import { IAuthUser } from "../../types";
+import { useTranslation } from 'react-i18next';
 
 
 interface IChangePassword {
@@ -15,6 +16,7 @@ interface IChangePassword {
 
 
 const ChangePassword = () =>{
+  const { t } = useTranslation();
     const {email} = useSelector((store: any) => store.auth as IAuthUser);
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<boolean>(false);
@@ -38,11 +40,11 @@ const ChangePassword = () =>{
         console.log(state);
 
         if (state.newPassword !== state.confirmPassword) {
-          setErrorMessage("New Password and Confirm Password do not match");
+          setErrorMessage(t('messages.passwordsDontMatch'));
           return;
         }
         if (state.newPassword.length < 6) {
-          setErrorMessage("New Password should be at least 6 characters long");
+          setErrorMessage(t('messages.passwordShort'));
           return;
         }
         try{
@@ -54,7 +56,7 @@ const ChangePassword = () =>{
         }
         catch(error: any){
           console.log ("error:", error);
-          setErrorMessage("Incorrect Password");
+          setErrorMessage(t('messages.incorrectPassword'));
         }
         console.log ("Data sent", state);     
     }
@@ -65,10 +67,10 @@ const ChangePassword = () =>{
           <div className=" cart" style={{ borderRadius: "1rem" }}>
             <div className="title">
             <h4>
-                  <b>Change Password</b>
+                  <b>{t('auth.changePassword')}</b>
                 </h4>
           {successMessage && (
-        <SuccessMessage message="Password successfully changed" />
+        <SuccessMessage message={t('auth.passwordChanged')} />
       )}
           {!successMessage && errorMessage && (
           <div className="alert alert-danger" role="alert">
@@ -79,7 +81,7 @@ const ChangePassword = () =>{
             style={{ width: 500 }}>
             <div className="mb-3">
               <label htmlFor="oldPassword" className="form-label" style={{color: "#e8baba"}}>
-                Old Password
+              {t('auth.oldPassword')}
               </label>
               <input
                 type="password"
@@ -87,14 +89,14 @@ const ChangePassword = () =>{
                 name="oldPassword"
                 value={state.oldPassword}
                 onChange={onChangeInputHandler}
-                placeholder="Enter Old Password"
+                placeholder={t('auth.enterOldPassword')}
                 required
               />
             </div>
 
             <div className="mb-3">
               <label htmlFor="newPassword" className="form-label" style={{color: "#e8baba"}}>
-                New Password
+              {t('auth.newPassword')}
               </label>
               <input
                 type="password"
@@ -102,14 +104,14 @@ const ChangePassword = () =>{
                 name="newPassword"
                 value={state.newPassword}
                 onChange={onChangeInputHandler}
-                placeholder="Enter New Password"
+                placeholder={t('auth.enterNewPassword')}
                 required
               />
             </div>
 
             <div className="mb-3">
               <label htmlFor="confirmPassword" className="form-label " style={{color: "#e8baba"}}>
-              Confirm Password
+              {t('auth.confirmPassword')}
               </label>
               <input
                 type="password"
@@ -117,19 +119,19 @@ const ChangePassword = () =>{
                 name="confirmPassword"
                 value={state.confirmPassword}
                 onChange={onChangeInputHandler}
-                placeholder="Confirm Password"
+                placeholder={t('auth.confirmPassword')}
                 required
               />
             </div>
            
             <div className="text-center mb-3">
               <button type="submit" className="cart-btn" style={{width: "300px"}}>
-              Change Password
+              {t('auth.changePassword')}
               </button>
             </div>
           </form>
           <Link to="/account/editProfile">
-                <button className="back-btn" style={{padding: "10px", width: "200px"}}>Go Back To Profile</button>
+                <button className="back-btn" style={{padding: "10px", width: "200px"}}>{t('auth.goBackToProfile')}</button>
           </Link>
         </div>
         </div>

@@ -4,6 +4,7 @@ import selectUser from "../../../assets/selectUser.png"
 import http from '../../../http';
 import GoogleAuth from '../login/google';
 import imgCosmetics from "../../../assets/images/cosmetics.jpg"
+import { useTranslation } from 'react-i18next';
 
 
 interface RegisterForm {
@@ -18,6 +19,7 @@ interface RegisterForm {
   
 
 const RegisterPage = () =>{
+  const { t } = useTranslation();
     const navigator = useNavigate();
     const [state, setState] = useState<RegisterForm>({
       firstName: '',
@@ -51,7 +53,11 @@ const RegisterPage = () =>{
     const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
         if (state.password !== state.confirmPassword) {
-            setErrorMessage("Passwords do not match");
+            setErrorMessage(t('messages.passwordsDontMatch'));
+            return;
+          }
+          if (state.password.length < 6) {
+            setErrorMessage(t('messages.passwordShort'));
             return;
           }
           setErrorMessage("");
@@ -81,7 +87,7 @@ const RegisterPage = () =>{
                 <div className="row">
                   <div className="col">
                     <h1 className="mt-2 mb-3 text-center"  style={{color: "#e8baba"}}>
-                      Create New Account
+                    {t('auth.createNewAccount')} 
                     </h1>
 
                     <form
@@ -96,7 +102,7 @@ const RegisterPage = () =>{
                             className="form-label"
                             style={{color: "#e8baba"}}
                           >
-                            First Name
+                            {t('auth.firstName')} 
                           </label>
                           <input
                             type="text"
@@ -104,12 +110,9 @@ const RegisterPage = () =>{
                             name="firstName"
                             value={state.firstName}
                             onChange={onChangeInputHandler}
-                            placeholder="Enter First Name"
+                            placeholder={t('auth.enterFirstName')} 
                             required
                           />
-                          <div className="invalid-feedback">
-                            Please enter a valid name.
-                          </div>
                         </div>
 
                         <div className="mb-3">
@@ -118,7 +121,7 @@ const RegisterPage = () =>{
                             className="form-label"
                             style={{color: "#e8baba"}}
                           >
-                            Last Name
+                            {t('auth.lastName')} 
                           </label>
                           <input
                             type="text"
@@ -126,12 +129,9 @@ const RegisterPage = () =>{
                             name="lastName"
                             value={state.lastName}
                             onChange={onChangeInputHandler}
-                            placeholder="Enter Last Name"
+                            placeholder={t('auth.enterLastName')} 
                             required
                           />
-                          <div className="invalid-feedback">
-                            Please enter a valid name.
-                          </div>
                         </div>
                       </div>
                       <div className="d-flex flex-row justify-content-baseline align-items-center">
@@ -141,7 +141,7 @@ const RegisterPage = () =>{
                             className="form-label "
                             style={{color: "#e8baba"}}
                           >
-                            User Name
+                            {t('auth.userName')} 
                           </label>
                           <input
                             type="text"
@@ -149,12 +149,9 @@ const RegisterPage = () =>{
                             name="username"
                             value={state.username}
                             onChange={onChangeInputHandler}
-                            placeholder="Enter User Name"
+                            placeholder={t('auth.enterUserName')} 
                             required
                           />
-                          <div className="invalid-feedback">
-                            Please enter a valid name.
-                          </div>
                         </div>
 
                         <div className="mb-3">
@@ -163,7 +160,7 @@ const RegisterPage = () =>{
                             className="form-label"
                             style={{color: "#e8baba"}}
                           >
-                            Email
+                            {t('auth.email')} 
                           </label>
                           <input
                             type="text"
@@ -171,12 +168,9 @@ const RegisterPage = () =>{
                             name="email"
                             value={state.email}
                             onChange={onChangeInputHandler}
-                            placeholder="Enter Email"
+                            placeholder={t('auth.enterEmail')} 
                             required
                           />
-                          <div className="invalid-feedback">
-                            Please enter a valid name.
-                          </div>
                         </div>
                       </div>
                       <div className="d-flex flex-row justify-content-baseline align-items-center">
@@ -186,7 +180,7 @@ const RegisterPage = () =>{
                             className="form-label"
                             style={{color: "#e8baba"}}
                           >
-                            Password
+                            {t('auth.password')} 
                           </label>
                           <input
                             type="password"
@@ -194,12 +188,9 @@ const RegisterPage = () =>{
                             name="password"
                             value={state.password}
                             onChange={onChangeInputHandler}
-                            placeholder="Enter password"
+                            placeholder={t('auth.enterPassword')} 
                             required
                           />
-                          <div className="invalid-feedback">
-                            Please enter a valid name.
-                          </div>
                         </div>
 
                         <div className="mb-3">
@@ -208,7 +199,7 @@ const RegisterPage = () =>{
                             className="form-label"
                             style={{color: "#e8baba"}}
                           >
-                            Confirm Password
+                            {t('auth.confirmPassword')} 
                           </label>
                           <input
                             type="password"
@@ -218,7 +209,7 @@ const RegisterPage = () =>{
                             name="confirmPassword"
                             value={state.confirmPassword}
                             onChange={onChangeInputHandler}
-                            placeholder="Confirm password"
+                            placeholder={t('auth.confirmPassword')} 
                             required
                           />
                           {errorMessage && (
@@ -253,7 +244,7 @@ const RegisterPage = () =>{
 
                       <div className="text-center">
                         <button type="submit" className="cart-btn mb-3" style={{width: "300px"}}>
-                          Register
+                        {t('auth.register')} 
                         </button>
                       </div>
                       <div className="text-center">
@@ -265,12 +256,12 @@ const RegisterPage = () =>{
                       </div>
                     </form>
                     <p className="text-center mt-3" style={{color: "#e8baba"}}>
-                      Have an account?
+                    {t('auth.haveAccount')}?
                       <Link to="/account/login">
                         <button
                           className="back-btn" style={{padding: "10px", width: "200px", marginLeft: 10 }}
                         >
-                          Log In
+                          {t('auth.login')}
                         </button>
                       </Link>
                     </p>

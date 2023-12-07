@@ -8,9 +8,11 @@ import { AuthActionType, IAuthUser } from "../types";
 import GoogleAuth from "./google";
 import { LoginForm } from "./types";
 import imgCosmetics from "../../../assets/images/cosmetics.jpg"
+import { useTranslation } from 'react-i18next';
 
 
 const LoginPage = () =>{
+  const { t } = useTranslation();
 
     const navigator = useNavigate();
     const dispatch = useDispatch();
@@ -85,7 +87,7 @@ return (
           <div className="title">
             <div className="row">
               <div className="col">               
-                <h1 className="mt-2  text-center" style={{color: "#e8baba"}}>Log In</h1>
+                <h1 className="mt-2  text-center" style={{color: "#e8baba"}}>{t('auth.login')}</h1>
                 <form
                   onSubmit={onSubmitHandler}
                   className=" pb-2 pt-5 ps-5 pe-5 m-5"
@@ -93,7 +95,7 @@ return (
                 >
                   <div className="mb-3">
                     <label htmlFor="email" className="form-label" style={{color: "#e8baba"}}>
-                      Email
+                    {t('auth.email')}
                     </label>
                     <input
                       type="text"
@@ -101,17 +103,17 @@ return (
                       name="email"
                       value={state.email}
                       onChange={onChangeInputHandler}
-                      placeholder="Enter Email"
+                      placeholder={t('auth.enterEmail')}
                       required
                     />
                     <div className="invalid-feedback">
-                      Please enter a valid name.
+                      Please enter a valid email.
                     </div>
                   </div>
 
                   <div className="mb-1">
                     <label htmlFor="password" className="form-label" style={{color: "#e8baba"}}>
-                      Password
+                    {t('auth.password')}
                     </label>
                     <input
                       type="password"
@@ -121,7 +123,7 @@ return (
                       name="password"
                       value={state.password}
                       onChange={onChangeInputHandler}
-                      placeholder="Enter password"
+                      placeholder={t('auth.enterPassword')}
                       required
                     />
                     {errorMessage && (
@@ -136,7 +138,7 @@ return (
                       style={{color: "#e8baba"}}
                       onClick={onClickHandler}
                     >
-                      Forgot password?
+                      {t('auth.forgotPassword')}?
                     </button>
                     {showModal && (
                       <SendEmailModal
@@ -147,7 +149,7 @@ return (
                   </div>
                   <div className="text-center">
                     <button type="submit" className="cart-btn m-2" style={{width: "300px"}}>
-                      Log In
+                    {t('auth.login')}
                     </button>
                   </div>
                   <hr></hr>
@@ -158,12 +160,12 @@ return (
                   </div>
                 </form>
                 <p className="text-center mt-5" style={{color: "#e8baba"}}>
-                  Not a member?
+                {t('auth.notMember')}?
                   <Link to="/account/register">
                     <button
                        className="back-btn" style={{padding: "10px", width: "200px", marginLeft: 10 }}
                     >
-                      Register
+                      {t('auth.register')}
                     </button>
                   </Link>
                 </p>

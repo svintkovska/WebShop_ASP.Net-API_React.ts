@@ -1,5 +1,8 @@
+import { useTranslation } from 'react-i18next';
+
 const Footer = () =>{
-   
+  const { t } = useTranslation();
+
     return (
       <>
         <section className="info_section  layout_padding2-top">
@@ -23,36 +26,32 @@ const Footer = () =>{
             <div className="container">
               <div className="row">
                 <div className="col-md-6 col-lg-3">
-                  <h6>ABOUT US</h6>
+                  <h6>{t('footer.aboutUs')}</h6>
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    doLorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed doLorem ipsum dolor sit amet,
+                  {t('footer.aboutUsText')}
                   </p>
                 </div>
                 <div className="col-md-6 col-lg-3">
                   <div className="info_form ">
-                    <h5>Newsletter</h5>
+                    <h5>{t('footer.newsletter')}</h5>
                     <form action="#">
-                      <input type="email" placeholder="Enter your email" />
-                      <button>Subscribe</button>
+                      <input type="email" placeholder={t('footer.enterEmail')} />
+                      <button>{t('footer.subscribe')}</button>
                     </form>
                   </div>
                 </div>
                 <div className="col-md-6 col-lg-3">
-                  <h6>NEED HELP</h6>
+                  <h6>{t('footer.help')}</h6>
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    doLorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed doLorem ipsum dolor sit amet,
+                  {t('footer.helpText')}
                   </p>
                 </div>
                 <div className="col-md-6 col-lg-3">
-                  <h6>CONTACT US</h6>
+                  <h6>{t('footer.conactUs')}</h6>
                   <div className="info_link-box">
                     <a href="">
                       <i className="fa fa-map-marker" aria-hidden="true"></i>
-                      <span> Gb road 123 london Uk </span>
+                      <span> {t('footer.address')} </span>
                     </a>
                     <a href="">
                       <i className="fa fa-phone" aria-hidden="true"></i>
@@ -70,8 +69,7 @@ const Footer = () =>{
           <footer className=" footer_section">
             <div className="container">
               <p>
-                &copy; <span id="displayYear"></span> All Rights Reserved By
-                <a href="https://html.design/">Free Html Templates</a>
+                &copy; <span id="displayYear">2023 </span>{t('footer.rights')}
               </p>
             </div>
           </footer>

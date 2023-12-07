@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import http from "../../../http";
+import { useTranslation } from 'react-i18next';
 
 interface MyModalProps {
     showModal: boolean;
@@ -11,7 +12,7 @@ interface MyModalProps {
     email: string;
   }
 const SendEmailModal = ({ showModal, handleModal }: MyModalProps) => {
-   
+  const { t } = useTranslation();
     const [state, setState] = useState<IEmail>({
         email: "",
       });
@@ -27,7 +28,7 @@ const SendEmailModal = ({ showModal, handleModal }: MyModalProps) => {
 
         if(state.email == '')
         {
-          setErrorMessage("Enter email");
+          setErrorMessage(t('auth.enterEmail'));
           return;
         }
         try{
@@ -38,7 +39,7 @@ const SendEmailModal = ({ showModal, handleModal }: MyModalProps) => {
           }
           catch(error: any){
             console.log ("error:", error);
-            setErrorMessage("Enter your email!");
+            setErrorMessage(t('auth.enterEmail'));
           }
           console.log ("Data sent", state); 
       };
@@ -49,7 +50,7 @@ const SendEmailModal = ({ showModal, handleModal }: MyModalProps) => {
         <Modal show={showModal} onHide={handleModal} style={{marginTop:"200px"}}>
         {successMessage && (
             <div className="alert alert-success" role="alert">
-             Email with the password reset link has been successfully sent            
+             {t('messages.resetLinkSent')}       
             </div>
           )}
           {!successMessage && errorMessage && (
@@ -58,12 +59,12 @@ const SendEmailModal = ({ showModal, handleModal }: MyModalProps) => {
           </div>
         )}
           <Modal.Header closeButton>
-            <Modal.Title style={{color: "#e8baba"}}>Enter your email</Modal.Title>
+            <Modal.Title style={{color: "#e8baba"}}>{t('auth.enterEmail')}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
           <div className="mb-3">
               <label htmlFor="email" className="form-label" style={{color: "#e8baba"}}>
-                Email
+              {t('auth.email')}
               </label>
               <input
                 type="text"
@@ -71,7 +72,7 @@ const SendEmailModal = ({ showModal, handleModal }: MyModalProps) => {
                 name="email"
                 value={state.email}
                 onChange={onChangeInputHandler}
-                placeholder="Enter Email"
+                placeholder={t('auth.enterEmail')}
                 required
               />
             </div>
@@ -79,10 +80,10 @@ const SendEmailModal = ({ showModal, handleModal }: MyModalProps) => {
           </Modal.Body>
           <Modal.Footer>
             <Button className="back-btn" style={{padding: "10px", width: "100px", marginTop: "0" }} onClick={handleModal}>
-              Close
+            {t('auth.close')}
             </Button>
             <Button className="cart-btn" style={{width: "200px",  marginTop: "0"}} onClick={sendEmail}>
-              Send Email
+            {t('auth.sendEmail')}
             </Button>
           </Modal.Footer>
         </Modal>

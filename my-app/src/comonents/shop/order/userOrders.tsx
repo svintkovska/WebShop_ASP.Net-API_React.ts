@@ -4,16 +4,16 @@ import http from "../../../http";
 import { IAuthUser } from "../../auth/types";
 import { IOrderItem, IUserOrder } from "../types";
 import Accordion, { AccordionProps } from "react-bootstrap/Accordion";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
 import { APP_ENV } from "../../../env";
 import qs from "qs";
 import { Link, useSearchParams } from "react-router-dom";
 import {IOrderResult, IOrderSearch} from "../types";
 import classNames from "classnames";
+import { useTranslation } from 'react-i18next';
 
 
 const UserOrders = () => {
+  const { t } = useTranslation();
   const [orders, setOrders] = useState<Array<IUserOrder>>([]);
   const { email } = useSelector((store: any) => store.auth as IAuthUser);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -72,7 +72,7 @@ const UserOrders = () => {
   return (
     <>
       <div className="d-flex  flex-column justify-content-center align-items-center">
-        <h1 className="text-light mt-3 mb-3">Order History</h1>
+        <h1 className="text-light mt-3 mb-3">{t('shop.product.oderHistory')}</h1>
         <div className="d-flex flex-row justify-content-center ">
           <div className="mb-3 col-12 me-5">
             <label htmlFor="description" className="form-label d-none"></label>
@@ -111,7 +111,7 @@ const UserOrders = () => {
                       {new Date(order.dateCreated).toLocaleTimeString()}{" "}
                       {new Date(order.dateCreated).toDateString()}
                     </div>
-                    <div>Status: {order.status}</div>
+                    <div>{t('shop.product.status')}: {order.status}</div>
                   </div>
                 </button>
               </h2>
@@ -126,9 +126,9 @@ const UserOrders = () => {
                     <thead>
                       <tr>
                         <th></th>
-                        <th>Product Name</th>
-                        <th>Quantity</th>
-                        <th>Price ₴</th>
+                        <th>{t('shop.product.productName')}</th>
+                        <th>{t('shop.product.quantity')}</th>
+                        <th>{t('shop.product.price')} ₴</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -150,10 +150,10 @@ const UserOrders = () => {
                   </table>
                   <div className="d-flex flex-column justify-content-center align-items-center">
                     <p>
-                      <b>Comment:</b> {order.comment}
+                      <b>{t('shop.product.comment')}:</b> {order.comment}
                     </p>
                     <p>
-                      <b>Receiver's Info:</b> {order.receiverName},{" "}
+                      <b>{t('shop.product.receiverInfo')}:</b> {order.receiverName},{" "}
                       {order.receiverPhone}
                     </p>
                     <div className="d-flex flex-row justify-content-center ">

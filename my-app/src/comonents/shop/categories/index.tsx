@@ -6,7 +6,6 @@ import http from "../../../http";
 import React from "react";
 
 
-
 interface ICategoryItem{
     id: number,
     name: string,
@@ -16,8 +15,6 @@ interface ICategoryItem{
 
 
 const CategoriesPage = ()=>{
-
-
     const [categories, setCategories] = useState<Array<ICategoryItem>>([]);
 
       useEffect(() => {
@@ -58,39 +55,9 @@ const CategoriesPage = ()=>{
     navigate(`/shop/products/${categoryId}`, { state: { categoryName, categoryId } });
   };
 
-      const navigation  = ()=>{
-        return (
-          <nav className="d-flex justify-content-left mb-3 mt-3">
-            <ul className="list-unstyled me-2">
-              <li>
-                <a href="/">Home Page -{'>'}</a>
-              </li>
-            </ul>
-            <ul className="list-unstyled">
-              <li>
-                <a href="/shop/categories">Menu</a>
-              </li>
-            </ul>
-          </nav>
-        );
-      }
-
-
     return (
       <>
-        {/* <Container className="my-3" style={{ maxWidth: "900px" }}>
-          <div>{navigation()}</div>
-
-          <Row xs={1} md={2} lg={3} className="g-4">
-            {cardItem}
-          </Row>
-        </Container> */}
-
-
-          <div>{navigation()}</div>
-
           <div className="content-wrapper">{сardItem}</div>
-
       </>
     );
 }
