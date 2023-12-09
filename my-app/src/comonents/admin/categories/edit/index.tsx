@@ -84,7 +84,8 @@ const EditCategoryPage = () =>{
           {successMessage && (
         <SuccessMessage message="Succesufully changed" />
       )}
-          <form onSubmit={onSubmitHandler} className="border border-info pb-2 pt-5 ps-5 pe-5"
+    
+          <form onSubmit={onSubmitHandler} className="border border-info pb-2 pt-5 ps-5 pe-5 bg-light rounded"
             style={{ width: 500 }}>
             <div className="mb-3 text-info">
               <label htmlFor="name" className="form-label">
@@ -123,8 +124,7 @@ const EditCategoryPage = () =>{
               <label htmlFor="image" className="form-label">
                 <img src={(state.uploadImage == null ? "http://localhost:5285/images/" + "300_" +state.currentImg :  URL.createObjectURL(state.uploadImage))} 
                 alt="select img" 
-                width="150px" 
-                style={{cursor: "pointer"}}/>
+                style={{cursor: "pointer", objectFit: 'contain', height: '150px', width: '150px'}}/>
               </label>
               <input
                 type="file"
@@ -136,13 +136,13 @@ const EditCategoryPage = () =>{
             </div>
 
             <div className="text-center">
-              <button type="submit" className="btn btn-info mb-2">
+              <button type="submit" className="btn btn-outline-info mb-2">
                 Edit Category
               </button>
             </div>
           </form>
           <Link to="/admin/categories/list">
-                <button className="btn btn-outline-info mt-5">Go Back to Categories</button>
+                <button className="btn btn-info mt-5">Go Back to Categories</button>
           </Link>
         </div>
       </>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { APP_ENV } from "../../../../env";
 import http from "../../../../http";
 import SuccessMessage from "../../../common/SuccessMessage";
@@ -101,7 +101,7 @@ const EditUserPage = () => {
 
           <form
             onSubmit={handleFormSubmit}
-            className="border border-info pb-2 pt-5 ps-5 pe-5"
+            className="border border-info pb-2 pt-5 ps-5 pe-5 bg-light rounded"
             style={{ width: 700 }}
           >
             <div className="d-flex flex-row justify-content-baseline align-items-center">
@@ -218,11 +218,14 @@ const EditUserPage = () => {
               </div>
             )}
             <div className="text-center mt-5">
-              <button type="submit" className="btn btn-info">
+              <button type="submit" className="btn btn-outline-info">
                 Save
               </button>
             </div>
           </form>
+          <Link to="/admin/users/list">
+                <button className="btn btn-info mt-5">Go Back to Users</button>
+          </Link>
         </div>
       </div>
     </>

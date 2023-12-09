@@ -34,7 +34,8 @@ const CategoriesPage = ()=>{
             src={APP_ENV.IMAGE_PATH + "300_" + category.image}
             alt={category.name}
             className="news-card__image"
-            
+            style={{ objectFit: 'contain'}}
+
           />
           <div className="news-card__text-wrapper">
             <h2 className="news-card__title">

@@ -100,7 +100,7 @@ const CategoriesList = ()=>{
         <td>
           <img
             src={APP_ENV.IMAGE_PATH + "300_" + category.image}
-            width="150"
+            style={{objectFit: 'contain', height: '150px', width: '150px'}}
           ></img>
         </td>
         <td>{category.name}</td>

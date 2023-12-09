@@ -163,7 +163,7 @@ const CreateProductPage = () =>{
           {successMessage && <SuccessMessage message="Succesufully created" />}
           <form
             onSubmit={onSubmitHandler}
-            className="border border-info pb-2 pt-5 ps-5 pe-5"
+            className="border border-info pb-2 pt-5 ps-5 pe-5 bg-light rounded"
             style={{ width: 500 }}
           >
             <div className="d-flex flex-row justify-content-baseline align-items-center">
@@ -256,7 +256,7 @@ const CreateProductPage = () =>{
                         className="mw-100 mh-100"
                         width="150px"
                         height="150px"
-                        style={{ objectFit: "cover", cursor: "pointer" }}
+                        style={{ objectFit: "contain", cursor: "pointer" }}
                         onClick={() => onEditImageHandler(index)}
                       />
                       <button
@@ -271,8 +271,7 @@ const CreateProductPage = () =>{
                 <img
                   src={upload}
                   alt="select img"
-                  width="150px"
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", objectFit: 'contain', height: '150px', width: '150px' }}
                   onClick={() => onSelectImageHandler(product.images.length)}
                 />
                 {showFileInput && (
@@ -289,13 +288,13 @@ const CreateProductPage = () =>{
             </div>
 
             <div className="text-center">
-              <button type="submit" className="btn btn-info mb-2">
+              <button type="submit" className="btn btn-outline-info mb-2">
                 Create Product
               </button>
             </div>
           </form>
           <Link to="/admin/products/list">
-            <button className="btn btn-outline-info mb-3 mt-3">
+            <button className="btn btn-info mb-3 mt-3">
               Go Back to Products
             </button>
           </Link>

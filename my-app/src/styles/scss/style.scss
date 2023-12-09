@@ -251,6 +251,7 @@ a:focus {
     .detail-box {
         padding-left: 45px;
         margin: 45px 0;
+        margin-left: 250px;
         h1 {
             font-weight: bold;
             font-size: 3.5rem;
@@ -264,6 +265,9 @@ a:focus {
             5px);
             margin-top: 25px;
             text-transform: uppercase;
+        }
+        p {
+            width: 1000px;
         }
     }
     .carousel_btn-box {

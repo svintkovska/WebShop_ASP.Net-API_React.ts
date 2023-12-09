@@ -203,6 +203,7 @@ a:focus {
 .slider_section .detail-box {
   padding-left: 45px;
   margin: 45px 0;
+  margin-left: 250px;
 }
 .slider_section .detail-box h1 {
   font-weight: bold;
@@ -223,6 +224,9 @@ a:focus {
 .slider_section .detail-box a:hover {
   background-color: transparent;
   color: #db4566;
+}
+.slider_section .detail-box p {
+  width: 1000px;
 }
 .slider_section .carousel_btn-box {
   display: flex;

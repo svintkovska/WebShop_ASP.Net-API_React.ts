@@ -1,9 +1,6 @@
-import { url } from "inspector";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AdminHomePage = ()=>{
-
-  
     return (
       <>
         <h1 className="text-light text-center mt-5 mb-5">ADMIN CENTER</h1>

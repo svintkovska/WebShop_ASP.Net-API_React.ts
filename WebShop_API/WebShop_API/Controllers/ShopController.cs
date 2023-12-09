@@ -54,7 +54,7 @@ namespace WebShop_API.Controllers
 
 
             int page = search.Page;
-            int pageSize = 6;
+            int pageSize = 8;
 
             var list = query
                 .Skip((page - 1) * pageSize)

@@ -93,8 +93,8 @@ const ProductsList = ()=>{
         <th scope="row">{product.id}</th>
         <td>
           <img
-            src={APP_ENV.IMAGE_PATH +"300_" + product.images[0]}
-            width="150"
+            src={APP_ENV.IMAGE_PATH +"300_" + product.images[0]}       
+            style={{objectFit: 'contain', height: '150px', width: '150px'}}
           ></img>
         </td>
         <td>{product.name}</td>

@@ -113,16 +113,15 @@ const ProductItemPage = () => {
     
     return (
       <>
-        <Container  className="mb-5">
-          
-
+        <Container className="mb-5">
           <section className="product">
             <div className="product__photo">
               <div className="photo-container">
                 <div className="photo-main">
                   <img
-                    src={APP_ENV.IMAGE_PATH + "300_" + mainImage}
+                    src={APP_ENV.IMAGE_PATH + "1200_" + mainImage}
                     alt={product.name}
+                    style={{objectFit: 'contain'}}
                   />
                 </div>
                 <div className="photo-album">
@@ -130,17 +129,14 @@ const ProductItemPage = () => {
                     {product.images.map((image, index) => (
                       <li>
                         <img
-                          src={APP_ENV.IMAGE_PATH + "300_" + image}
+                          src={APP_ENV.IMAGE_PATH + "1200_" + image}
                           alt={product.name}
-                          
-                          style={{ cursor: "pointer"}}
+                          style={{ cursor: "pointer",objectFit: 'contain' }}
                           onClick={() => handleImageClick(image)}
                         />
                       </li>
                     ))}
                   </ul>
-
-                 
                 </div>
               </div>
             </div>
@@ -149,50 +145,51 @@ const ProductItemPage = () => {
                 <h1> {product.name}</h1>
               </div>
               <div className="price">
-              ₴ <span> {product.price.toFixed(2)}</span>
+                ₴ <span> {product.price.toFixed(2)}</span>
               </div>
-              
+
               <div className="description">
                 <h3>{product.description}</h3>
               </div>
 
               <div className="d-flex justify-content-center align-items-center mb-5">
-                        <div className="input-group">
-                          <span className="input-group-prepend">
-                            <button
-                              className="btn btn-outline-danger"
-                              type="button"
-                              onClick={handleDecreaseQuantity}
-                             
-                            >
-                              -
-                            </button>
-                          </span>
-                          <input
-                            type="number"
-                            className="form-control text-center"
-                            style={{ maxWidth: "70px", minWidth: "50px"}}
-                            value={quantity}
-                            onChange={handleQuantityChange}
-                          />
-                          <span className="input-group-append">
-                            <button
-                              className="btn btn-outline-danger"
-                              type="button"
-                              onClick={handleIncreaseQuantity}
-                            >
-                              +
-                            </button>
-                          </span>
-                          </div>
-                      </div>
-              <button className="buy--btn" onClick={handleAddToCart}>{t('shop.product.addToCart')}</button>
+                <div className="input-group">
+                  <span className="input-group-prepend">
+                    <button
+                      className="btn btn-outline-danger"
+                      type="button"
+                      onClick={handleDecreaseQuantity}
+                    >
+                      -
+                    </button>
+                  </span>
+                  <input
+                    type="number"
+                    className="form-control text-center"
+                    style={{ maxWidth: "70px", minWidth: "50px" }}
+                    value={quantity}
+                    onChange={handleQuantityChange}
+                  />
+                  <span className="input-group-append">
+                    <button
+                      className="btn btn-outline-danger"
+                      type="button"
+                      onClick={handleIncreaseQuantity}
+                    >
+                      +
+                    </button>
+                  </span>
+                </div>
+              </div>
+              <button className="back-btn" style={{ padding: "10px", maxWidth: "300px" }} onClick={handleAddToCart}>
+                {t("shop.product.addToCart")}
+              </button>
             </div>
           </section>
           <AddToBasketModal
-                          show={showModal}
-                          onClose={() => setShowModal(false)}
-                        />
+            show={showModal}
+            onClose={() => setShowModal(false)}
+          />
         </Container>
       </>
     );

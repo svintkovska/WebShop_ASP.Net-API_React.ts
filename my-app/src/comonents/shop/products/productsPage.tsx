@@ -147,6 +147,7 @@ const ProductsPage = () => {
                 className="pic-1"
                 src={APP_ENV.IMAGE_PATH + "600_" + product.images[0]}
                 alt={product.name}
+                style={{objectFit: 'contain'}}
               />
             </a>
             <ul className="product-links">

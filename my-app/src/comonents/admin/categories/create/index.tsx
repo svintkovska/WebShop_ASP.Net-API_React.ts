@@ -79,7 +79,7 @@ const CreateCategoryPage = () => {
         {successMessage && <SuccessMessage message="Succesufully created" />}
         <form
           onSubmit={handleSubmit}
-          className="border border-info pb-2 pt-5 ps-5 pe-5"
+          className="border border-info pb-2 pt-5 ps-5 pe-5 bg-light rounded"
           style={{ width: 500 }}
         >
           <InputGroup
@@ -119,8 +119,7 @@ const CreateCategoryPage = () => {
                     : URL.createObjectURL(values.image)
                 }
                 alt="select img"
-                width="150px"
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", objectFit: 'contain', height: '150px', width: '150px' }}
               />
             </label>
             <input
@@ -139,13 +138,13 @@ const CreateCategoryPage = () => {
           </div>
 
           <div className="text-center">
-            <button type="submit" className="btn btn-info mb-2">
+            <button type="submit" className="btn btn-outline-info mb-2">
               Add Category
             </button>
           </div>
         </form>
         <Link to="/admin/categories/list">
-          <button className="btn btn-outline-info mt-3">
+          <button className="btn btn-info mt-3">
             Go Back to Categories
           </button>
         </Link>

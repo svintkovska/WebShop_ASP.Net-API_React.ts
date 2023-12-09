@@ -82,7 +82,7 @@ const MakeOrderPage = () =>{
       <>
         <div className="cart-card">
           {successMessage && (
-            <SuccessMessage message={t('shop.product.successOrder')} />
+            <SuccessMessage message={t('messages.successOrder')} />
           )}
           <form className="row" onSubmit={handleSubmit}>
             <div className="col-md-8 cart">

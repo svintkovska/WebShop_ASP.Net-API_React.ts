@@ -3,12 +3,23 @@ import { useSelector } from "react-redux";
 import { Link, redirect, useNavigate } from "react-router-dom";
 import { APP_ENV } from "../../../env";
 import { AuthActionType, IAuthUser } from "../../auth/types";
+import { useEffect } from "react";
 
 const AdminHeader = () =>{
     const navigator = useNavigate()
     const {isAuth} = useSelector((store: any) => store.auth as IAuthUser);
     const {email} = useSelector((store: any) => store.auth as IAuthUser);
     const {imagePath} = useSelector((store: any) => store.auth as IAuthUser);
+    const {roles} = useSelector((store: any) => store.auth as IAuthUser);
+    const isAdmin = roles.includes('admin');
+    const navigate = useNavigate();
+  
+    useEffect(() => {
+      if (!isAdmin) {
+        navigate("/");
+      }
+    }, []);
+    
 
     const dispatch = useDispatch();
 

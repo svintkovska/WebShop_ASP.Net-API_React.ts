@@ -269,7 +269,7 @@ const EditProductPage = () =>{
           {successMessage && <SuccessMessage message="Succesufully updated" />}
           <form
             onSubmit={onSubmitHandler}
-            className="border border-info pb-2 pt-5 ps-5 pe-5"
+            className="border border-info pb-2 pt-5 ps-5 pe-5 bg-light rounded"
             style={{ width: 700 }}
           >
             <div className="d-flex flex-row justify-content-baseline align-items-center">
@@ -361,7 +361,7 @@ const EditProductPage = () =>{
                         className="mw-100 mh-100"
                         width="150px"
                         height="150px"
-                        style={{ objectFit: "cover", cursor: "pointer" }}
+                        style={{ objectFit: "contain", cursor: "pointer" }}
                         onClick={() => onEditCurrentImageHandler(index, image)}
                       />
                       <button
@@ -385,7 +385,7 @@ const EditProductPage = () =>{
                         className="mw-100 mh-100"
                         width="150px"
                         height="150px"
-                        style={{ objectFit: "cover", cursor: "pointer" }}
+                        style={{ objectFit: "contain", cursor: "pointer" }}
                         onClick={() => onEditImageHandler(index)}
                       />
                       <button
@@ -401,7 +401,7 @@ const EditProductPage = () =>{
                   src={upload}
                   alt="select img"
                   width="150px"
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", objectFit: 'contain' }}
                   onClick={() => onSelectImageHandler(product.images.length)}
                 />
                 {showFileInput && (
@@ -418,13 +418,13 @@ const EditProductPage = () =>{
             </div>
 
             <div className="text-center">
-              <button type="submit" className="btn btn-info mb-3">
+              <button type="submit" className="btn btn-outline-info mb-3">
                 Update Product
               </button>
             </div>
           </form>
           <Link to="/products/list">
-            <button className="btn btn-outline-info mt-3 mb-3">
+            <button className="btn btn-info mt-3 mb-3">
               Go Back to Products
             </button>
           </Link>
