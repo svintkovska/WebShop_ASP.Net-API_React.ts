@@ -379,7 +379,7 @@ body {
     .photo-main img {
         margin-top: 30px;
         margin-left: -30px;
-        width: 250px;
+        width: 300px;
         height: 450px;
         filter: saturate(150%) contrast(120%) hue-rotate(10deg) drop-shadow(1px 20px 10px rgba(0, 0, 0, 0.3));
     }

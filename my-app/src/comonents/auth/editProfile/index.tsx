@@ -85,7 +85,7 @@ const EditProfile = () =>{
               <h4>
                   <b>{t('auth.update')}</b>
                 </h4>
-                {successMessage && <SuccessMessage message={t('profile.changesSaved')} />}
+                {successMessage && <SuccessMessage message={t('auth.changesSaved')} />}
                 <div className="text-center">
                   
                   <Link to="/account/editProfile/changePassword">

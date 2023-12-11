@@ -36,9 +36,12 @@ const Novaposhta: React.FC<NovaposhtaProps> = ({ onCitySelect, onWarehouseSelect
   };
 
   useEffect(() => {
+    console.log("use effect");
     axios
       .post("https://api.novaposhta.ua/v2.0/json/", requestCityData)
       .then((response) => {
+        console.log("response", response);
+
         const cityData = response.data.data.map((city: { Ref: string; Description: string }) => city);
         setCities(cityData);
       })
