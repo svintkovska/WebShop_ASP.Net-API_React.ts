@@ -88,7 +88,7 @@ const UserOrders = () => {
         </div>
         {orders.map((order) => (
           <div
-            className="accordion accordion-flush mb-3 col-6"
+            className="accordion accordion-flush mb-3 col-6 my_accordion"
             key={order.id}
             style={{ backgroundColor: "#f9ece6", border: "10px solid #f9ece6" }}
           >
@@ -105,7 +105,7 @@ const UserOrders = () => {
                   aria-expanded="false"
                   aria-controls={`flush-collapse-${order.id}`}
                 >
-                  <div className="d-flex flex-row justify-content-around align-items-center ">
+                  <div className="d-flex flex-row justify-content-around align-items-center user_orders">
                     <div className="me-5">#{order.id}</div>
                     <div className="me-5">
                       {new Date(order.dateCreated).toLocaleTimeString()}{" "}
@@ -138,7 +138,7 @@ const UserOrders = () => {
                             <img
                               src={APP_ENV.IMAGE_PATH + "300_" + item.image}
                               alt={item.productName}
-                              width="100"
+                              className="accordion_img"
                             />
                           </td>
                           <td>{item.productName}</td>

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import img from '../../assets/images/slider-img.png'
-import img2 from '../../assets/images/sale.png'
+import img2 from '../../assets/images/brush.png'
 import img3 from '../../assets/images/fashion-girl.png'
 import { Carousel } from "react-bootstrap";
 import { useTranslation } from 'react-i18next';

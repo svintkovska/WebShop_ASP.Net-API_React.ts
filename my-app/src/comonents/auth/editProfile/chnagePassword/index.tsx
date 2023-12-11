@@ -63,7 +63,7 @@ const ChangePassword = () =>{
 
     return (
         <>
-        <div className="cart-card text-center " style={{width: "600px"}}>
+        <div className="cart-card text-center profile_card" >
           <div className=" cart" style={{ borderRadius: "1rem" }}>
             <div className="title">
             <h4>
@@ -77,7 +77,7 @@ const ChangePassword = () =>{
             {errorMessage}
           </div>
         )}
-          <form onSubmit={onSubmitHandler} className=" pb-2 pt-5 ps-5 pe-5"
+          <form onSubmit={onSubmitHandler} className=" pb-2 pt-5 ps-5 pe-5 my_form"
             style={{ width: 500 }}>
             <div className="mb-3">
               <label htmlFor="oldPassword" className="form-label" style={{color: "#e8baba"}}>

@@ -79,7 +79,7 @@ const EditProfile = () =>{
 
     return (
       <>
-        <div className="cart-card text-center " style={{width: "600px"}}>
+        <div className="cart-card text-center profile_card" >
           <div className=" cart" style={{ borderRadius: "1rem" }}>
             <div className="title">
               <h4>
@@ -96,7 +96,7 @@ const EditProfile = () =>{
                 </div>
                 <form
                   onSubmit={onSubmitHandler}
-                  className=" pb-2 pt-5 ps-5 pe-5  text-center "
+                  className=" pb-2 pt-5 ps-5 pe-5  text-center my_form"
                   style={{ width: 500 }}
                 >
                   <div className="d-flex flex-row justify-content-baseline align-items-center">

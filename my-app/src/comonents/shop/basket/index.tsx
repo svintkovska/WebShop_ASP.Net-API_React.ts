@@ -64,47 +64,49 @@ const BasketPage = () => {
 
  
   return (
-    <div className="cart-card" >
+    <div className="cart-card">
       <div className="row">
         <div className="col-md-8 cart">
           <div className="title">
             <div className="row">
               <div className="col">
                 <h4>
-                  <b> {t('shop.product.cart')}</b>
+                  <b> {t("shop.product.cart")}</b>
                 </h4>
               </div>
               <div className="col align-self-center text-right text-muted">
-              {t('shop.product.items')}
+                {t("shop.product.items")}
               </div>
             </div>
           </div>
           {basket.length < 1 ? (
             <div className="text-center mt-5">
-              <img src={empty_cart} style={{width: "500px"}}/> 
-              <p><b className="text-danger">{t('shop.product.emptyCart')}</b></p>    
-              <p>{t('shop.product.makeMeHappy')}</p>    
+              <img className="empty_cart" src={empty_cart} />
+              <p>
+                <b className="text-danger">{t("shop.product.emptyCart")}</b>
+              </p>
+              <p>{t("shop.product.makeMeHappy")}</p>
             </div>
           ) : (
             <section>
               {basket.map((item) => (
-                <div className="row border-top border-bottom">
+                <div className="row border-top border-bottom ">
                   <div
-                    className="row main align-items-center"
+                    className="row main align-items-center mycart"
                     key={item.productId}
                   >
-                    <div className="col-2">
+                    <div className="col-2 d-flex justify-content-center">
                       <img
                         className="img-fluid"
                         src={APP_ENV.IMAGE_PATH + "300_" + item.image}
                         alt={item.name}
                       />
                     </div>
-                    <div className="col">
-                      <div className="row">{item.name}</div>
+                    <div className="col d-flex justify-content-center">
+                      <div className="row ">{item.name}</div>
                     </div>
-                    <div className="col">
-                    <div className="input-group">
+                    <div className="col d-flex justify-content-center">
+                      <div className="input-group d-flex justify-content-center">
                         <button
                           className="btn btn-outline-danger"
                           type="button"
@@ -128,12 +130,11 @@ const BasketPage = () => {
                         </button>
                       </div>
                     </div>
-                    <div className="col">
+                    <div className="col d-flex justify-content-center">
                       {(item.price * item.quantity).toFixed(2)} ₴{" "}
-                     
                     </div>
-                    <div className="col">
-                    <button
+                    <div className="col d-flex justify-content-center">
+                      <button
                         className="btn btn-outline-danger"
                         onClick={() => handleRemoveProduct(item.productId)}
                       >
@@ -147,31 +148,32 @@ const BasketPage = () => {
           )}
 
           <div className="back-to-shop">
-          <Link to="/shop/categories">
-                <a className="back-btn" style={{padding: "10px"}}>
-                {t('common.backToShop')}
-                </a>
-              </Link>
-
+            <Link to="/shop/categories">
+              <a className="back-btn" style={{ padding: "10px" }}>
+                {t("common.backToShop")}
+              </a>
+            </Link>
           </div>
         </div>
         <div className="col-md-4 summary">
           <div>
             <h5>
-              <b>{t('shop.product.summary')}</b>
+              <b>{t("shop.product.summary")}</b>
             </h5>
           </div>
           <div
             className="row"
             style={{ borderTop: "1px solid rgba(0,0,0,.1)", padding: "2vh 0" }}
           >
-            <div className="col">{t('shop.product.totalPrice')}</div>
+            <div className="col">{t("shop.product.totalPrice")}</div>
             <div className="col text-right">
-               {calculateTotalPrice().toFixed(2)} ₴
+              {calculateTotalPrice().toFixed(2)} ₴
             </div>
           </div>
           <Link to="/shop/makeOrder">
-          <button className="cart-btn" disabled={basket.length < 1}>{t('shop.product.checkout')}</button>
+            <button className="cart-btn" disabled={basket.length < 1}>
+              {t("shop.product.checkout")}
+            </button>
           </Link>
         </div>
       </div>

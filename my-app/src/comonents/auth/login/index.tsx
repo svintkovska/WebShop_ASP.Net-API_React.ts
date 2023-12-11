@@ -81,16 +81,16 @@ const LoginPage = () =>{
     } 
 return (
   <>
-    <div className="cart-card">
+    <div className="cart-card ">
       <div className="row">
         <div className="col-md-8 cart">
           <div className="title">
             <div className="row">
-              <div className="col">               
+              <div className="col d-flex flex-column justify-content-center">               
                 <h1 className="mt-2  text-center" style={{color: "#e8baba"}}>{t('auth.login')}</h1>
                 <form
                   onSubmit={onSubmitHandler}
-                  className=" pb-2 pt-5 ps-5 pe-5 m-5"
+                  className="  my_form"
                   style={{ width: 500, height: 400 }}
                 >
                   <div className="mb-3">

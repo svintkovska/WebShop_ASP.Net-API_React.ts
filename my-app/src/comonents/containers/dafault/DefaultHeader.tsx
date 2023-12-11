@@ -59,7 +59,7 @@ const DefaultHeader = () =>{
         const renderCategoryDropdown = () => {
           return (
             <Dropdown>
-              <Dropdown.Toggle variant="danger" style={{backgroundColor: "#f9ece6", color: "#514f4f"}} id="dropdown-basic">
+              <Dropdown.Toggle variant="danger" className="categories_dropdown" style={{backgroundColor: "#f9ece6", color: "#514f4f"}} id="dropdown-basic">
               {selectedCategory ? selectedCategory.name : t('header.allCategories')}
               </Dropdown.Toggle>
               <Dropdown.Menu>
@@ -87,8 +87,8 @@ const DefaultHeader = () =>{
             </NavLink>
 
             <div
-              className="collapse navbar-collapse"
-              id="navbarSupportedContent"
+              id="navbarSupportedContent" 
+              className="d-flex flex-row"
             >
               <ul className="navbar-nav me-auto">
                 <li className="nav-item">
@@ -118,8 +118,8 @@ const DefaultHeader = () =>{
                 {isAuth ? (
                   <>
                    
-                    <li className="nav-item nav-link active">{t('header.hello')} {email}</li>
-                    <li className="nav-item nav-link">
+                    <li id="hello" className="nav-item nav-link active">{t('header.hello')} {email}</li>
+                    <li id='hello__img' className="nav-item nav-link">
                       <img
                         src={APP_ENV.IMAGE_PATH + "300_" + imagePath}
                         width="40"

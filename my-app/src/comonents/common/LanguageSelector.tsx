@@ -12,11 +12,10 @@ const LanguageSelector: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div className='lang_selector' style={{ display: 'flex', alignItems: 'center' }}>
       <img
         src={i18n.language === 'uk' ? ukFlag : enFlag}
         alt={i18n.language === 'uk' ? 'UK Flag' : 'EN Flag'}
-        style={{ width: '50px', marginRight: '8px' }}
       />
       <select
         value={i18n.language}

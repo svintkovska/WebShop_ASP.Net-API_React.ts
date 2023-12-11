@@ -113,36 +113,39 @@ const ProductItemPage = () => {
     
     return (
       <>
-        <Container className="mb-5">
-          <section className="product">
-            <div className="product__photo">
+        <Container className="mt-5 mb-5">
+          <div className="row">
+            <div className="col m-0" >
               <div className="photo-container">
                 <div className="photo-main">
-                  <img
-                    src={APP_ENV.IMAGE_PATH + "1200_" + mainImage}
-                    alt={product.name}
-                    style={{objectFit: 'contain'}}
-                  />
+                <img
+                src={APP_ENV.IMAGE_PATH + "1200_" + mainImage}
+                alt={product.name}
+              />
                 </div>
-                <div className="photo-album">
-                  <ul>
-                    {product.images.map((image, index) => (
-                      <li>
-                        <img
-                          src={APP_ENV.IMAGE_PATH + "1200_" + image}
-                          alt={product.name}
-                          style={{ cursor: "pointer",objectFit: 'contain' }}
-                          onClick={() => handleImageClick(image)}
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              
+              </div>
+            
+              <div className="photo-album" >
+                <ul>
+                  {product.images.map((image, index) => (
+                    <li>
+                      <img
+                        src={APP_ENV.IMAGE_PATH + "1200_" + image}
+                        alt={product.name}
+                        width={50}
+                        height={50}
+                        style={{ cursor: "pointer", objectFit: "contain" }}
+                        onClick={() => handleImageClick(image)}
+                      />
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
-            <div className="product__info">
-              <div className="title">
-                <h1> {product.name}</h1>
+            <div className="col product__info m-0" >
+            <div className="row ">
+                <h1 className="title"> {product.name}</h1>
               </div>
               <div className="price">
                 ₴ <span> {product.price.toFixed(2)}</span>
@@ -185,7 +188,7 @@ const ProductItemPage = () => {
                 {t("shop.product.addToCart")}
               </button>
             </div>
-          </section>
+          </div>
           <AddToBasketModal
             show={showModal}
             onClose={() => setShowModal(false)}

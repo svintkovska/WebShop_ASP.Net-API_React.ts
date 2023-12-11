@@ -92,7 +92,7 @@ const RegisterPage = () =>{
 
                     <form
                       onSubmit={onSubmitHandler}
-                      className="m-5 pb-2 pt-5 ps-5 pe-5"
+                      className="my_form"
                       style={{ width: 550, height: "auto" }}
                     >
                       <div className="d-flex flex-row justify-content-baseline align-items-center">

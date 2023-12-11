@@ -179,13 +179,13 @@ const ProductsPage = () => {
 
   return (
     <>
-      <Container >
+      <Container className="d-flex flex-column justify-content-start">
         <div className="d-flex flex-row justify-content-center mt-3 mb-3">
           <div className="mb-3  me-5 ">
             <label htmlFor="name" className="form-label d-none"></label>
             <input
               type="text"
-              className="form-control"
+              className="form-control search_input"
               name="name"
               value={search.name}
               onChange={onChangeInputHandler}
@@ -196,7 +196,7 @@ const ProductsPage = () => {
             <label htmlFor="description" className="form-label d-none"></label>
             <input
               type="text"
-              className="form-control"
+              className="form-control search_input"
               name="description"
               value={search.description}
               onChange={onChangeInputHandler}

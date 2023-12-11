@@ -174,7 +174,9 @@ const AdminOrders = () => {
                                           item.image
                                         }
                                         alt={item.productName}
-                                        width="100"
+                                        width={100}
+                                        height={150}
+                                        style={{objectFit: "contain"}}
                                       />
                                     </td>
                                     <td>{item.productName}</td>
