@@ -379,7 +379,7 @@ body {
     .photo-main img {
         margin-top: 30px;
         margin-left: -30px;
-        width: 300px;
+        max-width: 500px;
         height: 450px;
         filter: saturate(150%) contrast(120%) hue-rotate(10deg) drop-shadow(1px 20px 10px rgba(0, 0, 0, 0.3));
     }
@@ -406,7 +406,7 @@ body {
     }
     
     .photo-album img {
-        width: 150px;
+        width: 140px;
         height: 160px;
     }
     /* ----- Informations Section ----- */
@@ -827,7 +827,7 @@ body {
         .photo-main img {
             margin-top: 15px;
             margin-left: -15px;
-            width: 150px;
+            max-width: 350px;
             height: 350px;
         }
         .photo-album li {
@@ -932,7 +932,7 @@ body {
             height: 300px;
         }
         .photo-main img {
-            width: 120px;
+            max-width: 270px;
             height: 270px;
         }
         .photo-album li {
